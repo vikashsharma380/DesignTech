@@ -17,8 +17,7 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -27,69 +26,6 @@ const Contact = () => {
       setTimeout(() => setIsSubmitted(false), 5000);
     }, 1500);
   };
-
-  const contactInfo = [
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <path
-            d="M4 8C4 5.79 5.79 4 8 4H12.27C12.9 4 13.46 4.37 13.71 4.97L15.84 9.4C16.04 9.82 16.03 10.31 15.8 10.72L13.5 14.67C14.65 16.94 16.94 19.35 19.33 20.5L23.28 18.2C23.69 17.97 24.18 17.96 24.6 18.16L29.03 20.29C29.63 20.54 30 21.1 30 21.73V28C30 30.21 28.21 32 26 32H24C13.51 32 4 22.49 4 12V8Z"
-            fill="#d4af37"
-          />
-        </svg>
-      ),
-      label: "Phone",
-      value: "+91 98765 43210",
-      href: "tel:+919876543210",
-    },
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect
-            x="2"
-            y="6"
-            width="28"
-            height="20"
-            rx="2"
-            stroke="#d4af37"
-            strokeWidth="2"
-          />
-          <path
-            d="M2 8L16 16L30 8"
-            stroke="#d4af37"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-      label: "Email",
-      value: "info@luxebuild.com",
-      href: "mailto:info@luxebuild.com",
-    },
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <path
-            d="M16 2C9.37 2 4 7.37 4 14C4 23 16 30 16 30S28 23 28 14C28 7.37 22.63 2 16 2ZM16 18C13.24 18 11 15.76 11 13C11 10.24 13.24 8 16 8C18.76 8 21 10.24 21 13C21 15.76 18.76 18 16 18Z"
-            fill="#d4af37"
-          />
-        </svg>
-      ),
-      label: "Location",
-      value: "Sector 50, Gurgaon, India",
-      href: "#",
-    },
-  ];
-
-  const benefits = [
-    "10-Year Structural Warranty",
-    "On-Time Delivery Guarantee",
-    "Transparent Pricing Model",
-    "Premium Materials Only",
-    "Award-Winning Architects",
-    "24/7 Client Support",
-  ];
 
   const services = [
     "Residential Construction",
@@ -100,107 +36,88 @@ const Contact = () => {
 
   return (
     <section style={styles.section}>
+      {/* Background Image with Overlay */}
+      <div style={styles.backgroundOverlay} />
+      <img
+        src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=900&fit=crop"
+        alt="Construction Background"
+        style={styles.backgroundImage}
+      />
+
       <div style={styles.container}>
-        {/* Header */}
-        <motion.div
-          style={styles.header}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div style={styles.badge}>
-            <span style={styles.badgeDot}>●</span>
-            GET IN TOUCH
-          </div>
-
-          <h2 style={styles.title}>Let's Build Something Extraordinary</h2>
-
-          <div style={styles.divider} />
-
-          <p style={styles.subtitle}>
-            Connect with our project experts and transform your architectural
-            vision into reality
-          </p>
-        </motion.div>
-
-        {/* Main Content Grid */}
-        <div style={styles.contentGrid}>
-          {/* Left Column - Contact Info */}
+        <div style={styles.contentWrapper}>
+          {/* Left Side - Text Content */}
           <motion.div
-            style={styles.leftColumn}
-            initial={{ opacity: 0, x: -30 }}
+            style={styles.leftContent}
+            initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            {/* Contact Cards */}
-            <div style={styles.contactCardsContainer}>
-              {contactInfo.map((info, idx) => (
-                <motion.a
-                  key={idx}
-                  href={info.href}
-                  style={styles.contactCard}
-                  whileHover={{ y: -5, borderColor: "rgba(212, 175, 55, 0.4)" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div style={styles.iconWrapper}>{info.icon}</div>
-                  <div style={styles.cardContent}>
-                    <span style={styles.cardLabel}>{info.label}</span>
-                    <span style={styles.cardValue}>{info.value}</span>
-                  </div>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    style={styles.arrowIcon}
-                  >
-                    <path
-                      d="M7 10H13M13 10L10 7M13 10L10 13"
-                      stroke="#d4af37"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Benefits Box */}
             <motion.div
-              style={styles.benefitsBox}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h3 style={styles.benefitsTitle}>Why Choose Us?</h3>
-              <div style={styles.benefitsGrid}>
-                {benefits.map((benefit, idx) => (
-                  <div key={idx} style={styles.benefitItem}>
-                    <div style={styles.checkmark}>✓</div>
-                    <span style={styles.benefitText}>{benefit}</span>
-                  </div>
-                ))}
+              <div style={styles.badge}>
+                <span style={styles.badgeDot}>●</span>
+                GET IN TOUCH
+              </div>
+
+              <h1 style={styles.mainTitle}>
+                Make Your Dream
+                <span style={styles.highlight}> Home a Reality</span>
+              </h1>
+
+              <p style={styles.mainSubtitle}>
+                Find inspiration, expertise and premium craftsmanship to
+                transform your architectural vision into reality — all in one
+                place
+              </p>
+
+              <div style={styles.highlightBox}>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style={styles.highlightIcon}
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#d4af37"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M9 12L11 14L15 10"
+                    stroke="#d4af37"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <p style={styles.highlightText}>
+                  Award-winning architects • On-time delivery • 10-year warranty
+                </p>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Form */}
+          {/* Right Side - Form */}
           <motion.div
-            style={styles.rightColumn}
-            initial={{ opacity: 0, x: 30 }}
+            style={styles.rightContent}
+            initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div style={styles.formWrapper}>
+            <div style={styles.formCard}>
               <h3 style={styles.formTitle}>Send Us a Message</h3>
               <p style={styles.formSubtitle}>
-                Fill out the form below and our team will get back to you within
-                24 hours
+                Our team will respond within 24 hours
               </p>
 
               {isSubmitted && (
@@ -222,30 +139,41 @@ const Contact = () => {
                 </motion.div>
               )}
 
-              <div style={styles.form} onSubmit={handleSubmit}>
-                {/* Name & Email */}
-                <div style={styles.formRow}>
+              <div style={styles.form}>
+                <div style={styles.formGroup}>
                   <input
                     type="text"
                     name="name"
                     placeholder="Full Name *"
                     value={formData.name}
                     onChange={handleChange}
-                    required
                     style={styles.input}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
+                    }
                   />
+                </div>
+
+                <div style={styles.formGroup}>
                   <input
                     type="email"
                     name="email"
                     placeholder="Email Address *"
                     value={formData.email}
                     onChange={handleChange}
-                    required
                     style={styles.input}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
+                    }
                   />
                 </div>
 
-                {/* Phone & Service */}
                 <div style={styles.formRow}>
                   <input
                     type="tel"
@@ -253,15 +181,25 @@ const Contact = () => {
                     placeholder="Phone Number *"
                     value={formData.phone}
                     onChange={handleChange}
-                    required
                     style={styles.input}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
+                    }
                   />
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    required
-                    style={{ ...styles.input, cursor: "pointer" }}
+                    style={styles.input}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
+                    }
                   >
                     <option value="">Select Service *</option>
                     {services.map((service, idx) => (
@@ -272,20 +210,24 @@ const Contact = () => {
                   </select>
                 </div>
 
-                {/* Message */}
-                <textarea
-                  name="message"
-                  placeholder="Tell us about your project *"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows="4"
-                  style={styles.textarea}
-                />
+                <div style={styles.formGroup}>
+                  <textarea
+                    name="message"
+                    placeholder="Tell us about your project *"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="4"
+                    style={styles.textarea}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
+                    }
+                  />
+                </div>
 
-                {/* Submit Button */}
                 <motion.button
-                  type="button"
                   onClick={handleSubmit}
                   style={styles.submitButton}
                   whileHover={{ scale: 1.02 }}
@@ -293,10 +235,10 @@ const Contact = () => {
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <span style={styles.loadingText}>Processing...</span>
+                    <span>Processing...</span>
                   ) : (
                     <>
-                      <span>Send Request</span>
+                      <span>Get Started</span>
                       <svg
                         width="20"
                         height="20"
@@ -318,8 +260,7 @@ const Contact = () => {
               </div>
 
               <p style={styles.disclaimer}>
-                We respect your privacy. Your information will be used only for
-                project consultation.
+                We respect your privacy. Information used for consultation only.
               </p>
             </div>
           </motion.div>
@@ -332,20 +273,52 @@ const Contact = () => {
 const styles = {
   section: {
     position: "relative",
-    padding: "8rem 5rem",
-    background: "#0a0a0a",
+    padding: "6rem 5rem",
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
     overflow: "hidden",
+  },
+
+  backgroundImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    zIndex: 0,
+  },
+
+  backgroundOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0, 0, 0, 0.65)",
+    zIndex: 1,
   },
 
   container: {
     maxWidth: "1400px",
     margin: "0 auto",
+    width: "100%",
+    position: "relative",
+    zIndex: 2,
   },
 
-  header: {
-    textAlign: "center",
-    maxWidth: "800px",
-    margin: "0 auto 5rem",
+  contentWrapper: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "4rem",
+    alignItems: "flex-start",
+  },
+
+  leftContent: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "2rem",
   },
 
   badge: {
@@ -362,7 +335,8 @@ const styles = {
     fontWeight: "500",
     backdropFilter: "blur(20px)",
     textTransform: "uppercase",
-    marginBottom: "2rem",
+    marginBottom: "1rem",
+    width: "fit-content",
   },
 
   badgeDot: {
@@ -370,154 +344,69 @@ const styles = {
     fontSize: "1.2rem",
   },
 
-  title: {
+  mainTitle: {
     fontSize: "3.5rem",
     lineHeight: "1.2",
-    margin: "0 0 2rem",
     fontFamily: '"Playfair Display", serif',
     fontWeight: "800",
     color: "#fff",
+    margin: 0,
     letterSpacing: "-1px",
   },
 
-  divider: {
-    height: "1.5px",
-    width: "80px",
-    background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
-    margin: "2rem auto",
-    boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)",
+  highlight: {
+    color: "#d4af37",
+    display: "block",
   },
 
-  subtitle: {
+  mainSubtitle: {
     fontSize: "1.15rem",
     lineHeight: "1.8",
     color: "#d0d0d0",
-    margin: "0",
+    margin: "1.5rem 0 0",
     fontWeight: "300",
     letterSpacing: "0.8px",
+    maxWidth: "500px",
   },
 
-  contentGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "4rem",
+  highlightBox: {
+    display: "flex",
     alignItems: "flex-start",
-  },
-
-  leftColumn: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-  },
-
-  contactCardsContainer: {
-    display: "flex",
-    flexDirection: "column",
     gap: "1.2rem",
-  },
-
-  contactCard: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1.5rem",
     padding: "1.8rem",
-    background: "rgba(255, 255, 255, 0.02)",
-    border: "1px solid rgba(212, 175, 55, 0.15)",
-    borderRadius: "12px",
-    backdropFilter: "blur(10px)",
-    transition: "all 0.3s ease",
-    textDecoration: "none",
-    cursor: "pointer",
-  },
-
-  iconWrapper: {
-    width: "60px",
-    height: "60px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     background: "rgba(212, 175, 55, 0.1)",
-    borderRadius: "12px",
-    flexShrink: 0,
-  },
-
-  cardContent: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.3rem",
-  },
-
-  cardLabel: {
-    fontSize: "0.85rem",
-    color: "#888",
-    textTransform: "uppercase",
-    letterSpacing: "1px",
-    fontWeight: "500",
-  },
-
-  cardValue: {
-    fontSize: "1.1rem",
-    color: "#fff",
-    fontWeight: "600",
-  },
-
-  arrowIcon: {
-    opacity: 0.3,
-    transition: "opacity 0.3s ease",
-  },
-
-  benefitsBox: {
-    padding: "2.5rem",
-    background: "rgba(212, 175, 55, 0.06)",
-    border: "1px solid rgba(212, 175, 55, 0.2)",
-    borderRadius: "14px",
+    borderLeft: "3px solid #d4af37",
+    borderRadius: "8px",
+    marginTop: "2rem",
     backdropFilter: "blur(10px)",
   },
 
-  benefitsTitle: {
-    fontSize: "1.6rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "700",
-    color: "#d4af37",
-    margin: "0 0 1.5rem",
-  },
-
-  benefitsGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "1rem",
-  },
-
-  benefitItem: {
-    display: "flex",
-    gap: "0.8rem",
-    alignItems: "flex-start",
-  },
-
-  checkmark: {
-    color: "#d4af37",
-    fontWeight: "700",
-    fontSize: "1.2rem",
+  highlightIcon: {
     flexShrink: 0,
+    marginTop: "0.2rem",
   },
 
-  benefitText: {
-    color: "#c0c0c0",
+  highlightText: {
     fontSize: "0.95rem",
+    color: "#e0e0e0",
+    margin: 0,
     fontWeight: "500",
+    lineHeight: "1.6",
   },
 
-  rightColumn: {
+  rightContent: {
     display: "flex",
-    flexDirection: "column",
+    justifyContent: "center",
   },
 
-  formWrapper: {
-    padding: "2.5rem",
-    background: "rgba(255, 255, 255, 0.02)",
-    border: "1px solid rgba(212, 175, 55, 0.15)",
-    borderRadius: "16px",
+  formCard: {
+    padding: "2.8rem",
+    background: "rgba(20, 20, 20, 0.9)",
+    borderRadius: "12px",
+    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+    maxWidth: "580px",
+    width: "100%",
+    border: "1px solid rgba(212, 175, 55, 0.2)",
     backdropFilter: "blur(10px)",
   },
 
@@ -527,12 +416,14 @@ const styles = {
     fontWeight: "700",
     color: "#fff",
     margin: "0 0 0.5rem",
+    letterSpacing: "-0.5px",
   },
 
   formSubtitle: {
     fontSize: "0.95rem",
-    color: "#888",
+    color: "#b0b0b0",
     margin: "0 0 1.8rem",
+    fontWeight: "400",
   },
 
   successMessage: {
@@ -546,12 +437,18 @@ const styles = {
     color: "#4ade80",
     marginBottom: "1.5rem",
     fontSize: "0.95rem",
+    fontWeight: "500",
   },
 
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "1rem",
+    gap: "1.2rem",
+  },
+
+  formGroup: {
+    display: "flex",
+    flexDirection: "column",
   },
 
   formRow: {
@@ -561,10 +458,10 @@ const styles = {
   },
 
   input: {
-    padding: "1rem",
-    background: "rgba(10, 10, 10, 0.8)",
+    padding: "0.95rem 1rem",
+    background: "rgba(40, 40, 40, 0.8)",
     border: "1px solid rgba(212, 175, 55, 0.2)",
-    borderRadius: "8px",
+    borderRadius: "6px",
     color: "#fff",
     fontSize: "0.95rem",
     fontFamily: "inherit",
@@ -573,27 +470,26 @@ const styles = {
   },
 
   textarea: {
-    padding: "1rem",
-    background: "rgba(10, 10, 10, 0.8)",
+    padding: "0.95rem 1rem",
+    background: "rgba(40, 40, 40, 0.8)",
     border: "1px solid rgba(212, 175, 55, 0.2)",
-    borderRadius: "8px",
+    borderRadius: "6px",
     color: "#fff",
     fontSize: "0.95rem",
     fontFamily: "inherit",
     resize: "none",
     transition: "all 0.3s ease",
     outline: "none",
-    marginBottom: "0.5rem",
   },
 
   submitButton: {
-    padding: "1.2rem",
+    padding: "1rem 2rem",
     background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "6px",
     color: "#000",
     fontWeight: "700",
-    fontSize: "1rem",
+    fontSize: "0.95rem",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
@@ -601,10 +497,7 @@ const styles = {
     gap: "0.8rem",
     transition: "all 0.3s ease",
     letterSpacing: "0.5px",
-  },
-
-  loadingText: {
-    opacity: 0.8,
+    marginTop: "0.5rem",
   },
 
   buttonArrow: {
@@ -615,7 +508,8 @@ const styles = {
     fontSize: "0.8rem",
     color: "#666",
     textAlign: "center",
-    margin: "1.5rem 0 0",
+    margin: "1.2rem 0 0",
+    fontWeight: "400",
   },
 };
 

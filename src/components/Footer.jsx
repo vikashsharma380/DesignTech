@@ -1,232 +1,3 @@
-// import React from "react";
-// import { motion } from "framer-motion";
-// import { fadeUp } from "../animations";
-
-// const Footer = () => {
-//   const footerStyle = {
-//     backgroundColor: "#0a0a0a",
-//     borderTop: "1px solid #262626",
-//     padding: "4rem 2rem 2rem",
-//     color: "white",
-//   };
-
-//   const containerStyle = {
-//     maxWidth: "1400px",
-//     margin: "0 auto",
-//   };
-
-//   const linkStyle = {
-//     color: "#b5b5b5",
-//     textDecoration: "none",
-//     fontSize: "0.95rem",
-//     transition: "0.3s",
-//   };
-
-//   const linkHover = {
-//     color: "#d4af37",
-//   };
-
-//   return (
-//     <footer style={footerStyle}>
-//       <div style={containerStyle}>
-//         <motion.div
-//           variants={fadeUp}
-//           initial="hidden"
-//           whileInView="visible"
-//           viewport={{ once: true }}
-//           style={{
-//             display: "grid",
-//             gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-//             gap: "3rem",
-//             marginBottom: "3rem",
-//           }}
-//         >
-//           {/* Brand */}
-//           <div style={{ gridColumn: "span 2" }}>
-//             <div
-//               style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
-//             >
-//               <div
-//                 style={{
-//                   width: "48px",
-//                   height: "48px",
-//                   borderRadius: "12px",
-//                   background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
-//                   display: "flex",
-//                   alignItems: "center",
-//                   justifyContent: "center",
-//                   fontSize: "24px",
-//                 }}
-//               >
-//                 🏛️
-//               </div>
-//               <span
-//                 style={{
-//                   fontSize: "1.5rem",
-//                   fontWeight: 800,
-//                   fontFamily: "'Playfair Display', serif",
-//                   letterSpacing: "2px",
-//                 }}
-//               >
-//                 LUXE BUILD
-//               </span>
-//             </div>
-
-//             <p
-//               style={{
-//                 color: "#737373",
-//                 margin: "1.5rem 0",
-//                 lineHeight: "1.7",
-//                 maxWidth: "500px",
-//               }}
-//             >
-//               India's premier luxury construction company delivering
-//               architectural excellence, innovation, and world-class
-//               craftsmanship.
-//             </p>
-
-//             {/* Social Icons */}
-//             <div style={{ display: "flex", gap: "1rem" }}>
-//               {["FB", "IN", "TW", "LI"].map((social) => (
-//                 <button
-//                   key={social}
-//                   style={{
-//                     width: "44px",
-//                     height: "44px",
-//                     borderRadius: "12px",
-//                     background: "#171717",
-//                     border: "1px solid #525252",
-//                     display: "flex",
-//                     alignItems: "center",
-//                     justifyContent: "center",
-//                     color: "#b5b5b5",
-//                     fontWeight: "700",
-//                     fontSize: "0.8rem",
-//                     cursor: "pointer",
-//                     transition: "0.3s",
-//                   }}
-//                   onMouseEnter={(e) => (e.target.style.color = "#d4af37")}
-//                   onMouseLeave={(e) => (e.target.style.color = "#b5b5b5")}
-//                 >
-//                   {social}
-//                 </button>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* Quick Links */}
-//           <div>
-//             <h4
-//               style={{
-//                 fontSize: "1.15rem",
-//                 fontWeight: 700,
-//                 marginBottom: "1.2rem",
-//               }}
-//             >
-//               Quick Links
-//             </h4>
-
-//             <ul style={{ listStyle: "none", padding: 0 }}>
-//               {[
-//                 "About Us",
-//                 "Services",
-//                 "Portfolio",
-//                 "Testimonials",
-//                 "Careers",
-//                 "Blog",
-//               ].map((item) => (
-//                 <li key={item} style={{ marginBottom: "0.75rem" }}>
-//                   <a
-//                     href="#"
-//                     style={linkStyle}
-//                     onMouseEnter={(e) => (e.target.style.color = "#d4af37")}
-//                     onMouseLeave={(e) => (e.target.style.color = "#b5b5b5")}
-//                   >
-//                     {item}
-//                   </a>
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-
-//           {/* Services */}
-//           <div>
-//             <h4
-//               style={{
-//                 fontSize: "1.15rem",
-//                 fontWeight: 700,
-//                 marginBottom: "1.2rem",
-//               }}
-//             >
-//               Services
-//             </h4>
-
-//             <ul style={{ listStyle: "none", padding: 0 }}>
-//               {[
-//                 "Residential Design",
-//                 "Commercial Projects",
-//                 "Interior Design",
-//                 "Architectural Planning",
-//                 "Turnkey Solutions",
-//                 "Consultation",
-//               ].map((service) => (
-//                 <li key={service} style={{ marginBottom: "0.75rem" }}>
-//                   <a
-//                     href="#"
-//                     style={linkStyle}
-//                     onMouseEnter={(e) => (e.target.style.color = "#d4af37")}
-//                     onMouseLeave={(e) => (e.target.style.color = "#b5b5b5")}
-//                   >
-//                     {service}
-//                   </a>
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         </motion.div>
-
-//         {/* Bottom Section */}
-//         <motion.div
-//           variants={fadeUp}
-//           initial="hidden"
-//           whileInView="visible"
-//           viewport={{ once: true }}
-//           style={{
-//             paddingTop: "2rem",
-//             borderTop: "1px solid #262626",
-//             display: "flex",
-//             justifyContent: "space-between",
-//             alignItems: "center",
-//             flexWrap: "wrap",
-//             gap: "1.5rem",
-//           }}
-//         >
-//           <p style={{ color: "#737373", fontSize: "0.9rem" }}>
-//             © 2025 Luxe Build. All rights reserved.
-//           </p>
-
-//           <div style={{ display: "flex", gap: "2rem" }}>
-//             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
-//               (item) => (
-//                 <a
-//                   key={item}
-//                   href="#"
-//                   style={linkStyle}
-//                   onMouseEnter={(e) => (e.target.style.color = "#d4af37")}
-//                   onMouseLeave={(e) => (e.target.style.color = "#b5b5b5")}
-//                 >
-//                   {item}
-//                 </a>
-//               )
-//             )}
-//           </div>
-//         </motion.div>
-//       </div>
-//     </footer>
-//   );
-// };
-
-// export default Footer;
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -253,10 +24,42 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: "f", label: "Facebook", href: "#" },
-    { icon: "in", label: "Instagram", href: "#" },
-    { icon: "tw", label: "Twitter", href: "#" },
-    { icon: "in", label: "LinkedIn", href: "#" },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+      ),
+      label: "Facebook",
+      href: "#",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.25C6.21 22.25 1.75 17.79 1.75 12S6.21 1.75 12 1.75 22.25 6.21 22.25 12 17.79 22.25 12 22.25zm5.387-11.285c-.095-2.01-1.19-3.78-2.906-4.406a4.673 4.673 0 00-2.996 0c-1.715.626-2.811 2.396-2.906 4.406 0 2.01 1.19 3.78 2.906 4.406.995.356 2.001.356 2.996 0 1.715-.626 2.811-2.396 2.906-4.406zm-5.387 3.406c-1.716 0-3.11-1.394-3.11-3.11s1.394-3.11 3.11-3.11 3.11 1.394 3.11 3.11-1.394 3.11-3.11 3.11z" />
+        </svg>
+      ),
+      label: "Instagram",
+      href: "#",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.953 4.57a10 10 0 102.856 10.54 9.958 9.958 0 00-2.856-10.54zM8.875 18.633c.712-1.095 1.823-1.957 3.157-2.39 1.334-.432 2.783-.432 4.116 0 1.334.433 2.445 1.295 3.157 2.39.712 1.095 1.068 2.419 1.068 3.789 0 1.37-.356 2.694-1.068 3.789a10 10 0 11-11.5-7.588z" />
+        </svg>
+      ),
+      label: "Twitter",
+      href: "#",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.083 0-1.724.722-2.048 1.422-.105.257-.132.615-.132.974v5.409h-3.554s.044-8.789 0-9.714h3.554v1.375c.428-.659 1.191-1.599 2.897-1.599 2.117 0 3.704 1.385 3.704 4.362v5.576zM5.337 9.433c-1.144 0-1.915-.758-1.915-1.707 0-.955.77-1.708 1.963-1.708 1.19 0 1.912.753 1.938 1.708 0 .949-.748 1.707-1.986 1.707zm1.946 11.019H3.391V9.956h3.892v10.496zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg>
+      ),
+      label: "LinkedIn",
+      href: "#",
+    },
   ];
 
   const legalLinks = [
@@ -351,7 +154,7 @@ const Footer = () => {
                   whileHover={{ scale: 1.1, y: -4 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {social.icon.toUpperCase()}
+                  {social.icon}
                 </motion.a>
               ))}
             </div>
@@ -416,7 +219,7 @@ const Footer = () => {
               <div style={styles.contactItem}>
                 <span style={styles.contactLabel}>Phone</span>
                 <a
-                  href="tel:+919876543210"
+                  href="tel:06204203526"
                   style={{
                     ...styles.contactValue,
                     color: hoveredLink === "phone" ? "#d4af37" : "#b5b5b5",
@@ -424,7 +227,7 @@ const Footer = () => {
                   onMouseEnter={() => setHoveredLink("phone")}
                   onMouseLeave={() => setHoveredLink(null)}
                 >
-                  +91 98765 43210
+                  062042 03526
                 </a>
               </div>
               <div style={styles.contactItem}>
@@ -443,7 +246,10 @@ const Footer = () => {
               </div>
               <div style={styles.contactItem}>
                 <span style={styles.contactLabel}>Location</span>
-                <p style={styles.contactValue}>Sector 50, Gurgaon, India</p>
+                <p style={styles.contactValue}>
+                  Gandhi Complex, Station Rd, near BJP Office, Professor Colony,
+                  Belbanwa, Motihari, Bihar 845401
+                </p>
               </div>
             </div>
           </motion.div>

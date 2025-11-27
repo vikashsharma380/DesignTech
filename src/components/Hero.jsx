@@ -52,7 +52,7 @@ const Hero = () => {
         }}
       >
         <video
-          src="/src/assets/bgv.mp4"
+          src="/DesignTech/bgv.mp4"
           autoPlay
           loop
           muted
@@ -79,7 +79,7 @@ const Hero = () => {
         }}
       >
         <video
-          src="/src/assets/bgv.mp4"
+          src="/DesignTech/bgv.mp4"
           autoPlay
           loop
           muted

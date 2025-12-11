@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ theme, onThemeToggle }) => {
+const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
   const isDark = theme === "dark";
 
   useEffect(() => {
@@ -14,25 +11,6 @@ const Navbar = ({ theme, onThemeToggle }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // 🔥 NEW FIX — retry scroll until section is mounted
-  const scrollToSection = (id) => {
-    const tryScroll = () => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      } else {
-        setTimeout(tryScroll, 60);
-      }
-    };
-
-    if (window.location.pathname !== "/") {
-      navigate("/");
-      setTimeout(tryScroll, 150);
-    } else {
-      tryScroll();
-    }
-  };
 
   const navItems = [
     { label: "Home", id: "home" },
@@ -43,24 +21,22 @@ const Navbar = ({ theme, onThemeToggle }) => {
 
   return (
     <>
-      {/* NAVBAR */}
       <motion.nav
-        className={`fixed top-0 w-full z-[2000] transition-all
-          ${
-            scrolled
-              ? isDark
-                ? "backdrop-blur-lg bg-black/70 border-b border-yellow-600/20"
-                : "backdrop-blur-lg bg-white/70 border-b border-yellow-600/20"
-              : "bg-transparent"
-          }`}
+        className={`fixed top-0 w-full z-[2000] transition-all ${
+          scrolled
+            ? isDark
+              ? "backdrop-blur-lg bg-black/70 border-b border-yellow-600/20"
+              : "backdrop-blur-lg bg-white/70 border-b border-yellow-600/20"
+            : "bg-transparent"
+        }`}
       >
         <div className="flex items-center justify-between px-4 py-4 sm:px-8 lg:px-16">
           {/* LOGO */}
           <div
-            onClick={() => scrollToSection("home")}
+            onClick={() => onNavClick("home")}
             className="flex items-center gap-2 cursor-pointer select-none"
           >
-            <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+            <svg width="40" height="40" viewBox="0 0 48 48">
               <rect
                 x="6"
                 y="12"
@@ -77,10 +53,10 @@ const Navbar = ({ theme, onThemeToggle }) => {
               />
               <circle cx="24" cy="24" r="2" fill="#d4af37" />
             </svg>
-
             <span
-              className={`text-2xl font-extrabold font-playfair 
-              ${isDark ? "text-white" : "text-black"}`}
+              className={`text-2xl font-extrabold font-playfair ${
+                isDark ? "text-white" : "text-black"
+              }`}
             >
               DESIGNTECH
             </span>
@@ -91,43 +67,33 @@ const Navbar = ({ theme, onThemeToggle }) => {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-sm font-semibold transition 
-                  ${isDark ? "text-gray-200" : "text-gray-800"}
-                  hover:text-yellow-500`}
+                onClick={() => onNavClick(item.id)}
+                className={`text-sm font-semibold ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                } hover:text-yellow-500`}
               >
                 {item.label}
               </button>
             ))}
 
-            {/* BOOKING */}
+            {/* Estimate Button */}
             <button
-              onClick={() => navigate("/booking")}
-              className={`text-sm font-semibold ${
-                isDark ? "text-gray-200" : "text-gray-800"
-              } hover:text-yellow-500`}
+              onClick={onEstimateClick}
+              className="px-6 py-3 font-bold text-black rounded-lg shadow-md bg-gradient-to-r from-yellow-600 to-yellow-300"
             >
-              Booking
+              Get Estimate
             </button>
 
-            {/* THEME TOGGLE */}
+            {/* Theme Toggle */}
             <button
               onClick={onThemeToggle}
               className="px-4 py-2 text-sm font-semibold text-yellow-200 border rounded-lg border-yellow-500/40 bg-yellow-500/10 hover:bg-yellow-600/20"
             >
               {isDark ? "Light Mode" : "Dark Mode"}
             </button>
-
-            {/* CTA */}
-            <button
-              onClick={() => navigate("/estimate")}
-              className="px-6 py-3 font-bold text-black rounded-lg shadow-md bg-gradient-to-r from-yellow-600 to-yellow-300"
-            >
-              Get Estimate
-            </button>
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MOBILE MENU ICON */}
           <button
             className="lg:hidden flex flex-col gap-1.5"
             onClick={() => setMenuOpen(true)}
@@ -151,27 +117,26 @@ const Navbar = ({ theme, onThemeToggle }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className={`fixed top-0 left-0 w-full h-full z-[1500] p-6 
-              ${isDark ? "bg-black/95" : "bg-white/95"} overflow-y-auto`}
+            className={`fixed top-0 left-0 w-full h-full z-[1500] p-6 ${
+              isDark ? "bg-black/95" : "bg-white/95"
+            } overflow-y-auto`}
           >
-            {/* Close */}
             <button
               onClick={() => setMenuOpen(false)}
-              className={`text-3xl font-bold mb-6 ml-auto block ${
+              className={`text-3xl font-bold mb-6 ml-auto ${
                 isDark ? "text-white" : "text-black"
               }`}
             >
               ✕
             </button>
 
-            {/* Mobile Links */}
             <div className="flex flex-col gap-6 mt-4">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => {
-                    scrollToSection(item.id);
                     setMenuOpen(false);
+                    onNavClick(item.id);
                   }}
                   className={`text-xl font-semibold ${
                     isDark ? "text-white" : "text-black"
@@ -181,20 +146,16 @@ const Navbar = ({ theme, onThemeToggle }) => {
                 </button>
               ))}
 
-              {/* Booking */}
               <button
                 onClick={() => {
-                  navigate("/booking");
+                  onEstimateClick();
                   setMenuOpen(false);
                 }}
-                className={`text-xl font-semibold ${
-                  isDark ? "text-white" : "text-black"
-                } hover:text-yellow-500`}
+                className="w-full py-3 font-bold text-black rounded-lg bg-gradient-to-r from-yellow-600 to-yellow-300"
               >
-                Booking
+                Get Estimate
               </button>
 
-              {/* Theme */}
               <button
                 onClick={() => {
                   onThemeToggle();
@@ -203,17 +164,6 @@ const Navbar = ({ theme, onThemeToggle }) => {
                 className="w-full py-3 font-bold text-yellow-200 border rounded-lg border-yellow-500/40 bg-yellow-500/20"
               >
                 {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              </button>
-
-              {/* Estimate CTA */}
-              <button
-                onClick={() => {
-                  navigate("/estimate");
-                  setMenuOpen(false);
-                }}
-                className="w-full py-3 font-bold text-black rounded-lg bg-gradient-to-r from-yellow-600 to-yellow-300"
-              >
-                Get Estimate
               </button>
             </div>
           </motion.div>

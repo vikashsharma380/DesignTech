@@ -10,13 +10,11 @@ const BookingPage = lazy(() => import("./components/BookingPage.jsx"));
 function App() {
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<PremiumConstruction />} />
-          <Route path="/estimate" element={<ConstructionEstimate />} />
-          <Route path="/booking" element={<BookingPage />} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<PremiumConstruction />} />
+        <Route path="/estimate" element={<ConstructionEstimate />} />
+        <Route path="/booking" element={<BookingPage />} />
+      </Routes>
     </Router>
   );
 }

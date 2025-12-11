@@ -23,54 +23,48 @@ const CTA = ({ theme }) => {
   return (
     <section
       id="cta"
-      className={`relative px-6 md:px-20 py-24 md:py-28 overflow-hidden ${
+      className={`relative px-4 sm:px-8 lg:px-20 py-20 md:py-28 overflow-hidden ${
         isLight ? "bg-white" : "bg-[#0a0a0a]"
       }`}
     >
-      {/* BG IMAGE */}
-      <div className="absolute inset-0 z-0">
+      {/* BACKGROUND IMAGE */}
+      <div className="absolute inset-0 -z-10">
         <img
           src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80"
-          className={`w-full h-full object-cover transition-opacity ${
-            isLight ? "opacity-10" : "opacity-[0.15]"
+          className={`w-full h-full object-cover ${
+            isLight ? "opacity-10" : "opacity-20"
           }`}
           alt="background"
         />
       </div>
 
-      {/* GOLD / WHITE OVERLAY */}
+      {/* GOLD OVERLAY */}
       <div
-        className={`absolute inset-0 ${
+        className={`absolute inset-0 -z-10 ${
           isLight
-            ? "bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(244,229,195,0.2)]"
-            : "bg-gradient-to-br from-[rgba(212,175,55,0.95)] to-[rgba(244,229,195,0.95)]"
+            ? "bg-gradient-to-br from-[rgba(212,175,55,0.15)] to-[rgba(244,229,195,0.15)]"
+            : "bg-gradient-to-br from-[rgba(212,175,55,0.9)] to-[rgba(244,229,195,0.9)]"
         }`}
-      ></div>
+      />
 
       {/* CONTENT */}
       <motion.div
-        className="relative z-10 text-center max-w-4xl mx-auto"
+        className="relative max-w-3xl mx-auto text-center"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.5 }}
+        viewport={{ once: true, amount: 0.4 }}
       >
-        {/* TOP LINE */}
+        {/* TOP DIVIDER */}
         <motion.div
           variants={itemVariants}
-          className={`h-[2px] w-20 mx-auto mb-8 ${
-            isLight
-              ? "bg-gradient-to-r from-transparent via-black/30 to-transparent"
-              : "bg-gradient-to-r from-transparent via-black/30 to-transparent"
-          }`}
+          className="h-[2px] w-16 sm:w-20 mx-auto mb-8 bg-gradient-to-r from-transparent via-black/30 to-transparent"
         />
 
         {/* HEADING */}
         <motion.h2
           variants={itemVariants}
-          className={`text-4xl md:text-5xl font-extrabold font-playfair mb-6 ${
-            isLight ? "text-black" : "text-black"
-          }`}
+          className="mb-6 text-3xl font-extrabold text-black sm:text-4xl md:text-5xl font-playfair"
         >
           Ready to Start Your Dream Project?
         </motion.h2>
@@ -78,33 +72,29 @@ const CTA = ({ theme }) => {
         {/* SUBTITLE */}
         <motion.p
           variants={itemVariants}
-          className={`text-lg md:text-xl leading-8 font-light mb-10 ${
+          className={`text-base sm:text-lg md:text-xl leading-relaxed font-light mb-10 ${
             isLight ? "text-[#333]" : "text-black/70"
           }`}
         >
           Get a free consultation and detailed estimate from our expert team
-          today
+          today.
         </motion.p>
 
-        {/* BOTTOM LINE */}
+        {/* BOTTOM DIVIDER */}
         <motion.div
           variants={itemVariants}
-          className={`h-[2px] w-20 mx-auto mb-14 ${
-            isLight
-              ? "bg-gradient-to-r from-transparent via-black/30 to-transparent"
-              : "bg-gradient-to-r from-transparent via-black/30 to-transparent"
-          }`}
+          className="h-[2px] w-16 sm:w-20 mx-auto mb-12 bg-gradient-to-r from-transparent via-black/30 to-transparent"
         />
 
         {/* BUTTONS */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap justify-center gap-6 mb-12"
+          className="flex flex-col justify-center gap-4 mb-12 sm:flex-row sm:gap-6"
         >
-          {/* PRIMARY BUTTON */}
+          {/* PRIMARY CTA */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
             onMouseEnter={() => setIsHoveredPrimary(true)}
             onMouseLeave={() => setIsHoveredPrimary(false)}
             onClick={() =>
@@ -112,11 +102,9 @@ const CTA = ({ theme }) => {
                 behavior: "smooth",
               })
             }
-            className={`px-10 py-4 rounded-lg font-bold uppercase tracking-wide flex items-center gap-2
-              ${isLight ? "text-[#d4af37]" : "text-[#d4af37]"}
-              shadow-lg transition-all
-              ${
-                isHoveredPrimary ? "bg-white shadow-2xl" : "bg-white shadow-lg"
+            className={`px-8 py-4 rounded-lg font-bold uppercase tracking-wide flex items-center justify-center gap-2 sm:min-w-[240px]
+              text-[#d4af37] transition-all ${
+                isHoveredPrimary ? "bg-white shadow-xl" : "bg-white shadow-md"
               }`}
           >
             <svg width="20" height="20" fill="#d4af37">
@@ -125,10 +113,10 @@ const CTA = ({ theme }) => {
             Calculate Cost Now
           </motion.button>
 
-          {/* SECONDARY OUTLINE BUTTON */}
+          {/* SECONDARY CTA */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
             onMouseEnter={() => setIsHoveredSecondary(true)}
             onMouseLeave={() => setIsHoveredSecondary(false)}
             onClick={() =>
@@ -136,11 +124,10 @@ const CTA = ({ theme }) => {
                 behavior: "smooth",
               })
             }
-            className={`px-10 py-4 rounded-lg font-bold uppercase tracking-wide flex items-center gap-2
-              border transition-all
+            className={`px-8 py-4 rounded-lg font-bold uppercase tracking-wide flex items-center justify-center gap-2 border sm:min-w-[240px] transition-all
               ${
                 isHoveredSecondary
-                  ? "text-white border-white shadow-xl"
+                  ? "text-white border-white shadow-lg"
                   : "text-white/90 border-white/60"
               }`}
           >
@@ -154,21 +141,15 @@ const CTA = ({ theme }) => {
         {/* TRUST INDICATORS */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap justify-center items-center gap-5 md:gap-8"
+          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8"
         >
           {["Free Consultation", "No Obligations", "24-Hour Response"].map(
             (txt, i) => (
               <React.Fragment key={i}>
                 <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-black">✓</span>
                   <span
-                    className={`font-bold text-lg ${
-                      isLight ? "text-black" : "text-black"
-                    }`}
-                  >
-                    ✓
-                  </span>
-                  <span
-                    className={`text-sm md:text-base font-medium ${
+                    className={`text-sm sm:text-base font-medium ${
                       isLight ? "text-[#444]" : "text-black/70"
                     }`}
                   >
@@ -177,11 +158,7 @@ const CTA = ({ theme }) => {
                 </div>
 
                 {i < 2 && (
-                  <div
-                    className={`h-5 w-[1px] ${
-                      isLight ? "bg-black/30" : "bg-black/20"
-                    }`}
-                  />
+                  <div className="hidden sm:block h-5 w-[1px] bg-black/20" />
                 )}
               </React.Fragment>
             )

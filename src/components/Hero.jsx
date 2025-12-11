@@ -7,20 +7,17 @@ const Hero = ({ theme = "dark" }) => {
 
   const isDark = theme === "dark";
 
-  // -------- THEME TOKENS --------
   const T = {
-    bg: isDark ? "#0a0a0a" : "rgba(255,255,255,0.10)", // EXACT 10% white
     mainHeading: isDark ? "#ffffffef" : "#1a1a1a",
     subHeading: isDark
       ? "linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%)"
       : "linear-gradient(135deg, #d4af37 0%, #a48826 50%, #d4af37 100%)",
     paragraph: isDark ? "#d0d0d0" : "#3a3a3a",
-    transparentWhite: isDark
-      ? "rgba(255,255,255,0.05)"
-      : "rgba(255,255,255,0.10)", // also softened to match 10%
-    outlineBorder: isDark
+    bg: isDark ? "#0a0a0a" : "rgba(255,255,255,0.10)",
+    buttonOutline: isDark
       ? "1.5px solid rgba(212,175,55,0.5)"
       : "1.5px solid rgba(212,175,55,0.35)",
+    glass: isDark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.10)",
   };
 
   useEffect(() => {
@@ -33,7 +30,6 @@ const Hero = ({ theme = "dark" }) => {
 
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("mousemove", mouseHandler);
-
     return () => {
       window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("mousemove", mouseHandler);
@@ -43,26 +39,16 @@ const Hero = ({ theme = "dark" }) => {
   return (
     <section
       id="home"
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "0 5rem",
-        overflow: "hidden",
-        background: T.bg,
-      }}
+      className="relative flex items-center justify-center min-h-screen px-4 overflow-hidden sm:px-8 md:px-16"
+      style={{ background: T.bg }}
     >
       {/* BACKGROUND VIDEO 1 */}
       <motion.div
+        className="absolute inset-0 z-0"
         style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
           transform: `translateY(${offsetY * 0.4}px) translateX(${
             mousePos.x
-          }px) translateY(${mousePos.y * 0.5}px) scale(1.1)`,
+          }px) scale(1.1)`,
         }}
       >
         <video
@@ -71,22 +57,16 @@ const Hero = ({ theme = "dark" }) => {
           loop
           muted
           playsInline
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            opacity: isDark ? 0.4 : 0.22, // perfect visibility
-          }}
-        ></video>
+          className="object-cover w-full h-full"
+          style={{ opacity: isDark ? 0.4 : 0.22 }}
+        />
       </motion.div>
 
-      {/* BACKGROUND VIDEO 2 (blur layer) */}
+      {/* BACKGROUND VIDEO 2 (Blurred Layer) */}
       <motion.div
+        className="absolute inset-0 z-1"
         style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 1,
-          transform: `translateY(${offsetY * 0.25}px) translateX(${
+          transform: `translateY(${offsetY * 0.2}px) translateX(${
             mousePos.x * 0.5
           }px) scale(1.05)`,
         }}
@@ -97,147 +77,92 @@ const Hero = ({ theme = "dark" }) => {
           loop
           muted
           playsInline
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            opacity: isDark ? 0.08 : 0.06,
-            filter: "blur(20px)",
-          }}
-        ></video>
+          className="object-cover w-full h-full"
+          style={{ opacity: isDark ? 0.08 : 0.06, filter: "blur(22px)" }}
+        />
       </motion.div>
 
-      {/* DARK MODE OVERLAY (light mode = fully transparent) */}
-      <motion.div
+      {/* OVERLAY */}
+      <div
+        className="absolute inset-0 pointer-events-none z-2"
         style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 2,
           background: isDark
-            ? "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.55) 100%)"
+            ? "linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.22), rgba(0,0,0,0.55))"
             : "transparent",
         }}
       />
 
       {/* GOLD / WHITE radiance */}
       <div
+        className="absolute inset-0 pointer-events-none z-3"
         style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 3,
           background: isDark
-            ? "radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.15) 0%, transparent 70%)"
-            : "radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.10) 0%, transparent 70%)",
+            ? "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 70%)"
+            : "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.10), transparent 70%)",
         }}
       />
 
-      {/* CONTENT */}
+      {/* HERO CONTENT */}
       <motion.div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          textAlign: "center",
-          maxWidth: "900px",
-        }}
+        className="relative z-10 text-center max-w-[900px] px-2"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
       >
         {/* MAIN HEADING */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          style={{
-            fontSize: "7rem",
-            lineHeight: "1.05",
-            margin: "0 0 1.5rem",
-            fontFamily: "'Playfair Display', serif",
-            fontWeight: 800,
-            color: T.mainHeading,
-          }}
+        <h1
+          className="font-playfair font-extrabold leading-[1.08]
+          text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[6.3rem] mb-6"
+          style={{ color: T.mainHeading }}
         >
           Build the Future
-        </motion.h1>
+        </h1>
 
-        {/* SUBHEADING */}
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+        {/* SUB HEADING */}
+        <h2
+          className="mb-10 text-xl font-semibold font-playfair sm:text-2xl md:text-3xl lg:text-4xl"
           style={{
-            fontSize: "2.5rem",
-            margin: "0 0 2.5rem",
-            fontFamily: "'Playfair Display', serif",
-            fontWeight: 600,
             background: T.subHeading,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}
         >
           Where Vision Meets Innovation
-        </motion.h2>
+        </h2>
 
         {/* DESCRIPTION */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          style={{
-            fontSize: "1.25rem",
-            lineHeight: "1.9",
-            color: T.paragraph,
-            maxWidth: "700px",
-            margin: "0 auto 3.5rem",
-            fontWeight: 300,
-          }}
+        <p
+          className="mx-auto max-w-[700px]
+          text-base sm:text-lg md:text-xl leading-relaxed
+          mb-12"
+          style={{ color: T.paragraph }}
         >
           Transform your design and construction vision into reality with
           cutting-edge technology and timeless elegance.
-        </motion.p>
+        </p>
 
         {/* CTA BUTTONS */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          style={{
-            display: "flex",
-            gap: "2rem",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* Primary CTA */}
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+          {/* PRIMARY CTA */}
           <button
-            style={{
-              padding: "1.3rem 3.5rem",
-              background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
-              borderRadius: "8px",
-              border: "none",
-              fontWeight: 700,
-              color: "#000",
-              fontSize: "1rem",
-              cursor: "pointer",
-            }}
+            className="py-3.5 px-8 sm:px-10 rounded-lg font-bold text-black
+            bg-gradient-to-br from-yellow-600 to-yellow-300 text-sm sm:text-base"
           >
             Start Building
           </button>
 
-          {/* Secondary CTA */}
+          {/* SECONDARY CTA */}
           <button
+            className="py-3.5 px-8 sm:px-10 rounded-lg font-bold backdrop-blur-xl
+            text-yellow-500 text-sm sm:text-base"
             style={{
-              padding: "1.3rem 3.5rem",
-              background: T.transparentWhite,
-              border: T.outlineBorder,
-              borderRadius: "8px",
-              fontWeight: 700,
-              fontSize: "1rem",
-              color: "#d4af37",
-              cursor: "pointer",
-              backdropFilter: "blur(20px)",
+              background: T.glass,
+              border: T.buttonOutline,
             }}
           >
             Explore Portfolio
           </button>
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );

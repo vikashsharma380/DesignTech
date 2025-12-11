@@ -68,6 +68,25 @@ const PremiumConstruction = () => {
         </>
       )}
 
+      {/* WHATSAPP FLOAT BUTTON - ONLY HOME PAGE */}
+      {!showEstimate && !showBooking && (
+        <a
+          href="https://wa.me/916204203526"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed z-[3000] flex items-center justify-center w-16 h-16 transition-all bg-green-500 rounded-full shadow-2xl bottom-6 right-6 hover:scale-110"
+          style={{
+            boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+            alt="WhatsApp"
+            className="w-8 h-8"
+          />
+        </a>
+      )}
+
       <Footer theme={theme} />
     </div>
   );

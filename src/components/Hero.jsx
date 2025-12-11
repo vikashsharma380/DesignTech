@@ -13,10 +13,14 @@ const Hero = ({ theme = "dark" }) => {
       ? "linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%)"
       : "linear-gradient(135deg, #d4af37 0%, #a48826 50%, #d4af37 100%)",
     paragraph: isDark ? "#d0d0d0" : "#3a3a3a",
-    bg: isDark ? "#0a0a0a" : "rgba(255,255,255,0.10)",
+
+    // 🌤 LIGHT MODE → Now 8% white tint
+    bg: isDark ? "#0a0a0a" : "rgba(255, 255, 255, 1)",
+
     buttonOutline: isDark
       ? "1.5px solid rgba(212,175,55,0.5)"
       : "1.5px solid rgba(212,175,55,0.35)",
+
     glass: isDark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.10)",
   };
 
@@ -42,7 +46,7 @@ const Hero = ({ theme = "dark" }) => {
       className="relative flex items-center justify-center min-h-screen px-4 overflow-hidden sm:px-8 md:px-16"
       style={{ background: T.bg }}
     >
-      {/* BACKGROUND VIDEO 1 */}
+      {/* BACKGROUND VIDEO MAIN */}
       <motion.div
         className="absolute inset-0 z-0"
         style={{
@@ -58,49 +62,58 @@ const Hero = ({ theme = "dark" }) => {
           muted
           playsInline
           className="object-cover w-full h-full"
-          style={{ opacity: isDark ? 0.4 : 0.22 }}
+          style={{
+            opacity: isDark ? 0.4 : 0.9,
+          }}
         />
       </motion.div>
 
-      {/* BACKGROUND VIDEO 2 (Blurred Layer) */}
-      <motion.div
-        className="absolute inset-0 z-1"
-        style={{
-          transform: `translateY(${offsetY * 0.2}px) translateX(${
-            mousePos.x * 0.5
-          }px) scale(1.05)`,
-        }}
-      >
-        <video
-          src="./bgv.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="object-cover w-full h-full"
-          style={{ opacity: isDark ? 0.08 : 0.06, filter: "blur(22px)" }}
+      {/* BLUR VIDEO ONLY IN DARK MODE */}
+      {isDark && (
+        <motion.div
+          className="absolute inset-0 z-1"
+          style={{
+            transform: `translateY(${offsetY * 0.2}px) translateX(${
+              mousePos.x * 0.5
+            }px) scale(1.05)`,
+          }}
+        >
+          <video
+            src="./bgv.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="object-cover w-full h-full"
+            style={{
+              opacity: 0.08,
+              filter: "blur(22px)",
+            }}
+          />
+        </motion.div>
+      )}
+
+      {/* DARK MODE OVERLAY */}
+      {isDark && (
+        <div
+          className="absolute inset-0 pointer-events-none z-2"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.22), rgba(0,0,0,0.55))",
+          }}
         />
-      </motion.div>
+      )}
 
-      {/* OVERLAY */}
-      <div
-        className="absolute inset-0 pointer-events-none z-2"
-        style={{
-          background: isDark
-            ? "linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.22), rgba(0,0,0,0.55))"
-            : "transparent",
-        }}
-      />
-
-      {/* GOLD / WHITE radiance */}
-      <div
-        className="absolute inset-0 pointer-events-none z-3"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 70%)"
-            : "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.10), transparent 70%)",
-        }}
-      />
+      {/* DARK MODE GOLD GLOW */}
+      {isDark && (
+        <div
+          className="absolute inset-0 pointer-events-none z-3"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 70%)",
+          }}
+        />
+      )}
 
       {/* HERO CONTENT */}
       <motion.div
@@ -109,7 +122,6 @@ const Hero = ({ theme = "dark" }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        {/* MAIN HEADING */}
         <h1
           className="font-playfair font-extrabold leading-[1.08]
           text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[6.3rem] mb-6"
@@ -118,7 +130,6 @@ const Hero = ({ theme = "dark" }) => {
           Build the Future
         </h1>
 
-        {/* SUB HEADING */}
         <h2
           className="mb-10 text-xl font-semibold font-playfair sm:text-2xl md:text-3xl lg:text-4xl"
           style={{
@@ -130,7 +141,6 @@ const Hero = ({ theme = "dark" }) => {
           Where Vision Meets Innovation
         </h2>
 
-        {/* DESCRIPTION */}
         <p
           className="mx-auto max-w-[700px]
           text-base sm:text-lg md:text-xl leading-relaxed
@@ -141,9 +151,8 @@ const Hero = ({ theme = "dark" }) => {
           cutting-edge technology and timeless elegance.
         </p>
 
-        {/* CTA BUTTONS */}
+        {/* CTA */}
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-          {/* PRIMARY CTA */}
           <button
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold text-black
             bg-gradient-to-br from-yellow-600 to-yellow-300 text-sm sm:text-base"
@@ -151,7 +160,6 @@ const Hero = ({ theme = "dark" }) => {
             Start Building
           </button>
 
-          {/* SECONDARY CTA */}
           <button
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold backdrop-blur-xl
             text-yellow-500 text-sm sm:text-base"

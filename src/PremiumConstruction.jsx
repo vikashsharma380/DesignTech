@@ -9,6 +9,7 @@ import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import ConstructionEstimate from "./components/ConstructionEstimate";
 import BookingPage from "./components/BookingPage";
+import WhatsAppButton from "./components/WhatsAppButton"; // ✅ ADDED HERE
 import jcbCursor from "./assets/jcb1.png";
 
 const PremiumConstruction = () => {
@@ -68,23 +69,13 @@ const PremiumConstruction = () => {
         </>
       )}
 
-      {/* WHATSAPP FLOAT BUTTON - ONLY HOME PAGE */}
+      {/* ✅ WHATSAPP BUTTON ONLY ON HOME SCREEN */}
       {!showEstimate && !showBooking && (
-        <a
-          href="https://wa.me/916204203526"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed z-[3000] flex items-center justify-center w-16 h-16 transition-all bg-green-500 rounded-full shadow-2xl bottom-6 right-6 hover:scale-110"
-          style={{
-            boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-            alt="WhatsApp"
-            className="w-8 h-8"
-          />
-        </a>
+        <WhatsAppButton
+          phoneNumber="916204203526"
+          defaultMessage="Hello! I want to build my dream house. Please guide me."
+          position={{ right: 20, bottom: 25 }}
+        />
       )}
 
       <Footer theme={theme} />

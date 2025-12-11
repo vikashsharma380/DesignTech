@@ -3,7 +3,6 @@ import { useState, lazy, Suspense } from "react";
 const PremiumConstruction = lazy(() => import("./PremiumConstruction"));
 
 function App() {
-  // ...existing code...
   return (
     <>
       <PremiumConstruction />

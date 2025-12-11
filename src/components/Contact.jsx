@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const Contact = () => {
+const Contact = ({ theme = "dark" }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,22 +9,22 @@ const Contact = () => {
     service: "",
     message: "",
   });
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const isDark = theme === "dark";
 
-  const handleSubmit = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", service: "", message: "" });
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+  // THEME TOKENS
+  const T = {
+    pageOverlay: isDark ? "bg-black/60" : "bg-white/60",
+    textMain: isDark ? "text-white" : "text-black",
+    textSecondary: isDark ? "text-gray-300" : "text-gray-700",
+    cardBg: isDark ? "bg-[rgba(20,20,20,0.9)]" : "bg-white/90",
+    inputBg: isDark ? "bg-[rgba(40,40,40,0.8)]" : "bg-white/95",
+    border: isDark
+      ? "border-[rgba(212,175,55,0.2)]"
+      : "border-[rgba(212,175,55,0.35)]",
   };
 
   const services = [
@@ -34,232 +34,192 @@ const Contact = () => {
     "Architectural Design",
   ];
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+
+      setTimeout(() => setIsSubmitted(false), 4000);
+    }, 1500);
+  };
+
   return (
-    <section style={styles.section}>
-      {/* Background Image with Overlay */}
-      <div style={styles.backgroundOverlay} />
+    <section className="relative min-h-screen py-24 px-10 flex items-center overflow-hidden">
+      {/* Background Image */}
       <img
         src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=900&fit=crop"
         alt="Construction Background"
-        style={styles.backgroundImage}
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
-      <div style={styles.container}>
-        <div style={styles.contentWrapper}>
-          {/* Left Side - Text Content */}
+      {/* Overlay */}
+      <div className={`absolute inset-0 z-10 ${T.pageOverlay}`}></div>
+
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* LEFT CONTENT */}
           <motion.div
-            style={styles.leftContent}
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="flex flex-col gap-6"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            {/* Badge */}
+            <div className="inline-flex items-center gap-3 py-4 px-8 rounded-full border border-[rgba(212,175,55,0.3)] backdrop-blur-xl uppercase tracking-[1.5px] text-sm bg-white/5 text-white">
+              <span className="text-[#d4af37] text-lg">●</span>
+              GET IN TOUCH
+            </div>
+
+            {/* Title */}
+            <h1
+              className={`text-5xl font-extrabold font-['Playfair_Display'] leading-tight ${T.textMain}`}
             >
-              <div style={styles.badge}>
-                <span style={styles.badgeDot}>●</span>
-                GET IN TOUCH
-              </div>
+              Make Your Dream
+              <span className="text-[#d4af37] block">Home a Reality</span>
+            </h1>
 
-              <h1 style={styles.mainTitle}>
-                Make Your Dream
-                <span style={styles.highlight}> Home a Reality</span>
-              </h1>
+            <p
+              className={`text-lg leading-relaxed max-w-md ${T.textSecondary}`}
+            >
+              Find inspiration, expertise and premium craftsmanship to transform
+              your architectural vision into reality — all in one place.
+            </p>
 
-              <p style={styles.mainSubtitle}>
-                Find inspiration, expertise and premium craftsmanship to
-                transform your architectural vision into reality — all in one
-                place
+            {/* Highlight Box */}
+            <div
+              className={`flex gap-4 p-6 rounded-md border-l-4 border-[#d4af37] ${
+                isDark ? "bg-yellow-600/10" : "bg-yellow-600/20"
+              }`}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="#d4af37"
+                  strokeWidth="2"
+                />
+                <path d="M9 12L11 14L15 10" stroke="#d4af37" strokeWidth="2" />
+              </svg>
+              <p className={`text-sm leading-relaxed ${T.textSecondary}`}>
+                Award-winning architects • On-time delivery • 10-year warranty
               </p>
-
-              <div style={styles.highlightBox}>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  style={styles.highlightIcon}
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="#d4af37"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M9 12L11 14L15 10"
-                    stroke="#d4af37"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <p style={styles.highlightText}>
-                  Award-winning architects • On-time delivery • 10-year warranty
-                </p>
-              </div>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* Right Side - Form */}
+          {/* RIGHT FORM */}
           <motion.div
-            style={styles.rightContent}
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="flex justify-center"
           >
-            <div style={styles.formCard}>
-              <h3 style={styles.formTitle}>Send Us a Message</h3>
-              <p style={styles.formSubtitle}>
+            <div
+              className={`w-full max-w-lg p-10 rounded-xl shadow-2xl border ${T.cardBg} ${T.border}`}
+            >
+              <h3
+                className={`text-2xl font-['Playfair_Display'] font-bold mb-1 ${T.textMain}`}
+              >
+                Send Us a Message
+              </h3>
+              <p className={`text-sm mb-6 ${T.textSecondary}`}>
                 Our team will respond within 24 hours
               </p>
 
+              {/* Success Message */}
               {isSubmitted && (
                 <motion.div
-                  style={styles.successMessage}
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 p-3 rounded-md border border-green-400/40 bg-green-400/10 text-green-400 mb-4 text-sm font-medium"
                 >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <svg width="20" height="20">
                     <path
                       d="M17 6L8 15L3 10"
                       stroke="#4ade80"
                       strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      fill="none"
                     />
                   </svg>
                   Thank you! We'll contact you shortly.
                 </motion.div>
               )}
 
-              <div style={styles.form}>
-                <div style={styles.formGroup}>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name *"
-                    value={formData.name}
-                    onChange={handleChange}
-                    style={styles.input}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
-                    }
-                  />
-                </div>
+              {/* Form */}
+              <div className="flex flex-col gap-4">
+                <input
+                  name="name"
+                  placeholder="Full Name *"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`p-3 rounded-md outline-none ${T.inputBg} ${T.textMain} ${T.border}`}
+                />
 
-                <div style={styles.formGroup}>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email Address *"
-                    value={formData.email}
-                    onChange={handleChange}
-                    style={styles.input}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
-                    }
-                  />
-                </div>
+                <input
+                  name="email"
+                  placeholder="Email Address *"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`p-3 rounded-md outline-none ${T.inputBg} ${T.textMain} ${T.border}`}
+                />
 
-                <div style={styles.formRow}>
+                <div className="grid grid-cols-2 gap-4">
                   <input
-                    type="tel"
                     name="phone"
                     placeholder="Phone Number *"
                     value={formData.phone}
                     onChange={handleChange}
-                    style={styles.input}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
-                    }
+                    className={`p-3 rounded-md outline-none ${T.inputBg} ${T.textMain} ${T.border}`}
                   />
+
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    style={styles.input}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
-                    }
+                    className={`p-3 rounded-md outline-none ${T.inputBg} ${T.textMain} ${T.border}`}
                   >
                     <option value="">Select Service *</option>
-                    {services.map((service, idx) => (
-                      <option key={idx} value={service}>
-                        {service}
-                      </option>
+                    {services.map((s) => (
+                      <option key={s}>{s}</option>
                     ))}
                   </select>
                 </div>
 
-                <div style={styles.formGroup}>
-                  <textarea
-                    name="message"
-                    placeholder="Tell us about your project *"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="4"
-                    style={styles.textarea}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.5)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "rgba(212, 175, 55, 0.2)")
-                    }
-                  />
-                </div>
+                <textarea
+                  name="message"
+                  placeholder="Tell us about your project *"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows="4"
+                  className={`p-3 rounded-md outline-none resize-none ${T.inputBg} ${T.textMain} ${T.border}`}
+                />
 
                 <motion.button
                   onClick={handleSubmit}
-                  style={styles.submitButton}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   disabled={isLoading}
+                  className="py-3 px-6 rounded-md bg-gradient-to-br from-[#d4af37] to-[#f4e5c3] font-bold text-black uppercase tracking-wide mt-2"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  {isLoading ? (
-                    <span>Processing...</span>
-                  ) : (
-                    <>
-                      <span>Get Started</span>
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        style={styles.buttonArrow}
-                      >
-                        <path
-                          d="M3 10H17M17 10L12 5M17 10L12 15"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </>
-                  )}
+                  {isLoading ? "Processing..." : "Get Started →"}
                 </motion.button>
               </div>
 
-              <p style={styles.disclaimer}>
+              <p className={`text-xs mt-4 text-center ${T.textSecondary}`}>
                 We respect your privacy. Information used for consultation only.
               </p>
             </div>
@@ -268,249 +228,6 @@ const Contact = () => {
       </div>
     </section>
   );
-};
-
-const styles = {
-  section: {
-    position: "relative",
-    padding: "6rem 5rem",
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-
-  backgroundImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    zIndex: 0,
-  },
-
-  backgroundOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    background: "rgba(0, 0, 0, 0.65)",
-    zIndex: 1,
-  },
-
-  container: {
-    maxWidth: "1400px",
-    margin: "0 auto",
-    width: "100%",
-    position: "relative",
-    zIndex: 2,
-  },
-
-  contentWrapper: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "4rem",
-    alignItems: "flex-start",
-  },
-
-  leftContent: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-  },
-
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    padding: "1rem 2.2rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(212, 175, 55, 0.3)",
-    borderRadius: "60px",
-    fontSize: "0.85rem",
-    color: "#fff",
-    letterSpacing: "1.5px",
-    fontWeight: "500",
-    backdropFilter: "blur(20px)",
-    textTransform: "uppercase",
-    marginBottom: "1rem",
-    width: "fit-content",
-  },
-
-  badgeDot: {
-    color: "#d4af37",
-    fontSize: "1.2rem",
-  },
-
-  mainTitle: {
-    fontSize: "3.5rem",
-    lineHeight: "1.2",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "800",
-    color: "#fff",
-    margin: 0,
-    letterSpacing: "-1px",
-  },
-
-  highlight: {
-    color: "#d4af37",
-    display: "block",
-  },
-
-  mainSubtitle: {
-    fontSize: "1.15rem",
-    lineHeight: "1.8",
-    color: "#d0d0d0",
-    margin: "1.5rem 0 0",
-    fontWeight: "300",
-    letterSpacing: "0.8px",
-    maxWidth: "500px",
-  },
-
-  highlightBox: {
-    display: "flex",
-    alignItems: "flex-start",
-    gap: "1.2rem",
-    padding: "1.8rem",
-    background: "rgba(212, 175, 55, 0.1)",
-    borderLeft: "3px solid #d4af37",
-    borderRadius: "8px",
-    marginTop: "2rem",
-    backdropFilter: "blur(10px)",
-  },
-
-  highlightIcon: {
-    flexShrink: 0,
-    marginTop: "0.2rem",
-  },
-
-  highlightText: {
-    fontSize: "0.95rem",
-    color: "#e0e0e0",
-    margin: 0,
-    fontWeight: "500",
-    lineHeight: "1.6",
-  },
-
-  rightContent: {
-    display: "flex",
-    justifyContent: "center",
-  },
-
-  formCard: {
-    padding: "2.8rem",
-    background: "rgba(20, 20, 20, 0.9)",
-    borderRadius: "12px",
-    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
-    maxWidth: "580px",
-    width: "100%",
-    border: "1px solid rgba(212, 175, 55, 0.2)",
-    backdropFilter: "blur(10px)",
-  },
-
-  formTitle: {
-    fontSize: "1.8rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "700",
-    color: "#fff",
-    margin: "0 0 0.5rem",
-    letterSpacing: "-0.5px",
-  },
-
-  formSubtitle: {
-    fontSize: "0.95rem",
-    color: "#b0b0b0",
-    margin: "0 0 1.8rem",
-    fontWeight: "400",
-  },
-
-  successMessage: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    padding: "1rem 1.2rem",
-    background: "rgba(74, 222, 128, 0.1)",
-    border: "1px solid rgba(74, 222, 128, 0.3)",
-    borderRadius: "8px",
-    color: "#4ade80",
-    marginBottom: "1.5rem",
-    fontSize: "0.95rem",
-    fontWeight: "500",
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1.2rem",
-  },
-
-  formGroup: {
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  formRow: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "1rem",
-  },
-
-  input: {
-    padding: "0.95rem 1rem",
-    background: "rgba(40, 40, 40, 0.8)",
-    border: "1px solid rgba(212, 175, 55, 0.2)",
-    borderRadius: "6px",
-    color: "#fff",
-    fontSize: "0.95rem",
-    fontFamily: "inherit",
-    transition: "all 0.3s ease",
-    outline: "none",
-  },
-
-  textarea: {
-    padding: "0.95rem 1rem",
-    background: "rgba(40, 40, 40, 0.8)",
-    border: "1px solid rgba(212, 175, 55, 0.2)",
-    borderRadius: "6px",
-    color: "#fff",
-    fontSize: "0.95rem",
-    fontFamily: "inherit",
-    resize: "none",
-    transition: "all 0.3s ease",
-    outline: "none",
-  },
-
-  submitButton: {
-    padding: "1rem 2rem",
-    background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
-    border: "none",
-    borderRadius: "6px",
-    color: "#000",
-    fontWeight: "700",
-    fontSize: "0.95rem",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "0.8rem",
-    transition: "all 0.3s ease",
-    letterSpacing: "0.5px",
-    marginTop: "0.5rem",
-  },
-
-  buttonArrow: {
-    transition: "transform 0.3s ease",
-  },
-
-  disclaimer: {
-    fontSize: "0.8rem",
-    color: "#666",
-    textAlign: "center",
-    margin: "1.2rem 0 0",
-    fontWeight: "400",
-  },
 };
 
 export default Contact;

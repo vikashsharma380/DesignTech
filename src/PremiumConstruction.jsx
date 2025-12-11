@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-
-// Import All Components
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
@@ -25,14 +23,20 @@ const globalStyles = `
   body {
     margin: 0;
     padding: 0;
-    background: #0a0a0a;
     font-family: 'Inter', sans-serif;
   }
 `;
 
 const PremiumConstruction = () => {
-  const [showModal, setShowModal] = useState(false);
   const [showEstimate, setShowEstimate] = useState(false);
+
+  // 🌙 THEME SYSTEM
+  const [theme, setTheme] = useState("dark"); // default dark
+  const isDark = theme === "dark";
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   const handleEstimateClick = () => {
     setShowEstimate(true);
@@ -45,26 +49,23 @@ const PremiumConstruction = () => {
 
   return (
     <div
-  style={{
-    background: "#0a0a0a",
-    color: "white",
-    cursor: `url(${jcbCursor}) 5 5, auto`,
-  }}
->
-
-      {/* Inject Fonts + Global Styles */}
+      style={{
+        background: isDark ? "#0a0a0a" : "#ffffff",
+        color: isDark ? "white" : "black",
+        cursor: `url(${jcbCursor}) 5 5, auto`,
+        transition: "background 0.4s ease, color 0.4s ease",
+      }}
+    >
       <style>{globalStyles}</style>
 
-      {/* Modal */}
-      {/* <HouseModal isOpen={showModal} onClose={() => setShowModal(false)} /> */}
-
-      {/* Navbar with callbacks */}
+      {/* NAVBAR */}
       <Navbar
-        openModal={() => setShowModal(true)}
+        theme={theme}
+        onThemeToggle={toggleTheme}
         onEstimateClick={handleEstimateClick}
       />
 
-      {/* Back Button - Only show when Estimate page is open */}
+      {/* Back Button - Only for Estimate page */}
       {showEstimate && (
         <button
           onClick={handleBackClick}
@@ -74,7 +75,9 @@ const PremiumConstruction = () => {
             right: "2rem",
             zIndex: 1999,
             padding: "0.7rem 1.5rem",
-            background: "rgba(212, 175, 55, 0.15)",
+            background: isDark
+              ? "rgba(212, 175, 55, 0.15)"
+              : "rgba(212, 175, 55, 0.25)",
             border: "1px solid rgba(212, 175, 55, 0.4)",
             color: "#d4af37",
             cursor: "pointer",
@@ -84,37 +87,27 @@ const PremiumConstruction = () => {
             letterSpacing: "0.5px",
             transition: "all 0.3s ease",
           }}
-          onMouseEnter={(e) => {
-            e.target.style.background = "rgba(212, 175, 55, 0.25)";
-            e.target.style.boxShadow = "0 4px 12px rgba(212, 175, 55, 0.2)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "rgba(212, 175, 55, 0.15)";
-            e.target.style.boxShadow = "none";
-          }}
         >
           ← Back to Home
         </button>
       )}
 
-      {/* Conditional Rendering */}
+      {/* CONDITIONAL PAGE */}
       {showEstimate ? (
-        <ConstructionEstimate />
+        <ConstructionEstimate theme={theme} />
       ) : (
         <>
-          {/* Sections */}
-          <Hero />
-          <Services />
-          <Projects />
-          <Contact />
-          <WhyChooseUs />
-          <Testimonials />
-          <CTA />
+          <Hero theme={theme} />
+          <Services theme={theme} />
+          <Projects theme={theme} />
+          <Contact theme={theme} />
+          <WhyChooseUs theme={theme} />
+          <Testimonials theme={theme} />
+          <CTA theme={theme} />
         </>
       )}
 
-      {/* Footer - Always visible */}
-      <Footer />
+      <Footer theme={theme} />
     </div>
   );
 };

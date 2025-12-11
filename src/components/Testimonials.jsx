@@ -1,8 +1,25 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const Testimonials = () => {
+const Testimonials = ({ theme }) => {
+  const isLight = theme === "light";
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const colors = {
+    bg: isLight ? "#ffffff" : "#0a0a0a",
+    cardBg: isLight ? "#ffffff" : "rgba(255,255,255,0.02)",
+    text: isLight ? "#000" : "#fff",
+    subText: isLight ? "#444" : "#d0d0d0",
+    border: isLight ? "rgba(212, 175, 55, 0.25)" : "rgba(212, 175, 55, 0.12)",
+    divider: isLight ? "rgba(212,175,55,0.35)" : "rgba(212,175,55,0.2)",
+    badgeBg: isLight ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.05)",
+    badgeText: isLight ? "#000" : "#fff",
+    overlayGlow: isLight ? "rgba(212,175,55,0.15)" : "rgba(212,175,55,0.12)",
+    ctaBg: isLight
+      ? "linear-gradient(135deg, rgba(212,175,55,0.15), transparent)"
+      : "linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent)",
+    gold: "#d4af37",
+  };
 
   const testimonials = [
     {
@@ -39,10 +56,7 @@ const Testimonials = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
@@ -56,7 +70,12 @@ const Testimonials = () => {
   };
 
   return (
-    <section style={styles.section}>
+    <section
+      style={{
+        ...styles.section,
+        background: colors.bg,
+      }}
+    >
       {/* Header */}
       <motion.div
         style={styles.header}
@@ -65,16 +84,30 @@ const Testimonials = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div style={styles.badge}>
-          <span style={styles.badgeDot}>●</span>
+        <div
+          style={{
+            ...styles.badge,
+            background: colors.badgeBg,
+            color: colors.badgeText,
+            border: `1px solid ${colors.border}`,
+          }}
+        >
+          <span style={{ ...styles.badgeDot, color: colors.gold }}>●</span>
           CLIENT STORIES
         </div>
 
-        <h2 style={styles.title}>What Our Clients Say</h2>
+        <h2 style={{ ...styles.title, color: colors.text }}>
+          What Our Clients Say
+        </h2>
 
-        <div style={styles.divider} />
+        <div
+          style={{
+            ...styles.divider,
+            background: `linear-gradient(90deg, transparent, ${colors.gold}, transparent)`,
+          }}
+        />
 
-        <p style={styles.subtitle}>
+        <p style={{ ...styles.subtitle, color: colors.subText }}>
           Hear from the satisfied clients who have transformed their visions
           into architectural masterpieces with DesignTech
         </p>
@@ -88,65 +121,92 @@ const Testimonials = () => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        {testimonials.map((testimonial, idx) => (
+        {testimonials.map((t, idx) => (
           <motion.div
             key={idx}
             variants={itemVariants}
-            style={styles.card}
+            style={{
+              ...styles.card,
+              background: colors.cardBg,
+              border: `1px solid ${colors.border}`,
+            }}
             onMouseEnter={() => setHoveredIndex(idx)}
             onMouseLeave={() => setHoveredIndex(null)}
             whileHover={{ y: -8, transition: { duration: 0.3 } }}
           >
-            {/* Card Glow */}
+            {/* Glow */}
             <div
               style={{
                 ...styles.cardGlow,
+                background: `radial-gradient(circle at center, ${colors.overlayGlow} 0%, transparent 70%)`,
                 opacity: hoveredIndex === idx ? 1 : 0,
               }}
             />
 
             {/* Rating */}
             <div style={styles.ratingContainer}>
-              {[...Array(testimonial.rating)].map((_, i) => (
-                <span key={i} style={styles.star}>
+              {[...Array(t.rating)].map((_, i) => (
+                <span key={i} style={{ ...styles.star, color: colors.gold }}>
                   ★
                 </span>
               ))}
             </div>
 
-            {/* Testimonial Text */}
-            <p style={styles.testimonialText}>"{testimonial.text}"</p>
+            {/* Text */}
+            <p style={{ ...styles.testimonialText, color: colors.subText }}>
+              "{t.text}"
+            </p>
 
-            {/* Divider */}
-            <div style={styles.cardDivider} />
+            <div
+              style={{
+                ...styles.cardDivider,
+                background: `linear-gradient(90deg, transparent, ${colors.divider}, transparent)`,
+              }}
+            />
 
-            {/* Profile Section */}
+            {/* Profile */}
             <div style={styles.profileSection}>
               <div style={styles.avatarWrapper}>
-                <div style={styles.avatar}>{testimonial.avatar}</div>
+                <div
+                  style={{
+                    ...styles.avatar,
+                    background: `linear-gradient(135deg, ${colors.gold}, #f4e5c3)`,
+                  }}
+                >
+                  {t.avatar}
+                </div>
               </div>
 
               <div style={styles.profileInfo}>
-                <h4 style={styles.profileName}>{testimonial.name}</h4>
-                <p style={styles.profileRole}>{testimonial.role}</p>
+                <h4 style={{ ...styles.profileName, color: colors.text }}>
+                  {t.name}
+                </h4>
+                <p style={{ ...styles.profileRole, color: colors.subText }}>
+                  {t.role}
+                </p>
               </div>
             </div>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Bottom CTA */}
+      {/* CTA */}
       <motion.div
-        style={styles.ctaSection}
+        style={{
+          ...styles.ctaSection,
+          background: colors.ctaBg,
+          border: `1px solid ${colors.border}`,
+        }}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
         viewport={{ once: true }}
       >
-        <p style={styles.ctaText}>
+        <p style={{ ...styles.ctaText, color: colors.subText }}>
           Join hundreds of satisfied clients who have realized their
           architectural dreams with DesignTech
         </p>
+
         <motion.button
           style={styles.ctaButton}
           whileHover={{ scale: 1.02 }}
@@ -163,7 +223,6 @@ const styles = {
   section: {
     position: "relative",
     padding: "8rem 5rem",
-    background: "#0a0a0a",
     overflow: "hidden",
   },
 
@@ -178,11 +237,8 @@ const styles = {
     alignItems: "center",
     gap: "0.8rem",
     padding: "1rem 2.2rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(212, 175, 55, 0.3)",
     borderRadius: "60px",
     fontSize: "0.85rem",
-    color: "#fff",
     letterSpacing: "1.5px",
     fontWeight: "500",
     backdropFilter: "blur(20px)",
@@ -191,7 +247,6 @@ const styles = {
   },
 
   badgeDot: {
-    color: "#d4af37",
     fontSize: "1.2rem",
   },
 
@@ -201,22 +256,19 @@ const styles = {
     margin: "0 0 2rem",
     fontFamily: '"Playfair Display", serif',
     fontWeight: "800",
-    color: "#fff",
     letterSpacing: "-1px",
   },
 
   divider: {
     height: "1.5px",
     width: "80px",
-    background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
     margin: "2rem auto",
-    boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)",
+    boxShadow: "0 0 15px rgba(212,175,55,0.5)",
   },
 
   subtitle: {
     fontSize: "1.15rem",
     lineHeight: "1.8",
-    color: "#d0d0d0",
     margin: 0,
     fontWeight: "300",
     letterSpacing: "0.8px",
@@ -232,8 +284,6 @@ const styles = {
   card: {
     position: "relative",
     padding: "2.5rem",
-    background: "rgba(255, 255, 255, 0.02)",
-    border: "1px solid rgba(212, 175, 55, 0.12)",
     borderRadius: "14px",
     backdropFilter: "blur(10px)",
     transition: "all 0.3s ease",
@@ -244,8 +294,6 @@ const styles = {
   cardGlow: {
     position: "absolute",
     inset: 0,
-    background:
-      "radial-gradient(circle at center, rgba(212, 175, 55, 0.12) 0%, transparent 70%)",
     borderRadius: "14px",
     pointerEvents: "none",
     transition: "opacity 0.3s ease",
@@ -258,7 +306,6 @@ const styles = {
   },
 
   star: {
-    color: "#d4af37",
     fontSize: "1.2rem",
     fontWeight: "700",
   },
@@ -266,7 +313,6 @@ const styles = {
   testimonialText: {
     fontSize: "1.05rem",
     lineHeight: "1.8",
-    color: "#d0d0d0",
     margin: "0 0 1.8rem",
     fontStyle: "italic",
     fontWeight: "300",
@@ -275,8 +321,6 @@ const styles = {
 
   cardDivider: {
     height: "1px",
-    background:
-      "linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent)",
     margin: "1.8rem 0",
   },
 
@@ -295,7 +339,6 @@ const styles = {
     width: "56px",
     height: "56px",
     borderRadius: "12px",
-    background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -315,13 +358,11 @@ const styles = {
     fontSize: "1.05rem",
     fontFamily: '"Playfair Display", serif',
     fontWeight: "700",
-    color: "#fff",
     margin: 0,
   },
 
   profileRole: {
     fontSize: "0.85rem",
-    color: "#888",
     margin: 0,
     fontWeight: "500",
   },
@@ -329,15 +370,12 @@ const styles = {
   ctaSection: {
     textAlign: "center",
     padding: "3rem",
-    background: "linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent)",
-    border: "1px solid rgba(212, 175, 55, 0.15)",
     borderRadius: "16px",
     backdropFilter: "blur(10px)",
   },
 
   ctaText: {
     fontSize: "1.2rem",
-    color: "#d0d0d0",
     margin: "0 0 2rem",
     fontWeight: "300",
     lineHeight: "1.7",

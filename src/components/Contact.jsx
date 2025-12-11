@@ -55,7 +55,10 @@ const Contact = ({ theme = "dark" }) => {
   };
 
   return (
-    <section className="relative flex items-start min-h-screen px-4 py-20 overflow-hidden sm:px-8 md:px-12 lg:px-20">
+    <section
+      id="contact"
+      className="relative flex items-start min-h-screen px-4 py-20 overflow-hidden sm:px-8 md:px-12 lg:px-20"
+    >
       {/* Background */}
       <img
         src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=900&fit=crop"

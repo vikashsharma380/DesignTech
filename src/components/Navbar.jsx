@@ -15,14 +15,22 @@ const Navbar = ({ theme, onThemeToggle }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 🔥 NEW FIX — retry scroll until section is mounted
   const scrollToSection = (id) => {
+    const tryScroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        setTimeout(tryScroll, 60);
+      }
+    };
+
     if (window.location.pathname !== "/") {
       navigate("/");
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 200);
+      setTimeout(tryScroll, 150);
     } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      tryScroll();
     }
   };
 
@@ -85,9 +93,8 @@ const Navbar = ({ theme, onThemeToggle }) => {
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 className={`text-sm font-semibold transition 
-                ${
-                  isDark ? "text-gray-200" : "text-gray-800"
-                } hover:text-yellow-500`}
+                  ${isDark ? "text-gray-200" : "text-gray-800"}
+                  hover:text-yellow-500`}
               >
                 {item.label}
               </button>
@@ -96,10 +103,9 @@ const Navbar = ({ theme, onThemeToggle }) => {
             {/* BOOKING */}
             <button
               onClick={() => navigate("/booking")}
-              className={`text-sm font-semibold 
-                ${
-                  isDark ? "text-gray-200" : "text-gray-800"
-                } hover:text-yellow-500`}
+              className={`text-sm font-semibold ${
+                isDark ? "text-gray-200" : "text-gray-800"
+              } hover:text-yellow-500`}
             >
               Booking
             </button>
@@ -126,21 +132,14 @@ const Navbar = ({ theme, onThemeToggle }) => {
             className="lg:hidden flex flex-col gap-1.5"
             onClick={() => setMenuOpen(true)}
           >
-            <span
-              className={`block w-7 h-[3px] ${
-                isDark ? "bg-white" : "bg-black"
-              }`}
-            ></span>
-            <span
-              className={`block w-7 h-[3px] ${
-                isDark ? "bg-white" : "bg-black"
-              }`}
-            ></span>
-            <span
-              className={`block w-7 h-[3px] ${
-                isDark ? "bg-white" : "bg-black"
-              }`}
-            ></span>
+            {[1, 2, 3].map((i) => (
+              <span
+                key={i}
+                className={`block w-7 h-[3px] ${
+                  isDark ? "bg-white" : "bg-black"
+                }`}
+              />
+            ))}
           </button>
         </div>
       </motion.nav>
@@ -155,16 +154,17 @@ const Navbar = ({ theme, onThemeToggle }) => {
             className={`fixed top-0 left-0 w-full h-full z-[1500] p-6 
               ${isDark ? "bg-black/95" : "bg-white/95"} overflow-y-auto`}
           >
-            {/* Close button */}
+            {/* Close */}
             <button
               onClick={() => setMenuOpen(false)}
-              className={`text-3xl font-bold mb-6 ml-auto block
-                ${isDark ? "text-white" : "text-black"}`}
+              className={`text-3xl font-bold mb-6 ml-auto block ${
+                isDark ? "text-white" : "text-black"
+              }`}
             >
               ✕
             </button>
 
-            {/* Mobile Nav Links */}
+            {/* Mobile Links */}
             <div className="flex flex-col gap-6 mt-4">
               {navItems.map((item) => (
                 <button
@@ -173,10 +173,9 @@ const Navbar = ({ theme, onThemeToggle }) => {
                     scrollToSection(item.id);
                     setMenuOpen(false);
                   }}
-                  className={`text-xl font-semibold 
-                    ${
-                      isDark ? "text-white" : "text-black"
-                    } hover:text-yellow-500`}
+                  className={`text-xl font-semibold ${
+                    isDark ? "text-white" : "text-black"
+                  } hover:text-yellow-500`}
                 >
                   {item.label}
                 </button>
@@ -188,15 +187,14 @@ const Navbar = ({ theme, onThemeToggle }) => {
                   navigate("/booking");
                   setMenuOpen(false);
                 }}
-                className={`text-xl font-semibold 
-                  ${
-                    isDark ? "text-white" : "text-black"
-                  } hover:text-yellow-500`}
+                className={`text-xl font-semibold ${
+                  isDark ? "text-white" : "text-black"
+                } hover:text-yellow-500`}
               >
                 Booking
               </button>
 
-              {/* Theme Toggle */}
+              {/* Theme */}
               <button
                 onClick={() => {
                   onThemeToggle();

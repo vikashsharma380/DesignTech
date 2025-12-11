@@ -74,6 +74,7 @@ const Projects = ({ theme }) => {
 
   return (
     <section
+      id="projects"
       className={`py-24 sm:py-28 md:py-32 px-4 sm:px-8 md:px-12 lg:px-20 transition-colors duration-300 ${
         isLight ? "bg-white" : "bg-[#0a0a0a]"
       }`}

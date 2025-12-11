@@ -146,6 +146,7 @@ const Services = ({ theme }) => {
 
   return (
     <section
+      id="services"
       className={`relative py-24 sm:py-28 md:py-32 px-4 sm:px-8 md:px-12 lg:px-20 ${colors.bg}`}
     >
       {/* HEADER */}

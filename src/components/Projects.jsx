@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Projects = () => {
+const Projects = ({ theme }) => {
+  const isLight = theme === "light";
+
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -71,33 +73,63 @@ const Projects = () => {
   };
 
   return (
-    <section style={styles.section}>
-      <div style={styles.container}>
-        {/* Header */}
+    <section
+      className={`py-32 px-6 md:px-20 transition-colors duration-300 ${
+        isLight ? "bg-white" : "bg-[#0a0a0a]"
+      }`}
+      aria-label="Signature Projects"
+    >
+      <div className="max-w-[1400px] mx-auto">
+        {/* HEADER */}
         <motion.div
-          style={styles.header}
+          className="text-center max-w-[800px] mx-auto mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div style={styles.badge}>
-            <span style={styles.badgeDot}>●</span>
-            PORTFOLIO
+          {/* Badge */}
+          <div
+            className={`inline-flex items-center gap-3 py-4 px-8 rounded-full font-medium uppercase tracking-[1.5px] text-[0.85rem] mb-8 backdrop-blur-xl border ${
+              isLight
+                ? "bg-black/5 text-black border-[#d4af37]/40"
+                : "bg-white/5 text-white border-[#d4af37]/30"
+            }`}
+          >
+            <span className="text-[#d4af37] text-lg">●</span> PORTFOLIO
           </div>
 
-          <h2 style={styles.title}>Signature Projects</h2>
+          {/* Title */}
+          <h2
+            className={`font-['Playfair_Display'] font-extrabold tracking-[-1px] mb-6 ${
+              isLight ? "text-black" : "text-white"
+            } text-3xl md:text-5xl`}
+          >
+            Signature Projects
+          </h2>
 
-          <div style={styles.divider} />
+          {/* Divider */}
+          <div className="h-[1.5px] w-20 mx-auto my-8 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
 
-          <p style={styles.subtitle}>
+          {/* Subtitle */}
+          <p
+            className={`text-[1.1rem] leading-[1.8] font-light tracking-wide ${
+              isLight ? "text-[#333]" : "text-[#d0d0d0]"
+            }`}
+          >
             Showcasing our finest works across residential, commercial, and
-            luxury developments
+            luxury developments.
           </p>
         </motion.div>
 
-        {/* Slider */}
-        <div style={styles.sliderWrapper}>
+        {/* SLIDER */}
+        <div
+          className={`relative rounded-2xl overflow-hidden mb-10 border backdrop-blur-xl ${
+            isLight
+              ? "bg-black/5 border-[#d4af37]/20"
+              : "bg-white/5 border-[#d4af37]/10"
+          } h-[360px] sm:h-[420px] md:h-[500px] lg:h-[600px]`}
+        >
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={current}
@@ -106,56 +138,108 @@ const Projects = () => {
               initial="enter"
               animate="center"
               exit="exit"
-              style={styles.slide}
+              className="absolute inset-0"
             >
               <img
                 src={projects[current].image}
                 alt={projects[current].title}
-                style={styles.image}
+                className="w-full h-full object-cover"
               />
 
               {/* Overlay */}
-              <div style={styles.overlay} />
+              <div
+                className={`absolute inset-0 ${
+                  isLight
+                    ? "bg-gradient-to-t from-white/90 via-white/60 to-transparent"
+                    : "bg-gradient-to-t from-black/90 via-black/60 to-transparent"
+                }`}
+              />
 
-              {/* Content */}
+              {/* CONTENT */}
               <motion.div
-                style={styles.content}
+                className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 md:p-14"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
               >
-                <div style={styles.typeTag}>{projects[current].type}</div>
+                {/* Type Tag */}
+                <div className="inline-block px-6 py-2 bg-[#d4af37]/20 border border-[#d4af37]/40 rounded-full text-[#d4af37] text-xs font-semibold tracking-wider uppercase mb-4">
+                  {projects[current].type}
+                </div>
 
-                <h3 style={styles.projectTitle}>{projects[current].title}</h3>
+                {/* Title */}
+                <h3
+                  className={`font-['Playfair_Display'] font-extrabold tracking-tight mb-4 ${
+                    isLight ? "text-black" : "text-white"
+                  } text-2xl sm:text-3xl md:text-4xl lg:text-[2.8rem]`}
+                >
+                  {projects[current].title}
+                </h3>
 
-                <p style={styles.projectDetails}>{projects[current].details}</p>
+                {/* Details */}
+                <p
+                  className={`max-w-[600px] font-light leading-relaxed mb-6 ${
+                    isLight ? "text-[#333]" : "text-gray-300"
+                  } text-sm sm:text-base`}
+                >
+                  {projects[current].details}
+                </p>
 
-                <div style={styles.projectMeta}>
-                  <div style={styles.metaItem}>
-                    <span style={styles.metaLabel}>Location</span>
-                    <span style={styles.metaValue}>
+                {/* Meta */}
+                <div
+                  className={`flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 border-t pt-4 ${
+                    isLight ? "border-[#d4af37]/30" : "border-[#d4af37]/20"
+                  }`}
+                >
+                  {/* Location */}
+                  <div>
+                    <span
+                      className={`text-xs uppercase font-medium ${
+                        isLight ? "text-gray-600" : "text-gray-400"
+                      }`}
+                    >
+                      Location
+                    </span>
+                    <p
+                      className={`text-lg font-semibold ${
+                        isLight ? "text-black" : "text-white"
+                      }`}
+                    >
                       {projects[current].location}
-                    </span>
+                    </p>
                   </div>
-                  <div style={styles.metaDivider} />
-                  <div style={styles.metaItem}>
-                    <span style={styles.metaLabel}>Area</span>
-                    <span style={styles.metaValue}>
-                      {projects[current].area}
+
+                  {/* Divider */}
+                  <div className="hidden sm:block w-px h-8 bg-[#d4af37]/30" />
+
+                  {/* Area */}
+                  <div>
+                    <span
+                      className={`text-xs uppercase font-medium ${
+                        isLight ? "text-gray-600" : "text-gray-400"
+                      }`}
+                    >
+                      Area
                     </span>
+                    <p
+                      className={`text-lg font-semibold ${
+                        isLight ? "text-black" : "text-white"
+                      }`}
+                    >
+                      {projects[current].area}
+                    </p>
                   </div>
                 </div>
               </motion.div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation Arrows */}
+          {/* NAV BUTTONS */}
           <button
-            style={{ ...styles.navButton, ...styles.navPrev }}
             onClick={() => paginate(-1)}
-            aria-label="Previous project"
+            className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
                 d="M15 18L9 12L15 6"
                 stroke="#d4af37"
@@ -167,11 +251,10 @@ const Projects = () => {
           </button>
 
           <button
-            style={{ ...styles.navButton, ...styles.navNext }}
             onClick={() => paginate(1)}
-            aria-label="Next project"
+            className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
                 d="M9 18L15 12L9 6"
                 stroke="#d4af37"
@@ -183,8 +266,8 @@ const Projects = () => {
           </button>
         </div>
 
-        {/* Indicators */}
-        <div style={styles.indicators}>
+        {/* INDICATORS */}
+        <div className="flex justify-center gap-3 mb-6">
           {projects.map((_, idx) => (
             <motion.button
               key={idx}
@@ -192,268 +275,22 @@ const Projects = () => {
                 setDirection(idx > current ? 1 : -1);
                 setCurrent(idx);
               }}
-              style={{
-                ...styles.indicator,
-                background:
-                  current === idx ? "#d4af37" : "rgba(212, 175, 55, 0.2)",
-                width: current === idx ? "32px" : "10px",
-              }}
+              className={`h-2 rounded-full transition-all ${
+                idx === current ? "bg-[#d4af37] w-8" : "bg-[#d4af37]/30 w-3"
+              }`}
               whileHover={{ scale: 1.2 }}
-              aria-label={`Go to project ${idx + 1}`}
             />
           ))}
         </div>
 
-        {/* Counter */}
-        <div style={styles.counter}>
-          <span style={styles.currentCount}>
-            {String(current + 1).padStart(2, "0")}
-          </span>
-          <span style={styles.separator}>/</span>
-          <span style={styles.totalCount}>
-            {String(projects.length).padStart(2, "0")}
-          </span>
+        {/* COUNTER */}
+        <div className="text-center text-[#d4af37] font-['Playfair_Display'] font-semibold text-2xl">
+          {String(current + 1).padStart(2, "0")} /
+          {String(projects.length).padStart(2, "0")}
         </div>
       </div>
     </section>
   );
-};
-
-const styles = {
-  section: {
-    position: "relative",
-    padding: "8rem 5rem",
-    background: "#0a0a0a",
-    overflow: "hidden",
-  },
-
-  container: {
-    maxWidth: "1400px",
-    margin: "0 auto",
-  },
-
-  header: {
-    textAlign: "center",
-    maxWidth: "800px",
-    margin: "0 auto 5rem",
-  },
-
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    padding: "1rem 2.2rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(212, 175, 55, 0.3)",
-    borderRadius: "60px",
-    fontSize: "0.85rem",
-    color: "#fff",
-    letterSpacing: "1.5px",
-    fontWeight: "500",
-    backdropFilter: "blur(20px)",
-    textTransform: "uppercase",
-    marginBottom: "2rem",
-  },
-
-  badgeDot: {
-    color: "#d4af37",
-    fontSize: "1.2rem",
-  },
-
-  title: {
-    fontSize: "3.5rem",
-    lineHeight: "1.2",
-    margin: "0 0 2rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "800",
-    color: "#fff",
-    letterSpacing: "-1px",
-  },
-
-  divider: {
-    height: "1.5px",
-    width: "80px",
-    background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
-    margin: "2rem auto",
-    boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)",
-  },
-
-  subtitle: {
-    fontSize: "1.15rem",
-    lineHeight: "1.8",
-    color: "#d0d0d0",
-    margin: "0",
-    fontWeight: "300",
-    letterSpacing: "0.8px",
-  },
-
-  sliderWrapper: {
-    position: "relative",
-    height: "600px",
-    borderRadius: "16px",
-    overflow: "hidden",
-    background: "rgba(255, 255, 255, 0.02)",
-    border: "1px solid rgba(212, 175, 55, 0.1)",
-    marginBottom: "3rem",
-  },
-
-  slide: {
-    position: "absolute",
-    inset: 0,
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-
-  overlay: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "linear-gradient(135deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.3) 50%, transparent 100%)",
-  },
-
-  content: {
-    position: "absolute",
-    bottom: "0",
-    left: "0",
-    right: "0",
-    padding: "4rem 3rem",
-    background:
-      "linear-gradient(to top, rgba(10,10,10,0.98), rgba(10,10,10,0.7), transparent)",
-  },
-
-  typeTag: {
-    display: "inline-block",
-    padding: "0.7rem 1.5rem",
-    background: "rgba(212, 175, 55, 0.15)",
-    border: "1px solid rgba(212, 175, 55, 0.4)",
-    borderRadius: "50px",
-    color: "#d4af37",
-    fontSize: "0.85rem",
-    fontWeight: "600",
-    letterSpacing: "1px",
-    textTransform: "uppercase",
-    marginBottom: "1.5rem",
-  },
-
-  projectTitle: {
-    fontSize: "2.8rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "800",
-    color: "#fff",
-    margin: "0 0 1rem",
-    letterSpacing: "-0.5px",
-  },
-
-  projectDetails: {
-    fontSize: "1.1rem",
-    color: "#c0c0c0",
-    margin: "0 0 2rem",
-    fontWeight: "300",
-    lineHeight: "1.6",
-    maxWidth: "600px",
-  },
-
-  projectMeta: {
-    display: "flex",
-    alignItems: "center",
-    gap: "2rem",
-    paddingTop: "1.5rem",
-    borderTop: "1px solid rgba(212, 175, 55, 0.2)",
-  },
-
-  metaItem: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.4rem",
-  },
-
-  metaLabel: {
-    fontSize: "0.85rem",
-    color: "#888",
-    textTransform: "uppercase",
-    letterSpacing: "1px",
-    fontWeight: "500",
-  },
-
-  metaValue: {
-    fontSize: "1.15rem",
-    color: "#fff",
-    fontWeight: "600",
-  },
-
-  metaDivider: {
-    width: "1px",
-    height: "30px",
-    background: "rgba(212, 175, 55, 0.2)",
-  },
-
-  navButton: {
-    position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
-    width: "50px",
-    height: "50px",
-    border: "1px solid rgba(212, 175, 55, 0.3)",
-    background: "rgba(10, 10, 10, 0.7)",
-    borderRadius: "50%",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 20,
-    backdropFilter: "blur(10px)",
-    transition: "all 0.3s ease",
-  },
-
-  navPrev: {
-    left: "2rem",
-  },
-
-  navNext: {
-    right: "2rem",
-  },
-
-  indicators: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "1rem",
-    marginBottom: "2rem",
-  },
-
-  indicator: {
-    height: "10px",
-    border: "none",
-    borderRadius: "50px",
-    cursor: "pointer",
-    transition: "all 0.4s ease",
-    background: "rgba(212, 175, 55, 0.2)",
-  },
-
-  counter: {
-    textAlign: "center",
-    fontSize: "2rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "700",
-    color: "#d4af37",
-    letterSpacing: "-0.5px",
-  },
-
-  currentCount: {
-    color: "#d4af37",
-  },
-
-  separator: {
-    margin: "0 0.5rem",
-    opacity: 0.5,
-  },
-
-  totalCount: {
-    opacity: 0.6,
-  },
 };
 
 export default Projects;

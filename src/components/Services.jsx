@@ -1,370 +1,35 @@
-// import React, { useState } from "react";
-// import { motion } from "framer-motion";
-
-// const Services = () => {
-//   const [hoveredIndex, setHoveredIndex] = useState(null);
-
-//   const services = [
-//     {
-//       icon: (
-//         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-//           <path
-//             d="M30 5L55 15V45L30 55L5 45V15L30 5Z"
-//             stroke="#d4af37"
-//             strokeWidth="1.5"
-//           />
-//           <path
-//             d="M30 5V55M30 15L5 25M30 15L55 25M5 25V45M55 25V45M5 45L30 55L55 45"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.5"
-//           />
-//         </svg>
-//       ),
-//       title: "Architectural Design",
-//       desc: "Timeless architectural concepts crafted with precision and global aesthetics.",
-//       number: "01",
-//     },
-//     {
-//       icon: (
-//         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-//           <rect
-//             x="10"
-//             y="15"
-//             width="40"
-//             height="35"
-//             stroke="#d4af37"
-//             strokeWidth="1.5"
-//           />
-//           <path
-//             d="M10 28H50M28 15V50M42 15V50"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.5"
-//           />
-//           <path d="M20 8L25 15M40 8L35 15" stroke="#d4af37" strokeWidth="1.5" />
-//         </svg>
-//       ),
-//       title: "Luxury Residences",
-//       desc: "World-class homes designed with exceptional craftsmanship and detail.",
-//       number: "02",
-//     },
-//     {
-//       icon: (
-//         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-//           <circle cx="30" cy="30" r="22" stroke="#d4af37" strokeWidth="1.5" />
-//           <path
-//             d="M30 8V52M8 30H52M18 18L42 42M42 18L18 42"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.5"
-//           />
-//           <circle
-//             cx="30"
-//             cy="30"
-//             r="8"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.3"
-//           />
-//         </svg>
-//       ),
-//       title: "Interior Excellence",
-//       desc: "Premium interior compositions blending luxury materials & modern sensibilities.",
-//       number: "03",
-//     },
-//     {
-//       icon: (
-//         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-//           <path d="M15 45L30 15L45 45H15Z" stroke="#d4af37" strokeWidth="1.5" />
-//           <line
-//             x1="30"
-//             y1="15"
-//             x2="30"
-//             y2="45"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.5"
-//           />
-//           <line
-//             x1="20"
-//             y1="35"
-//             x2="40"
-//             y2="35"
-//             stroke="#d4af37"
-//             strokeWidth="1"
-//             opacity="0.5"
-//           />
-//           <rect
-//             x="25"
-//             y="45"
-//             width="10"
-//             height="8"
-//             stroke="#d4af37"
-//             strokeWidth="1.5"
-//           />
-//         </svg>
-//       ),
-//       title: "Turnkey Execution",
-//       desc: "End-to-end management with absolute transparency and assured delivery.",
-//       number: "04",
-//     },
-//   ];
-
-//   const containerVariants = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: {
-//         staggerChildren: 0.15,
-//         delayChildren: 0.2,
-//       },
-//     },
-//   };
-
-//   const itemVariants = {
-//     hidden: { opacity: 0, y: 30 },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       transition: { duration: 0.6, ease: "easeOut" },
-//     },
-//   };
-
-//   return (
-//     <section style={styles.servicesSection}>
-//       {/* Section Header */}
-//       <motion.div
-//         style={styles.headerContainer}
-//         initial={{ opacity: 0, y: 20 }}
-//         whileInView={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.8 }}
-//         viewport={{ once: true }}
-//       >
-//         <div style={styles.badge}>
-//           <span style={styles.badgeDot}>●</span>
-//           OUR EXPERTISE
-//         </div>
-
-//         <h2 style={styles.sectionTitle}>What We Offer</h2>
-
-//         <div style={styles.divider} />
-
-//         <p style={styles.sectionDescription}>
-//           Premium Design & Build Services. Curated expertise tailored to elevate
-//           your residential, commercial, and luxury spaces with uncompromising
-//           quality.
-//         </p>
-//       </motion.div>
-
-//       {/* Services Grid */}
-//       <motion.div
-//         style={styles.servicesGrid}
-//         variants={containerVariants}
-//         initial="hidden"
-//         whileInView="visible"
-//         viewport={{ once: true, amount: 0.2 }}
-//       >
-//         {services.map((srv, i) => (
-//           <motion.div
-//             key={i}
-//             variants={itemVariants}
-//             style={styles.serviceCard}
-//             onMouseEnter={() => setHoveredIndex(i)}
-//             onMouseLeave={() => setHoveredIndex(null)}
-//             whileHover={{ y: -10, transition: { duration: 0.3 } }}
-//           >
-//             {/* Card Background Glow */}
-//             <div
-//               style={{
-//                 ...styles.cardGlow,
-//                 opacity: hoveredIndex === i ? 1 : 0,
-//               }}
-//             />
-
-//             {/* Number Badge */}
-//             <div style={styles.numberBadge}>{srv.number}</div>
-
-//             {/* Icon */}
-//             <div style={styles.iconContainer}>
-//               <span style={styles.icon}>{srv.icon}</span>
-//             </div>
-
-//             {/* Title */}
-//             <h3 style={styles.serviceTitle}>{srv.title}</h3>
-
-//             {/* Description */}
-//             <p style={styles.serviceDesc}>{srv.desc}</p>
-
-//             {/* Hover Line */}
-//             <motion.div
-//               style={{
-//                 ...styles.hoverLine,
-//                 scaleX: hoveredIndex === i ? 1 : 0,
-//               }}
-//               transition={{ duration: 0.3 }}
-//             />
-//           </motion.div>
-//         ))}
-//       </motion.div>
-//     </section>
-//   );
-// };
-
-// const styles = {
-//   servicesSection: {
-//     position: "relative",
-//     padding: "8rem 5rem",
-//     background: "#0a0a0a",
-//     overflow: "hidden",
-//   },
-
-//   headerContainer: {
-//     textAlign: "center",
-//     maxWidth: "800px",
-//     margin: "0 auto 5rem",
-//   },
-
-//   badge: {
-//     display: "inline-flex",
-//     alignItems: "center",
-//     gap: "0.8rem",
-//     padding: "1rem 2.2rem",
-//     background: "rgba(255, 255, 255, 0.05)",
-//     border: "1px solid rgba(212, 175, 55, 0.3)",
-//     borderRadius: "60px",
-//     fontSize: "0.85rem",
-//     color: "#fff",
-//     letterSpacing: "1.5px",
-//     fontWeight: "500",
-//     backdropFilter: "blur(20px)",
-//     textTransform: "uppercase",
-//     marginBottom: "2rem",
-//   },
-
-//   badgeDot: {
-//     color: "#d4af37",
-//     fontSize: "1.2rem",
-//   },
-
-//   sectionTitle: {
-//     fontSize: "3.5rem",
-//     lineHeight: "1.2",
-//     margin: "0 0 2rem",
-//     fontFamily: '"Playfair Display", serif',
-//     fontWeight: "800",
-//     color: "#fff",
-//     letterSpacing: "-1px",
-//   },
-
-//   divider: {
-//     height: "1.5px",
-//     width: "80px",
-//     background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
-//     margin: "2rem auto",
-//     boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)",
-//   },
-
-//   sectionDescription: {
-//     fontSize: "1.15rem",
-//     lineHeight: "1.8",
-//     color: "#d0d0d0",
-//     maxWidth: "700px",
-//     margin: "0 auto",
-//     fontWeight: "300",
-//     letterSpacing: "0.8px",
-//   },
-
-//   servicesGrid: {
-//     display: "grid",
-//     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-//     gap: "2.5rem",
-//     maxWidth: "1200px",
-//     margin: "0 auto",
-//   },
-
-//   serviceCard: {
-//     position: "relative",
-//     padding: "2.5rem",
-//     background: "rgba(255, 255, 255, 0.02)",
-//     border: "1px solid rgba(212, 175, 55, 0.1)",
-//     borderRadius: "12px",
-//     backdropFilter: "blur(10px)",
-//     transition: "all 0.3s ease",
-//     cursor: "pointer",
-//   },
-
-//   cardGlow: {
-//     position: "absolute",
-//     inset: "0",
-//     background:
-//       "radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, transparent 70%)",
-//     borderRadius: "12px",
-//     pointerEvents: "none",
-//     transition: "opacity 0.3s ease",
-//   },
-
-//   numberBadge: {
-//     fontSize: "3rem",
-//     fontFamily: '"Playfair Display", serif',
-//     fontWeight: "700",
-//     background: "linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%)",
-//     WebkitBackgroundClip: "text",
-//     WebkitTextFillColor: "transparent",
-//     backgroundClip: "text",
-//     opacity: 0.3,
-//     marginBottom: "1rem",
-//     lineHeight: "1",
-//   },
-
-//   iconContainer: {
-//     marginBottom: "1.5rem",
-//   },
-
-//   icon: {
-//     fontSize: "3.5rem",
-//     display: "inline-block",
-//     filter: "drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))",
-//   },
-
-//   serviceTitle: {
-//     fontSize: "1.5rem",
-//     fontFamily: '"Playfair Display", serif',
-//     fontWeight: "700",
-//     color: "#fff",
-//     margin: "0 0 1rem",
-//     letterSpacing: "-0.5px",
-//   },
-
-//   serviceDesc: {
-//     fontSize: "1rem",
-//     lineHeight: "1.7",
-//     color: "#b0b0b0",
-//     margin: "0",
-//     fontWeight: "300",
-//     letterSpacing: "0.5px",
-//   },
-
-//   hoverLine: {
-//     position: "absolute",
-//     bottom: "0",
-//     left: "0",
-//     right: "0",
-//     height: "2px",
-//     background: "linear-gradient(90deg, #d4af37, transparent)",
-//     transformOrigin: "left",
-//   },
-// };
-
-// export default Services;
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const Services = () => {
+import interiorImg from "../assets/interior.jpeg";
+import luxuryResidence from "../assets/bedroom.jpeg";
+import architecture from "../assets/architecture.jpeg";
+import turnkey from "../assets/turnkey.jpeg";
+
+const Services = ({ theme }) => {
+  const isLight = theme === "light";
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const colors = {
+    bg: isLight ? "bg-white" : "bg-[#0a0a0a]",
+    text: isLight ? "text-black" : "text-white",
+    subText: isLight ? "text-[#444]" : "text-[#d0d0d0]",
+    cardBg: isLight ? "bg-white" : "bg-white/5",
+    cardBorder: isLight
+      ? "border-[rgba(212,175,55,0.25)]"
+      : "border-[rgba(212,175,55,0.1)]",
+    badgeBg: isLight ? "bg-black/5" : "bg-white/10",
+    badgeText: isLight ? "text-black" : "text-white",
+    overlay: isLight ? "bg-white/40" : "bg-black/50",
+    gold: "#d4af37",
+  };
 
   const services = [
     {
+      image: architecture,
+      title: "Architectural Design",
+      desc: "Timeless architectural concepts crafted with precision and global aesthetics.",
+      number: "01",
       icon: (
         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
           <path
@@ -380,13 +45,12 @@ const Services = () => {
           />
         </svg>
       ),
-      title: "Architectural Design",
-      desc: "Timeless architectural concepts crafted with precision and global aesthetics.",
-      number: "01",
-      image:
-        "https://images.unsplash.com/photo-1541123603104-852fc5d33dff?w=600&h=400&fit=crop",
     },
     {
+      image: luxuryResidence,
+      title: "Luxury Residences",
+      desc: "World-class homes designed with exceptional craftsmanship and detail.",
+      number: "02",
       icon: (
         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
           <rect
@@ -406,13 +70,12 @@ const Services = () => {
           <path d="M20 8L25 15M40 8L35 15" stroke="#d4af37" strokeWidth="1.5" />
         </svg>
       ),
-      title: "Luxury Residences",
-      desc: "World-class homes designed with exceptional craftsmanship and detail.",
-      number: "02",
-      image:
-        "https://images.unsplash.com/photo-1512917774080-9b274b90bad0?w=600&h=400&fit=crop",
     },
     {
+      image: interiorImg,
+      title: "Interior Excellence",
+      desc: "Premium interior compositions blending luxury materials & modern sensibilities.",
+      number: "03",
       icon: (
         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
           <circle cx="30" cy="30" r="22" stroke="#d4af37" strokeWidth="1.5" />
@@ -432,13 +95,12 @@ const Services = () => {
           />
         </svg>
       ),
-      title: "Interior Excellence",
-      desc: "Premium interior compositions blending luxury materials & modern sensibilities.",
-      number: "03",
-      image:
-        "https://images.unsplash.com/photo-1565183938294-e3a7f3d66b12?w=600&h=400&fit=crop",
     },
     {
+      image: turnkey,
+      title: "Turnkey Execution",
+      desc: "End-to-end management with absolute transparency and assured delivery.",
+      number: "04",
       icon: (
         <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
           <path d="M15 45L30 15L45 45H15Z" stroke="#d4af37" strokeWidth="1.5" />
@@ -470,11 +132,6 @@ const Services = () => {
           />
         </svg>
       ),
-      title: "Turnkey Execution",
-      desc: "End-to-end management with absolute transparency and assured delivery.",
-      number: "04",
-      image:
-        "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&h=400&fit=crop",
     },
   ];
 
@@ -482,10 +139,7 @@ const Services = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
@@ -499,25 +153,42 @@ const Services = () => {
   };
 
   return (
-    <section style={styles.servicesSection}>
-      {/* Section Header */}
+    <section
+      className={`relative py-32 px-6 md:px-12 lg:px-20 overflow-hidden ${colors.bg}`}
+    >
+      {/* Header */}
       <motion.div
-        style={styles.headerContainer}
+        className="text-center max-w-[800px] mx-auto mb-20"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div style={styles.badge}>
-          <span style={styles.badgeDot}>●</span>
+        {/* Badge */}
+        <div
+          className={`inline-flex items-center gap-3 py-4 px-8 rounded-full text-[0.85rem] font-medium tracking-[1.5px] uppercase mb-8 backdrop-blur-xl border ${colors.badgeBg} ${colors.badgeText} border-[rgba(212,175,55,0.3)]`}
+        >
+          <span className="text-[#d4af37] text-lg">●</span>
           OUR EXPERTISE
         </div>
 
-        <h2 style={styles.sectionTitle}>What We Offer</h2>
+        <h2
+          className={`text-[3.5rem] font-extrabold font-['Playfair_Display'] tracking-[-1px] mb-8 leading-[1.2] ${colors.text}`}
+        >
+          What We Offer
+        </h2>
 
-        <div style={styles.divider} />
+        <div
+          className="h-[1.5px] w-20 mx-auto my-8 shadow-[0_0_15px_rgba(212,175,55,0.5)]"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, #d4af37, transparent)",
+          }}
+        />
 
-        <p style={styles.sectionDescription}>
+        <p
+          className={`text-[1.15rem] leading-[1.8] font-light tracking-wide max-w-[700px] mx-auto ${colors.subText}`}
+        >
           Premium Design & Build Services. Curated expertise tailored to elevate
           your residential, commercial, and luxury spaces with uncompromising
           quality.
@@ -526,7 +197,7 @@ const Services = () => {
 
       {/* Services Grid */}
       <motion.div
-        style={styles.servicesGrid}
+        className="grid gap-10 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] max-w-[1200px] mx-auto"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -536,57 +207,60 @@ const Services = () => {
           <motion.div
             key={i}
             variants={itemVariants}
-            style={styles.serviceCard}
+            className={`relative rounded-xl overflow-hidden flex flex-col transition-all duration-300 backdrop-blur-lg border ${colors.cardBg}`}
+            style={{
+              borderColor: isLight
+                ? "rgba(212,175,55,0.25)"
+                : "rgba(212,175,55,0.1)",
+            }}
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
             whileHover={{ y: -10, transition: { duration: 0.3 } }}
           >
-            {/* Image Container */}
-            <div style={styles.imageContainer}>
+            {/* Image */}
+            <div className="relative w-full h-[220px] overflow-hidden">
               <img
                 src={srv.image}
                 alt={srv.title}
-                style={{
-                  ...styles.serviceImage,
-                  opacity: hoveredIndex === i ? 1 : 0.6,
-                }}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  hoveredIndex === i ? "opacity-100" : "opacity-60"
+                }`}
               />
               <div
-                style={{
-                  ...styles.imageOverlay,
-                  opacity: hoveredIndex === i ? 0.4 : 0.7,
-                }}
+                className={`absolute inset-0 transition-opacity duration-300 ${colors.overlay}`}
+                style={{ opacity: hoveredIndex === i ? 0.4 : 0.7 }}
               />
             </div>
 
-            {/* Card Content */}
-            <div style={styles.cardContent}>
-              {/* Card Background Glow */}
+            {/* Content */}
+            <div className="relative p-10 flex flex-col">
               <div
+                className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-xl"
                 style={{
-                  ...styles.cardGlow,
                   opacity: hoveredIndex === i ? 1 : 0,
+                  background:
+                    "radial-gradient(circle at center, rgba(212,175,55,0.15) 0%, transparent 70%)",
                 }}
               />
 
-              {/* Number Badge */}
-              <div style={styles.numberBadge}>{srv.number}</div>
+              <div className="mb-6 flex justify-center">{srv.icon}</div>
 
-              {/* Icon */}
-              <div style={styles.iconContainer}>
-                <span style={styles.icon}>{srv.icon}</span>
-              </div>
+              <h3
+                className={`text-[1.5rem] font-['Playfair_Display'] font-bold mb-4 leading-tight ${colors.text}`}
+              >
+                {srv.title}
+              </h3>
 
-              {/* Title */}
-              <h3 style={styles.serviceTitle}>{srv.title}</h3>
+              <p
+                className={`text-[1rem] leading-[1.7] font-light mb-4 flex-1 ${colors.subText}`}
+              >
+                {srv.desc}
+              </p>
 
-              {/* Description */}
-              <p style={styles.serviceDesc}>{srv.desc}</p>
-
-              {/* Hover Line */}
               <motion.div
+                className="absolute bottom-0 left-0 right-0 h-[2px] origin-left"
                 style={{
-                  ...styles.hoverLine,
+                  background: "linear-gradient(90deg, #d4af37, transparent)",
                   scaleX: hoveredIndex === i ? 1 : 0,
                 }}
                 transition={{ duration: 0.3 }}
@@ -597,182 +271,6 @@ const Services = () => {
       </motion.div>
     </section>
   );
-};
-
-const styles = {
-  servicesSection: {
-    position: "relative",
-    padding: "8rem 5rem",
-    background: "#0a0a0a",
-    overflow: "hidden",
-  },
-
-  headerContainer: {
-    textAlign: "center",
-    maxWidth: "800px",
-    margin: "0 auto 5rem",
-  },
-
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    padding: "1rem 2.2rem",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "1px solid rgba(212, 175, 55, 0.3)",
-    borderRadius: "60px",
-    fontSize: "0.85rem",
-    color: "#fff",
-    letterSpacing: "1.5px",
-    fontWeight: "500",
-    backdropFilter: "blur(20px)",
-    textTransform: "uppercase",
-    marginBottom: "2rem",
-  },
-
-  badgeDot: {
-    color: "#d4af37",
-    fontSize: "1.2rem",
-  },
-
-  sectionTitle: {
-    fontSize: "3.5rem",
-    lineHeight: "1.2",
-    margin: "0 0 2rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "800",
-    color: "#fff",
-    letterSpacing: "-1px",
-  },
-
-  divider: {
-    height: "1.5px",
-    width: "80px",
-    background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
-    margin: "2rem auto",
-    boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)",
-  },
-
-  sectionDescription: {
-    fontSize: "1.15rem",
-    lineHeight: "1.8",
-    color: "#d0d0d0",
-    maxWidth: "700px",
-    margin: "0 auto",
-    fontWeight: "300",
-    letterSpacing: "0.8px",
-  },
-
-  servicesGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "2.5rem",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-
-  serviceCard: {
-    position: "relative",
-    background: "rgba(255, 255, 255, 0.02)",
-    border: "1px solid rgba(212, 175, 55, 0.1)",
-    borderRadius: "12px",
-    backdropFilter: "blur(10px)",
-    transition: "all 0.3s ease",
-    cursor: "pointer",
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-  },
-
-  imageContainer: {
-    position: "relative",
-    width: "100%",
-    height: "220px",
-    overflow: "hidden",
-    backgroundColor: "#1a1a1a",
-  },
-
-  serviceImage: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center",
-    transition: "opacity 0.3s ease",
-    display: "block",
-  },
-
-  imageOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "rgba(10, 10, 10, 0.5)",
-    transition: "opacity 0.3s ease",
-    zIndex: 1,
-  },
-
-  cardContent: {
-    position: "relative",
-    padding: "2.5rem",
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  cardGlow: {
-    position: "absolute",
-    inset: "0",
-    background:
-      "radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, transparent 70%)",
-    borderRadius: "12px",
-    pointerEvents: "none",
-    transition: "opacity 0.3s ease",
-  },
-
-  numberBadge: {
-    display: "none",
-  },
-
-  iconContainer: {
-    display: "none",
-  },
-
-  icon: {
-    fontSize: "3.5rem",
-    display: "inline-block",
-    filter: "drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))",
-  },
-
-  serviceTitle: {
-    fontSize: "1.5rem",
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: "700",
-    color: "#fff",
-    margin: "0 0 1rem",
-    letterSpacing: "-0.5px",
-  },
-
-  serviceDesc: {
-    fontSize: "1rem",
-    lineHeight: "1.7",
-    color: "#b0b0b0",
-    margin: "0",
-    fontWeight: "300",
-    letterSpacing: "0.5px",
-    flex: 1,
-  },
-
-  hoverLine: {
-    position: "absolute",
-    bottom: "0",
-    left: "0",
-    right: "0",
-    height: "2px",
-    background: "linear-gradient(90deg, #d4af37, transparent)",
-    transformOrigin: "left",
-  },
 };
 
 export default Services;

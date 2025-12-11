@@ -1,9 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
+const Navbar = ({
+  onEstimateClick,
+  onLogoClick,
+  onNavClick,
+  theme,
+  onThemeToggle,
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const isDark = theme === "dark";
+
+  // responsive check
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -18,11 +35,54 @@ const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
   };
 
   const handleEstimateClick = (e) => {
-    e.preventDefault();
+    e?.preventDefault?.();
     if (onEstimateClick) {
       onEstimateClick();
+    } else {
+      // fallback: scroll to contact section if exists
+      const el = document.getElementById("contact");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
     setMenuOpen(false);
+  };
+
+  const handleLogoClick = (e) => {
+    e?.preventDefault?.();
+    if (onLogoClick) {
+      onLogoClick();
+    } else {
+      const el = document.getElementById("home");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setMenuOpen(false);
+  };
+
+  const handleNav = (item) => {
+    // item is like "home", "projects", etc.
+    if (onNavClick) {
+      onNavClick(item);
+    } else {
+      const el = document.getElementById(item);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+      else {
+        // if no element, update hash for default browser behavior
+        try {
+          window.history.replaceState(null, "", `#${item}`);
+        } catch {}
+      }
+    }
+    setMenuOpen(false);
+  };
+
+  /* ---------------------- STYLES ---------------------- */
+
+  const colors = {
+    bg: isDark ? "#000" : "#ffffff",
+    text: isDark ? "#fff" : "#000",
+    link: isDark ? "#e6e6e6" : "#222",
+    bar: isDark ? "#fff" : "#000",
+    mobileBg: isDark ? "rgba(0,0,0,0.92)" : "rgba(255, 255, 255, 0.95)",
   };
 
   const styles = {
@@ -35,49 +95,25 @@ const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
+      background: "transparent",
       transition: "0.35s ease-in-out",
     },
 
     scrolled: {
       backdropFilter: "blur(14px)",
-      background: "rgba(0, 0, 0, 0.75)",
-      borderBottom: "1px solid rgba(212, 175, 55, 0.25)",
-    },
-
-    logoContainer: {
-      display: "flex",
-      alignItems: "center",
-      gap: "0.7rem",
-      cursor: "pointer",
-    },
-
-    logoIcon: {
-      filter: "drop-shadow(0 0 8px rgba(212, 175, 55, 0.2))",
+      background: isDark ? "rgba(0, 0, 0, 0.75)" : "rgba(255,255,255,0.75)",
+      borderBottom: "1px solid rgba(212,175,55,0.25)",
     },
 
     logoText: {
       fontSize: "1.55rem",
       fontWeight: "800",
-      letterSpacing: "1.5px",
       fontFamily: '"Playfair Display", serif',
-      color: "#fff",
-    },
-
-    navLinks: {
-      display: "flex",
-      gap: "3rem",
-      listStyle: "none",
-      margin: 0,
-      padding: 0,
-      alignItems: "center",
-    },
-
-    desktopNav: {
-      display: "flex",
+      color: colors.text,
     },
 
     navLink: {
-      color: "#e6e6e6",
+      color: colors.link,
       textDecoration: "none",
       fontSize: "0.95rem",
       letterSpacing: "0.5px",
@@ -86,83 +122,26 @@ const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
       cursor: "pointer",
     },
 
-    navLinkHover: {
-      color: "#d4af37",
-    },
-
-    ctaButton: {
-      padding: "0.8rem 1.9rem",
-      background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
-      borderRadius: "8px",
-      border: "none",
-      cursor: "pointer",
-      fontWeight: "700",
-      color: "#000",
-      fontSize: "0.92rem",
-      letterSpacing: "0.5px",
-      boxShadow: "0 6px 18px rgba(212, 175, 55, 0.35)",
-      transition: "0.3s",
-    },
-
-    mobileToggle: {
-      display: "none",
-      flexDirection: "column",
-      gap: "6px",
-      cursor: "pointer",
-    },
-
     bar: {
       width: "28px",
       height: "3px",
-      background: "#fff",
+      background: colors.bar,
       borderRadius: "5px",
     },
 
-    mobileMenu: {
-      position: "fixed",
-      top: 0,
-      right: 0,
-      width: "100%",
-      padding: "2.5rem",
-      background: "rgba(0, 0, 0, 0.92)",
-      backdropFilter: "blur(14px)",
-      zIndex: 1500,
-      display: "flex",
-      flexDirection: "column",
-      gap: "2rem",
-      minHeight: "100vh",
-    },
-
-    closeButton: {
-      marginLeft: "auto",
-      padding: "0.4rem 1rem",
-      fontSize: "1.5rem",
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-    },
-
-    mobileLink: {
-      color: "#fff",
-      fontSize: "1.4rem",
-      fontWeight: "600",
-      textDecoration: "none",
-    },
-
-    mobileCtaButton: {
-      marginTop: "2rem",
-      padding: "1rem 2rem",
-      background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
-      border: "none",
+    toggleBtn: {
+      padding: "0.6rem 1.2rem",
       borderRadius: "8px",
-      fontSize: "1.1rem",
-      fontWeight: "700",
-      color: "#000",
+      background: "rgba(212,175,55,0.15)",
+      border: "1px solid rgba(212,175,55,0.4)",
+      color: colors.text,
+      fontWeight: "600",
       cursor: "pointer",
-      letterSpacing: "0.5px",
+      transition: "0.3s",
     },
   };
+
+  const navItems = ["Home", "Projects", "Services", "Contact"];
 
   return (
     <>
@@ -174,17 +153,23 @@ const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
         style={{
           ...styles.navbar,
           ...(scrolled && styles.scrolled),
+          paddingLeft: isMobile ? "1.2rem" : "4rem",
+          paddingRight: isMobile ? "1.2rem" : "4rem",
         }}
       >
         {/* LOGO */}
-        <div style={styles.logoContainer} onClick={onLogoClick}>
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            style={styles.logoIcon}
-          >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.7rem",
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+          onClick={handleLogoClick}
+          aria-label="Go to home"
+        >
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
             <rect
               x="6"
               y="12"
@@ -204,113 +189,215 @@ const Navbar = ({ onEstimateClick, onLogoClick, onNavClick }) => {
           <span style={styles.logoText}>DESIGNTECH</span>
         </div>
 
-        {/* DESKTOP LINKS */}
-        <ul style={{ ...styles.navLinks, ...styles.desktopNav }}>
-          {["Home", "Projects", "Services", "Contact"].map((item, i) => (
-            <li key={i}>
-              <motion.a
-                href={`#${item.toLowerCase()}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavClick(item.toLowerCase());
-                }}
-                style={styles.navLink}
-                whileHover={{ color: "#d4af37" }}
-              >
-                {item}
-              </motion.a>
-            </li>
-          ))}
-
-          {/* CTA BUTTON */}
-          <motion.button
-            onClick={handleEstimateClick}
-            style={{ ...styles.ctaButton, textDecoration: "none" }}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 25px rgba(212, 175, 55, 0.45)",
+        {/* DESKTOP NAV (hidden on mobile) */}
+        {!isMobile && (
+          <ul
+            style={{
+              display: "flex",
+              gap: "3rem",
+              listStyle: "none",
+              alignItems: "center",
+              margin: 0,
             }}
-            whileTap={{ scale: 0.95 }}
           >
-            Get Construction Estimate
-          </motion.button>
-        </ul>
+            {navItems.map((item, i) => (
+              <li key={i}>
+                <motion.a
+                  href={`#${item.toLowerCase()}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNav(item.toLowerCase());
+                  }}
+                  style={styles.navLink}
+                  whileHover={{}}
+                >
+                  {item}
+                </motion.a>
+              </li>
+            ))}
 
-        {/* HAMBURGER FOR MOBILE */}
-        <motion.div
-          style={styles.mobileToggle}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <div style={styles.bar}></div>
-          <div style={styles.bar}></div>
-          <div style={styles.bar}></div>
-        </motion.div>
+            {/* THEME TOGGLE */}
+            <motion.button
+              onClick={() => {
+                if (onThemeToggle) onThemeToggle();
+                else {
+                  // fallback: toggle a body data-theme attribute
+                  const next = isDark ? "light" : "dark";
+                  document.documentElement.setAttribute("data-theme", next);
+                }
+              }}
+              style={styles.toggleBtn}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 6px 15px rgba(212,175,55,0.35)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Toggle theme"
+            >
+              {isDark ? "Light Mode" : "Dark Mode"}
+            </motion.button>
+
+            {/* CTA */}
+            <motion.button
+              onClick={handleEstimateClick}
+              style={{
+                padding: "0.8rem 1.9rem",
+                background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: "700",
+                color: "#000",
+                fontSize: "0.92rem",
+                letterSpacing: "0.5px",
+              }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 10px 25px rgba(212, 175, 55, 0.45)",
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get Construction Estimate
+            </motion.button>
+          </ul>
+        )}
+
+        {/* MOBILE TOGGLE (visible only on mobile) */}
+        {isMobile && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+              cursor: "pointer",
+              marginLeft: "auto",
+            }}
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setMenuOpen(true);
+            }}
+          >
+            <div style={styles.bar}></div>
+            <div style={styles.bar}></div>
+            <div style={styles.bar}></div>
+          </div>
+        )}
       </motion.nav>
 
-      {/* MOBILE MENU DRAWER */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
-        {menuOpen && (
+        {menuOpen && isMobile && (
           <motion.div
             key="mobileMenu"
             variants={menuVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            style={styles.mobileMenu}
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              width: "100%",
+              padding: "2.5rem",
+              background: colors.mobileBg,
+              minHeight: "100vh",
+              backdropFilter: "blur(14px)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "2rem",
+              zIndex: 1500,
+            }}
           >
+            {/* Close Btn */}
             <button
               onClick={() => setMenuOpen(false)}
-              style={styles.closeButton}
+              style={{
+                fontSize: "1.5rem",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: colors.text,
+                marginLeft: "auto",
+              }}
+              aria-label="Close menu"
             >
               ✕
             </button>
 
-            {["Home", "Projects", "Services", "Contact"].map((item, i) => (
+            {/* MOBILE LINKS */}
+            {navItems.map((item, i) => (
               <motion.a
                 key={i}
                 href={`#${item.toLowerCase()}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  onNavClick(item.toLowerCase());
+                  handleNav(item.toLowerCase());
                   setMenuOpen(false);
+                }}
+                style={{
+                  color: colors.text,
+                  fontSize: "1.4rem",
+                  fontWeight: "600",
                 }}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * i }}
-                style={styles.mobileLink}
               >
                 {item}
               </motion.a>
             ))}
 
+            {/* Mobile Theme Toggle */}
             <motion.button
-              onClick={handleEstimateClick}
+              onClick={() => {
+                if (onThemeToggle) onThemeToggle();
+                else {
+                  const next = isDark ? "light" : "dark";
+                  document.documentElement.setAttribute("data-theme", next);
+                }
+                setMenuOpen(false);
+              }}
               style={{
-                ...styles.mobileCtaButton,
-                textDecoration: "none",
-                display: "inline-block",
+                padding: "1rem 2rem",
+                background: "rgba(212,175,55,0.2)",
+                borderRadius: "8px",
+                border: "1px solid rgba(212,175,55,0.4)",
+                fontSize: "1.1rem",
+                fontWeight: "700",
+                color: colors.text,
+                cursor: "pointer",
                 width: "100%",
-                textAlign: "center",
               }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 10px 25px rgba(212, 175, 55, 0.35)",
+            >
+              {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            </motion.button>
+
+            {/* Mobile CTA */}
+            <motion.button
+              onClick={() => {
+                handleEstimateClick();
+                setMenuOpen(false);
               }}
-              whileTap={{ scale: 0.95 }}
+              style={{
+                marginTop: "2rem",
+                padding: "1rem 2rem",
+                background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
+                borderRadius: "8px",
+                border: "none",
+                fontSize: "1.1rem",
+                fontWeight: "700",
+                color: "#000",
+                cursor: "pointer",
+                width: "100%",
+              }}
             >
               Get Construction Estimate
             </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <style>{`
-        @media (max-width: 900px) {
-          [style*="display: flex"][style*="gap: 3rem"] {
-            display: none !important;
-          }
-        }
-      `}</style>
     </>
   );
 };

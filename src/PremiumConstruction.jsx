@@ -8,6 +8,7 @@ import WhyChooseUs from "./components/WhyChooseUs";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import ConstructionEstimate from "./components/ConstructionEstimate";
+import WhatsAppButton from "./components/WhatsAppButton"; // ✅ ADD THIS
 import jcbCursor from "./assets/jcb1.png";
 
 // Google Fonts
@@ -32,10 +33,10 @@ const PremiumConstruction = () => {
 
   const handleBackClick = () => setShowEstimate(false);
 
-  // 🔥 NEW: Navigation that works from BOTH pages
+  // 🔥 Navbar navigation support (works from both pages)
   const scrollToFromNavbar = (id) => {
     if (showEstimate) {
-      setShowEstimate(false); // exit estimate screen
+      setShowEstimate(false);
       setTimeout(() => {
         const el = document.getElementById(id);
         el?.scrollIntoView({ behavior: "smooth" });
@@ -62,10 +63,10 @@ const PremiumConstruction = () => {
         theme={theme}
         onThemeToggle={toggleTheme}
         onEstimateClick={handleEstimateClick}
-        onNavClick={scrollToFromNavbar} // 🔥 pass function here
+        onNavClick={scrollToFromNavbar}
       />
 
-      {/* CONDITIONAL PAGE SWITCH */}
+      {/* PAGE SWITCH */}
       {showEstimate ? (
         <ConstructionEstimate theme={theme} />
       ) : (
@@ -76,6 +77,14 @@ const PremiumConstruction = () => {
           <Contact theme={theme} />
           <WhyChooseUs theme={theme} />
           <Testimonials theme={theme} />
+
+          {/* ✅ WhatsApp Button only on Home */}
+          <WhatsAppButton
+            phoneNumber="916204203526"
+            defaultMessage="Hello! I want to discuss a construction project."
+            position={{ right: 22, bottom: 26 }}
+            bg="#25D366"
+          />
         </>
       )}
 

@@ -66,7 +66,7 @@ const Hero = ({ theme = "dark" }) => {
         }}
       >
         <video
-          src="/DesignTech/bgv.mp4"
+          src="./bgv.mp4"
           autoPlay
           loop
           muted
@@ -92,7 +92,7 @@ const Hero = ({ theme = "dark" }) => {
         }}
       >
         <video
-          src="/DesignTech/bgv.mp4"
+          src="./bgv.mp4"
           autoPlay
           loop
           muted

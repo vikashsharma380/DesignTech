@@ -8,42 +8,29 @@ import WhyChooseUs from "./components/WhyChooseUs";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import ConstructionEstimate from "./components/ConstructionEstimate";
-import WhatsAppButton from "./components/WhatsAppButton"; // ✅ ADD THIS
+import BookingPage from "./components/BookingPage";
 import jcbCursor from "./assets/jcb1.png";
-
-// Google Fonts
-const globalStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
-  * { box-sizing: border-box; scroll-behavior: smooth; }
-  body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-`;
 
 const PremiumConstruction = () => {
   const [showEstimate, setShowEstimate] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
+
   const [theme, setTheme] = useState("dark");
   const isDark = theme === "dark";
 
   const toggleTheme = () =>
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
 
-  const handleEstimateClick = () => {
-    setShowEstimate(true);
-    window.scrollTo(0, 0);
-  };
-
-  const handleBackClick = () => setShowEstimate(false);
-
-  // 🔥 Navbar navigation support (works from both pages)
+  // Smooth scroll + exit estimate or booking page
   const scrollToFromNavbar = (id) => {
-    if (showEstimate) {
+    if (showEstimate || showBooking) {
       setShowEstimate(false);
+      setShowBooking(false);
       setTimeout(() => {
-        const el = document.getElementById(id);
-        el?.scrollIntoView({ behavior: "smooth" });
-      }, 350);
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
     } else {
-      const el = document.getElementById(id);
-      el?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -53,21 +40,22 @@ const PremiumConstruction = () => {
         background: isDark ? "#0a0a0a" : "#ffffff",
         color: isDark ? "white" : "black",
         cursor: `url(${jcbCursor}) 5 5, auto`,
-        transition: "background 0.4s ease, color 0.4s ease",
+        transition: "0.3s",
       }}
     >
-      <style>{globalStyles}</style>
-
       {/* NAVBAR */}
       <Navbar
         theme={theme}
         onThemeToggle={toggleTheme}
-        onEstimateClick={handleEstimateClick}
+        onEstimateClick={() => setShowEstimate(true)}
+        onBookingClick={() => setShowBooking(true)}
         onNavClick={scrollToFromNavbar}
       />
 
-      {/* PAGE SWITCH */}
-      {showEstimate ? (
+      {/* CONDITIONAL RENDERING */}
+      {showBooking ? (
+        <BookingPage theme={theme} />
+      ) : showEstimate ? (
         <ConstructionEstimate theme={theme} />
       ) : (
         <>
@@ -77,14 +65,6 @@ const PremiumConstruction = () => {
           <Contact theme={theme} />
           <WhyChooseUs theme={theme} />
           <Testimonials theme={theme} />
-
-          {/* ✅ WhatsApp Button only on Home */}
-          <WhatsAppButton
-            phoneNumber="916204203526"
-            defaultMessage="Hello! I want to discuss a construction project."
-            position={{ right: 22, bottom: 26 }}
-            bg="#25D366"
-          />
         </>
       )}
 

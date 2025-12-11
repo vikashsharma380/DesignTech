@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
+const Navbar = ({
+  theme,
+  onThemeToggle,
+  onEstimateClick,
+  onNavClick,
+  onBookingClick,
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const isDark = theme === "dark";
@@ -76,7 +82,17 @@ const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
               </button>
             ))}
 
-            {/* Estimate Button */}
+            {/* BOOKING */}
+            <button
+              onClick={onBookingClick}
+              className={`text-sm font-semibold ${
+                isDark ? "text-gray-200" : "text-gray-800"
+              } hover:text-yellow-500`}
+            >
+              Booking
+            </button>
+
+            {/* ESTIMATE */}
             <button
               onClick={onEstimateClick}
               className="px-6 py-3 font-bold text-black rounded-lg shadow-md bg-gradient-to-r from-yellow-600 to-yellow-300"
@@ -84,7 +100,7 @@ const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
               Get Estimate
             </button>
 
-            {/* Theme Toggle */}
+            {/* THEME */}
             <button
               onClick={onThemeToggle}
               className="px-4 py-2 text-sm font-semibold text-yellow-200 border rounded-lg border-yellow-500/40 bg-yellow-500/10 hover:bg-yellow-600/20"
@@ -146,6 +162,18 @@ const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
                 </button>
               ))}
 
+              {/* BOOKING */}
+              <button
+                onClick={() => {
+                  onBookingClick();
+                  setMenuOpen(false);
+                }}
+                className="text-xl font-semibold hover:text-yellow-500"
+              >
+                Booking
+              </button>
+
+              {/* ESTIMATE */}
               <button
                 onClick={() => {
                   onEstimateClick();
@@ -156,6 +184,7 @@ const Navbar = ({ theme, onThemeToggle, onEstimateClick, onNavClick }) => {
                 Get Estimate
               </button>
 
+              {/* THEME */}
               <button
                 onClick={() => {
                   onThemeToggle();

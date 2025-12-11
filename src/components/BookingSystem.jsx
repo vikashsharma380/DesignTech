@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-export default function BookingSystem() {
+export default function BookingSystem({ theme = "light" }) {
+  const isDark = theme === "dark";
+
   const [slots, setSlots] = useState([
     { id: 1, label: "A1", booked: false },
     { id: 2, label: "A2", booked: false },
@@ -37,7 +39,6 @@ export default function BookingSystem() {
 
     setSlots(updated);
     setSelected([]);
-
     alert("Booking confirmed ✔");
   };
 
@@ -67,16 +68,13 @@ export default function BookingSystem() {
               onClick={() => toggleSelect(slot.id)}
               disabled={slot.booked}
               className={`
-                px-4 py-3 rounded-lg text-center font-semibold transition 
+                px-4 py-3 rounded-lg text-center font-semibold transition
                 ${
-                  slot.booked ? "bg-gray-400 cursor-not-allowed text-white" : ""
-                }
-                ${
-                  isSelected
+                  slot.booked
+                    ? "bg-gray-400 cursor-not-allowed text-white"
+                    : isSelected
                     ? "bg-blue-600 text-white"
-                    : !slot.booked
-                    ? "bg-green-500 text-white hover:bg-green-600"
-                    : ""
+                    : "bg-green-500 text-white hover:bg-green-600"
                 }
               `}
             >

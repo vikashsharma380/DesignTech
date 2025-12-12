@@ -90,23 +90,12 @@ const Navbar = ({
           >
             {menuOpen ? (
               // X ICON
-              <span
-                className={`text-4xl font-bold ${
-                  isDark ? "text-white" : "text-black"
-                }`}
-              >
-                ✕
-              </span>
+              <span className="text-4xl font-bold text-black">✕</span>
             ) : (
               // HAMBURGER ICON
               <div className="flex flex-col gap-1.5">
                 {[1, 2, 3].map((i) => (
-                  <span
-                    key={i}
-                    className={`block w-7 h-[3px] ${
-                      isDark ? "bg-white" : "bg-black"
-                    }`}
-                  />
+                  <span key={i} className="block w-7 h-[3px] bg-black" />
                 ))}
               </div>
             )}

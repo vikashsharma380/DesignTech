@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../assets/logo.png";
 
 const Navbar = ({
   theme,
@@ -28,45 +29,19 @@ const Navbar = ({
   return (
     <>
       {/* TOP NAV */}
-      <motion.nav
-        className={`fixed top-0 w-full z-[2000] transition-all ${
-          scrolled
-            ? isDark
-              ? "backdrop-blur-lg bg-black/70 border-b border-yellow-600/20"
-              : "backdrop-blur-lg bg-white/70 border-b border-yellow-600/20"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="flex items-center justify-between px-4 py-4 sm:px-8 lg:px-16">
+      <motion.nav className="fixed top-0 w-full z-[2000] transition-all backdrop-blur-lg bg-white border-b border-yellow-600/20">
+        <div className="flex items-center justify-between px-4 py-2 sm:px-8 lg:px-16">
+          {/* LOGO */}
           {/* LOGO */}
           <div
             onClick={() => onNavClick("home")}
-            className="flex items-center gap-2 cursor-pointer select-none"
+            className="flex items-center gap-2 pl-10 cursor-pointer select-none"
           >
-            <svg width="40" height="40" viewBox="0 0 48 48">
-              <rect
-                x="6"
-                y="12"
-                width="36"
-                height="30"
-                rx="2"
-                stroke="#d4af37"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M6 18H42M14 12V42M34 12V42M24 18V30"
-                stroke="#d4af37"
-                strokeWidth="1"
-              />
-              <circle cx="24" cy="24" r="2" fill="#d4af37" />
-            </svg>
-            <span
-              className={`text-2xl font-extrabold font-playfair ${
-                isDark ? "text-white" : "text-black"
-              }`}
-            >
-              DESIGNTECH
-            </span>
+            <img
+              src={logo}
+              alt="Logo"
+              className="object-contain w-20 h-20 scale-125"
+            />
           </div>
 
           {/* DESKTOP MENU */}
@@ -75,9 +50,7 @@ const Navbar = ({
               <button
                 key={item.id}
                 onClick={() => onNavClick(item.id)}
-                className={`text-sm font-semibold ${
-                  isDark ? "text-gray-200" : "text-gray-800"
-                } hover:text-yellow-500`}
+                className="text-sm font-semibold text-black hover:text-yellow-500"
               >
                 {item.label}
               </button>

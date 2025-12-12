@@ -6,45 +6,33 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import WhyChooseUs from "./components/WhyChooseUs";
 import Testimonials from "./components/Testimonials";
-import CTA from "./components/CTA";
 import Footer from "./components/Footer";
 import ConstructionEstimate from "./components/ConstructionEstimate";
+import BookingPage from "./components/BookingPage";
+import WhatsAppButton from "./components/WhatsAppButton"; // ✅ ADDED HERE
 import jcbCursor from "./assets/jcb1.png";
-
-// Import Google Fonts
-const globalStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
-
-  * {
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-  }
-`;
 
 const PremiumConstruction = () => {
   const [showEstimate, setShowEstimate] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
 
-  // 🌙 THEME SYSTEM
-  const [theme, setTheme] = useState("dark"); // default dark
+  const [theme, setTheme] = useState("dark");
   const isDark = theme === "dark";
 
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
 
-  const handleEstimateClick = () => {
-    setShowEstimate(true);
-    window.scrollTo(0, 0);
-  };
-
-  const handleBackClick = () => {
-    setShowEstimate(false);
+  // Smooth scroll + exit estimate or booking page
+  const scrollToFromNavbar = (id) => {
+    if (showEstimate || showBooking) {
+      setShowEstimate(false);
+      setShowBooking(false);
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -53,47 +41,22 @@ const PremiumConstruction = () => {
         background: isDark ? "#0a0a0a" : "#ffffff",
         color: isDark ? "white" : "black",
         cursor: `url(${jcbCursor}) 5 5, auto`,
-        transition: "background 0.4s ease, color 0.4s ease",
+        transition: "0.3s",
       }}
     >
-      <style>{globalStyles}</style>
-
       {/* NAVBAR */}
       <Navbar
         theme={theme}
         onThemeToggle={toggleTheme}
-        onEstimateClick={handleEstimateClick}
+        onEstimateClick={() => setShowEstimate(true)}
+        onBookingClick={() => setShowBooking(true)}
+        onNavClick={scrollToFromNavbar}
       />
 
-      {/* Back Button - Only for Estimate page */}
-      {showEstimate && (
-        <button
-          onClick={handleBackClick}
-          style={{
-            position: "fixed",
-            top: "90px",
-            right: "2rem",
-            zIndex: 1999,
-            padding: "0.7rem 1.5rem",
-            background: isDark
-              ? "rgba(212, 175, 55, 0.15)"
-              : "rgba(212, 175, 55, 0.25)",
-            border: "1px solid rgba(212, 175, 55, 0.4)",
-            color: "#d4af37",
-            cursor: "pointer",
-            borderRadius: "8px",
-            fontWeight: "600",
-            fontSize: "0.9rem",
-            letterSpacing: "0.5px",
-            transition: "all 0.3s ease",
-          }}
-        >
-          ← Back to Home
-        </button>
-      )}
-
-      {/* CONDITIONAL PAGE */}
-      {showEstimate ? (
+      {/* CONDITIONAL RENDERING */}
+      {showBooking ? (
+        <BookingPage theme={theme} />
+      ) : showEstimate ? (
         <ConstructionEstimate theme={theme} />
       ) : (
         <>
@@ -103,8 +66,16 @@ const PremiumConstruction = () => {
           <Contact theme={theme} />
           <WhyChooseUs theme={theme} />
           <Testimonials theme={theme} />
-          <CTA theme={theme} />
         </>
+      )}
+
+      {/* ✅ WHATSAPP BUTTON ONLY ON HOME SCREEN */}
+      {!showEstimate && !showBooking && (
+        <WhatsAppButton
+          phoneNumber="916204203526"
+          defaultMessage="Hello! I want to build my dream house. Please guide me."
+          position={{ right: 20, bottom: 25 }}
+        />
       )}
 
       <Footer theme={theme} />

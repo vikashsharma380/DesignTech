@@ -51,17 +51,17 @@ const Projects = ({ theme }) => {
   const slideVariants = {
     enter: (dir) => ({
       opacity: 0,
-      x: dir > 0 ? 1000 : -1000,
+      x: dir > 0 ? 300 : -300,
     }),
     center: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: "easeInOut" },
+      transition: { duration: 0.5, ease: "easeInOut" },
     },
     exit: (dir) => ({
       opacity: 0,
-      x: dir > 0 ? -1000 : 1000,
-      transition: { duration: 0.6, ease: "easeInOut" },
+      x: dir > 0 ? -300 : 300,
+      transition: { duration: 0.5, ease: "easeInOut" },
     }),
   };
 
@@ -74,7 +74,8 @@ const Projects = ({ theme }) => {
 
   return (
     <section
-      className={`py-32 px-6 md:px-20 transition-colors duration-300 ${
+      id="projects"
+      className={`py-24 sm:py-28 md:py-32 px-4 sm:px-8 md:px-12 lg:px-20 transition-colors duration-300 ${
         isLight ? "bg-white" : "bg-[#0a0a0a]"
       }`}
       aria-label="Signature Projects"
@@ -82,7 +83,7 @@ const Projects = ({ theme }) => {
       <div className="max-w-[1400px] mx-auto">
         {/* HEADER */}
         <motion.div
-          className="text-center max-w-[800px] mx-auto mb-20"
+          className="text-center max-w-[800px] mx-auto mb-14 sm:mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -90,30 +91,28 @@ const Projects = ({ theme }) => {
         >
           {/* Badge */}
           <div
-            className={`inline-flex items-center gap-3 py-4 px-8 rounded-full font-medium uppercase tracking-[1.5px] text-[0.85rem] mb-8 backdrop-blur-xl border ${
+            className={`inline-flex items-center gap-3 py-3 px-6 sm:py-4 sm:px-8 rounded-full font-medium uppercase tracking-[1.5px] text-xs sm:text-sm mb-6 sm:mb-8 backdrop-blur-xl border ${
               isLight
                 ? "bg-black/5 text-black border-[#d4af37]/40"
                 : "bg-white/5 text-white border-[#d4af37]/30"
             }`}
           >
-            <span className="text-[#d4af37] text-lg">●</span> PORTFOLIO
+            <span className="text-[#d4af37] text-base sm:text-lg">●</span>
+            PORTFOLIO
           </div>
 
-          {/* Title */}
           <h2
             className={`font-['Playfair_Display'] font-extrabold tracking-[-1px] mb-6 ${
               isLight ? "text-black" : "text-white"
-            } text-3xl md:text-5xl`}
+            } text-3xl sm:text-4xl md:text-5xl`}
           >
             Signature Projects
           </h2>
 
-          {/* Divider */}
-          <div className="h-[1.5px] w-20 mx-auto my-8 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
+          <div className="h-[1.5px] w-20 mx-auto my-6 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
 
-          {/* Subtitle */}
           <p
-            className={`text-[1.1rem] leading-[1.8] font-light tracking-wide ${
+            className={`text-sm sm:text-base md:text-lg leading-[1.8] font-light tracking-wide ${
               isLight ? "text-[#333]" : "text-[#d0d0d0]"
             }`}
           >
@@ -128,7 +127,7 @@ const Projects = ({ theme }) => {
             isLight
               ? "bg-black/5 border-[#d4af37]/20"
               : "bg-white/5 border-[#d4af37]/10"
-          } h-[360px] sm:h-[420px] md:h-[500px] lg:h-[600px]`}
+          } h-[300px] sm:h-[380px] md:h-[460px] lg:h-[540px]`}
         >
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
@@ -143,7 +142,7 @@ const Projects = ({ theme }) => {
               <img
                 src={projects[current].image}
                 alt={projects[current].title}
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
               />
 
               {/* Overlay */}
@@ -157,51 +156,51 @@ const Projects = ({ theme }) => {
 
               {/* CONTENT */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 md:p-14"
+                className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-10 lg:p-14"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
               >
                 {/* Type Tag */}
-                <div className="inline-block px-6 py-2 bg-[#d4af37]/20 border border-[#d4af37]/40 rounded-full text-[#d4af37] text-xs font-semibold tracking-wider uppercase mb-4">
+                <div className="inline-block px-5 py-2 bg-[#d4af37]/20 border border-[#d4af37]/40 rounded-full text-[#d4af37] text-[10px] sm:text-xs font-semibold tracking-wider uppercase mb-3 sm:mb-4">
                   {projects[current].type}
                 </div>
 
                 {/* Title */}
                 <h3
-                  className={`font-['Playfair_Display'] font-extrabold tracking-tight mb-4 ${
+                  className={`font-['Playfair_Display'] font-extrabold tracking-tight mb-3 sm:mb-4 ${
                     isLight ? "text-black" : "text-white"
-                  } text-2xl sm:text-3xl md:text-4xl lg:text-[2.8rem]`}
+                  } text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem]`}
                 >
                   {projects[current].title}
                 </h3>
 
                 {/* Details */}
                 <p
-                  className={`max-w-[600px] font-light leading-relaxed mb-6 ${
+                  className={`max-w-[600px] font-light leading-relaxed mb-4 sm:mb-6 text-xs sm:text-sm md:text-base ${
                     isLight ? "text-[#333]" : "text-gray-300"
-                  } text-sm sm:text-base`}
+                  }`}
                 >
                   {projects[current].details}
                 </p>
 
-                {/* Meta */}
+                {/* Meta Info */}
                 <div
-                  className={`flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 border-t pt-4 ${
+                  className={`flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-10 border-t pt-4 ${
                     isLight ? "border-[#d4af37]/30" : "border-[#d4af37]/20"
                   }`}
                 >
                   {/* Location */}
                   <div>
                     <span
-                      className={`text-xs uppercase font-medium ${
+                      className={`text-[10px] sm:text-xs uppercase font-medium ${
                         isLight ? "text-gray-600" : "text-gray-400"
                       }`}
                     >
                       Location
                     </span>
                     <p
-                      className={`text-lg font-semibold ${
+                      className={`text-base sm:text-lg font-semibold ${
                         isLight ? "text-black" : "text-white"
                       }`}
                     >
@@ -215,14 +214,14 @@ const Projects = ({ theme }) => {
                   {/* Area */}
                   <div>
                     <span
-                      className={`text-xs uppercase font-medium ${
+                      className={`text-[10px] sm:text-xs uppercase font-medium ${
                         isLight ? "text-gray-600" : "text-gray-400"
                       }`}
                     >
                       Area
                     </span>
                     <p
-                      className={`text-lg font-semibold ${
+                      className={`text-base sm:text-lg font-semibold ${
                         isLight ? "text-black" : "text-white"
                       }`}
                     >
@@ -234,40 +233,39 @@ const Projects = ({ theme }) => {
             </motion.div>
           </AnimatePresence>
 
-          {/* NAV BUTTONS */}
+          {/* LEFT NAV */}
           <button
             onClick={() => paginate(-1)}
-            className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path
                 d="M15 18L9 12L15 6"
                 stroke="#d4af37"
                 strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
             </svg>
           </button>
 
+          {/* RIGHT NAV */}
           <button
             onClick={() => paginate(1)}
-            className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#d4af37]/30 bg-white/40 dark:bg-black/40 hover:scale-105 transition"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path
                 d="M9 18L15 12L9 6"
                 stroke="#d4af37"
                 strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
             </svg>
           </button>
         </div>
 
         {/* INDICATORS */}
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="flex justify-center gap-3 mb-4 sm:mb-6">
           {projects.map((_, idx) => (
             <motion.button
               key={idx}
@@ -284,7 +282,7 @@ const Projects = ({ theme }) => {
         </div>
 
         {/* COUNTER */}
-        <div className="text-center text-[#d4af37] font-['Playfair_Display'] font-semibold text-2xl">
+        <div className="text-center text-[#d4af37] font-['Playfair_Display'] font-semibold text-lg sm:text-xl">
           {String(current + 1).padStart(2, "0")} /
           {String(projects.length).padStart(2, "0")}
         </div>

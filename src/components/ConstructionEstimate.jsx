@@ -361,8 +361,7 @@ const ConstructionEstimate = ({ theme = "dark" }) => {
           .filterGrid { grid-template-columns: 1fr !important; }
         }
       `}</style>
-
-      {/* ---------- ENTRANCE POPUP (blocking) ---------- */}
+      {/* ---------- ENTRANCE POPUP (House Information Form) ---------- */}
       <AnimatePresence>
         {entranceOpen && (
           <motion.div
@@ -381,116 +380,170 @@ const ConstructionEstimate = ({ theme = "dark" }) => {
             }}
           >
             <motion.div
-              initial={{ y: 10, scale: 0.98 }}
-              animate={{ y: 0, scale: 1 }}
-              exit={{ y: 10, scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 260, damping: 25 }}
               style={{
-                width: "min(920px, 96%)",
-                borderRadius: 12,
-                padding: 18,
-                overflow: "hidden",
-                background: isDark ? "#060606" : "#fff",
+                width: "min(480px,95%)",
+                background: isDark ? "#0c0c0c" : "#fff",
+                borderRadius: 14,
+                padding: "2rem",
                 border: `1px solid ${T.border}`,
-                display: "flex",
-                gap: 0,
-                alignItems: "stretch",
+                textAlign: "center",
               }}
             >
-              {/* Left visual */}
-              <div style={{ width: "45%", minHeight: 220, overflow: "hidden" }}>
-                <img
-                  src="https://images.unsplash.com/photo-1546597566-8e5f5d2b52b9?w=1200&q=80"
-                  alt="construction"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
-              </div>
-
-              {/* Right content */}
-              <div
+              <h2
                 style={{
-                  padding: 16,
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
+                  fontSize: "1.8rem",
+                  marginBottom: "1.5rem",
+                  fontWeight: "800",
+                  color: T.textMain,
+                  fontFamily: '"Playfair Display", serif',
                 }}
               >
-                <h2
+                House Information
+              </h2>
+
+              {/* FORM GRID */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                {/* CITY */}
+                <select
+                  value={formData.city}
+                  name="city"
+                  onChange={handleChange}
                   style={{
-                    margin: 0,
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
                     color: T.textMain,
-                    fontSize: 22,
-                    fontWeight: 800,
+                    fontWeight: 600,
                   }}
                 >
-                  Premium Construction Estimator
-                </h2>
-                <p style={{ marginTop: 8, color: T.textSecondary }}>
-                  Get an instant, realistic cost estimate by choosing premium
-                  materials and settings.
-                </p>
+                  <option>Choose City</option>
+                  <option>Gurgaon</option>
+                  <option>Delhi</option>
+                  <option>Mumbai</option>
+                  <option>Bangalore</option>
+                </select>
 
-                <ul
+                {/* PLOT AREA */}
+                <select
+                  value={formData.plotArea}
+                  name="plotArea"
+                  onChange={handleChange}
                   style={{
-                    marginTop: 10,
-                    color: T.textSecondary,
-                    paddingLeft: 18,
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
                   }}
                 >
-                  <li>Accurate material categories and market-based pricing</li>
-                  <li>Quick compare & confirm workflow</li>
-                  <li>Option to get a professional consultation</li>
-                </ul>
+                  <option>Choose Plot Area</option>
+                  <option>1000-3000</option>
+                  <option>3001-5000</option>
+                  <option>5001-8000</option>
+                  <option>8001+</option>
+                </select>
 
-                <div style={{ marginTop: "auto", display: "flex", gap: 10 }}>
-                  {/* NOTE: per your request, add a Cancel/Close but user shouldn't proceed without using Enter Site */}
-                  <button
-                    onClick={() => {
-                      // Cancel should NOT let them continue to interaction — keep entranceOpen true
-                      // We'll show a tiny shake or keep modal; for now keep it blocking (no close)
-                      // But to allow your requested "extra cancel button" we keep it visually present but non-closing.
-                      // Small UX: brief visual feedback
-                      // (No state change so page stays blocked)
-                      // you can change this later to show a message if you want
-                      // Example: flash a small alert
-                      alert("You must click 'Enter Site' to proceed.");
-                    }}
-                    style={{
-                      padding: "10px 14px",
-                      borderRadius: 8,
-                      border: `1px solid ${T.border}`,
-                      background: "transparent",
-                      color: T.textMain,
-                      fontWeight: 700,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Cancel
-                  </button>
+                {/* ROOF/SLAB AREA */}
+                <select
+                  value={formData.slabArea || ""}
+                  name="slabArea"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose Slab/Roof Area</option>
+                  <option>500-1500</option>
+                  <option>1501-3000</option>
+                  <option>3001-6000</option>
+                </select>
 
-                  <button
-                    onClick={() => {
-                      // Primary CTA -> Enter site (close the entrance popup)
-                      setEntranceOpen(false);
-                    }}
-                    style={{
-                      padding: "10px 14px",
-                      borderRadius: 8,
-                      border: "none",
-                      background: "linear-gradient(135deg,#d4af37,#f4e5c3)",
-                      color: "#000",
-                      fontWeight: 900,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Enter Site
-                  </button>
-                </div>
+                {/* FLOORS */}
+                <select
+                  value={formData.floors}
+                  name="floors"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose Number of Floors</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+              </div>
+
+              {/* BUTTONS */}
+              <div style={{ marginTop: "1.8rem" }}>
+                <button
+                  onClick={() => {
+                    if (
+                      !formData.city ||
+                      !formData.plotArea ||
+                      !formData.floors ||
+                      !formData.slabArea
+                    ) {
+                      alert("Please fill all fields before submitting.");
+                      return;
+                    }
+                    setEntranceOpen(false);
+                  }}
+                  style={{
+                    padding: "1rem",
+                    width: "100%",
+                    background: "linear-gradient(135deg,#f4c825,#ffdd55)",
+                    border: "none",
+                    borderRadius: 30,
+                    fontSize: "1.1rem",
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    color: "#000",
+                  }}
+                >
+                  Submit
+                </button>
+
+                {/* CANCEL BUTTON (optional, does NOT allow entering site) */}
+                <button
+                  onClick={() => alert("You must submit to continue.")}
+                  style={{
+                    marginTop: "1rem",
+                    padding: "0.9rem",
+                    width: "100%",
+                    background: "transparent",
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 10,
+                    color: T.textSecondary,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </motion.div>
           </motion.div>

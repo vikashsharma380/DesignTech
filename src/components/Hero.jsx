@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const Hero = ({ theme = "dark" }) => {
+const Hero = () => {
   const [offsetY, setOffsetY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  const isDark = theme === "dark";
-
+  // DARK MODE COLORS — fixed, no switching
   const T = {
-    mainHeading: isDark ? "#ffffffef" : "#1a1a1a",
-    subHeading: isDark
-      ? "linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%)"
-      : "linear-gradient(135deg, #d4af37 0%, #a48826 50%, #d4af37 100%)",
-    paragraph: isDark ? "#d0d0d0" : "#3a3a3a",
-
-    // 🌤 LIGHT MODE → Now 8% white tint
-    bg: isDark ? "#0a0a0a" : "rgba(255, 255, 255, 1)",
-
-    buttonOutline: isDark
-      ? "1.5px solid rgba(212,175,55,0.5)"
-      : "1.5px solid rgba(212,175,55,0.35)",
-
-    glass: isDark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.10)",
+    mainHeading: "#ffffffef",
+    subHeading:
+      "linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%)",
+    paragraph: "#d0d0d0",
+    bg: "#0a0a0a",
+    buttonOutline: "1.5px solid rgba(212,175,55,0.5)",
+    glass: "rgba(255,255,255,0.05)",
   };
 
   useEffect(() => {
@@ -62,58 +54,50 @@ const Hero = ({ theme = "dark" }) => {
           muted
           playsInline
           className="object-cover w-full h-full"
+          style={{ opacity: 0.4 }}
+        />
+      </motion.div>
+
+      {/* BLUR OVERLAY */}
+      <motion.div
+        className="absolute inset-0 z-1"
+        style={{
+          transform: `translateY(${offsetY * 0.2}px) translateX(${
+            mousePos.x * 0.5
+          }px) scale(1.05)`,
+        }}
+      >
+        <video
+          src="./bgv.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover w-full h-full"
           style={{
-            opacity: isDark ? 0.4 : 0.9,
+            opacity: 0.08,
+            filter: "blur(22px)",
           }}
         />
       </motion.div>
 
-      {/* BLUR VIDEO ONLY IN DARK MODE */}
-      {isDark && (
-        <motion.div
-          className="absolute inset-0 z-1"
-          style={{
-            transform: `translateY(${offsetY * 0.2}px) translateX(${
-              mousePos.x * 0.5
-            }px) scale(1.05)`,
-          }}
-        >
-          <video
-            src="./bgv.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="object-cover w-full h-full"
-            style={{
-              opacity: 0.08,
-              filter: "blur(22px)",
-            }}
-          />
-        </motion.div>
-      )}
-
       {/* DARK MODE OVERLAY */}
-      {isDark && (
-        <div
-          className="absolute inset-0 pointer-events-none z-2"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.22), rgba(0,0,0,0.55))",
-          }}
-        />
-      )}
+      <div
+        className="absolute inset-0 pointer-events-none z-2"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.22), rgba(0,0,0,0.55))",
+        }}
+      />
 
-      {/* DARK MODE GOLD GLOW */}
-      {isDark && (
-        <div
-          className="absolute inset-0 pointer-events-none z-3"
-          style={{
-            background:
-              "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 70%)",
-          }}
-        />
-      )}
+      {/* GOLD GLOW */}
+      <div
+        className="absolute inset-0 pointer-events-none z-3"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15), transparent 70%)",
+        }}
+      />
 
       {/* HERO CONTENT */}
       <motion.div
@@ -122,36 +106,40 @@ const Hero = ({ theme = "dark" }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
+        {/* MAIN HEADING */}
         <h1
           className="font-playfair font-extrabold leading-[1.08]
-          text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[6.3rem] mb-6"
-          style={{ color: T.mainHeading }}
+          text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[6rem] mb-6"
+          style={{ color: T.mainHeading, display: "inline-block" }}
         >
-          Build the Future
+          Design. Build. Innovate.
         </h1>
 
+        {/* SUBTITLE */}
         <h2
-          className="mb-10 text-xl font-semibold font-playfair sm:text-2xl md:text-3xl lg:text-4xl"
+          className="mb-8 text-xl font-semibold font-playfair sm:text-2xl md:text-3xl lg:text-4xl"
           style={{
             background: T.subHeading,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            display: "inline-block",
           }}
         >
-          Where Vision Meets Innovation
+          Crafting Modern Spaces With Precision & Excellence
         </h2>
 
+        {/* PARAGRAPH */}
         <p
           className="mx-auto max-w-[700px]
           text-base sm:text-lg md:text-xl leading-relaxed
           mb-12"
           style={{ color: T.paragraph }}
         >
-          Transform your design and construction vision into reality with
-          cutting-edge technology and timeless elegance.
+          From concept to completion, we transform architectural visions into
+          extraordinary realities through innovation and engineering mastery.
         </p>
 
-        {/* CTA */}
+        {/* CTA BUTTONS */}
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
           <button
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold text-black

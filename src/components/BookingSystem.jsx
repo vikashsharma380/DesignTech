@@ -1,96 +1,167 @@
 import React, { useState } from "react";
 
-export default function BookingSystem({ theme = "light" }) {
-  const isDark = theme === "dark";
-
-  const [slots, setSlots] = useState([
-    { id: 1, label: "A1", booked: false },
-    { id: 2, label: "A2", booked: false },
-    { id: 3, label: "A3", booked: true },
-    { id: 4, label: "A4", booked: true },
-    { id: 5, label: "A5", booked: false },
-    { id: 6, label: "B1", booked: false },
-    { id: 7, label: "B2", booked: false },
-    { id: 8, label: "B3", booked: true },
-    { id: 9, label: "B4", booked: false },
-    { id: 10, label: "B5", booked: false },
-  ]);
-
+export default function ExactSiteLayoutSVG() {
   const [selected, setSelected] = useState([]);
 
-  const toggleSelect = (id) => {
-    const slot = slots.find((s) => s.id === id);
-    if (slot.booked) return;
+  const booked = [
+    "A50",
+    "A47",
+    "A43",
+    "A38",
+    "A34",
+    "A29",
+    "A23",
+    "A18",
+    "A14",
+    "A7",
+    "A3",
+  ];
 
+  const toggle = (plot) => {
+    if (booked.includes(plot)) return;
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(plot) ? prev.filter((p) => p !== plot) : [...prev, plot]
     );
   };
 
-  const confirmBooking = () => {
-    if (selected.length === 0) {
-      alert("Please select at least one slot.");
-      return;
-    }
-
-    const updated = slots.map((s) =>
-      selected.includes(s.id) ? { ...s, booked: true } : s
-    );
-
-    setSlots(updated);
-    setSelected([]);
-    alert("Booking confirmed ✔");
+  const plotFill = (id, type) => {
+    if (booked.includes(id)) return "#9ca3af"; // booked
+    if (selected.includes(id)) return "#1e3a8a"; // selected
+    return type === "yellow" ? "#facc15" : "#bae6fd";
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* LEGEND */}
-      <div className="flex gap-6 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-4 bg-gray-400 rounded"></span> Booked
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-4 bg-green-500 rounded"></span> Available
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-4 bg-blue-600 rounded"></span> Selected
-        </div>
-      </div>
-
-      {/* GRID */}
-      <div className="grid max-w-lg grid-cols-5 gap-4">
-        {slots.map((slot) => {
-          const isSelected = selected.includes(slot.id);
-
-          return (
-            <button
-              key={slot.id}
-              onClick={() => toggleSelect(slot.id)}
-              disabled={slot.booked}
-              className={`
-                px-4 py-3 rounded-lg text-center font-semibold transition
-                ${
-                  slot.booked
-                    ? "bg-gray-400 cursor-not-allowed text-white"
-                    : isSelected
-                    ? "bg-blue-600 text-white"
-                    : "bg-green-500 text-white hover:bg-green-600"
-                }
-              `}
-            >
-              {slot.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* CTA BUTTON */}
-      <button
-        onClick={confirmBooking}
-        className="px-6 py-3 mt-4 text-white transition bg-black rounded-md shadow-md hover:opacity-80"
+    <div className="w-full py-10 overflow-auto bg-white">
+      <svg
+        width="1200"
+        height="700"
+        viewBox="0 0 1200 700"
+        className="mx-auto border"
       >
-        Confirm Booking
-      </button>
+        {/* ================= ROADS ================= */}
+        {/* Right vertical 40 ft road */}
+        <rect x="850" y="20" width="120" height="560" fill="#9ca3af" />
+        <text
+          x="910"
+          y="120"
+          fill="#fff"
+          fontSize="12"
+          textAnchor="middle"
+          transform="rotate(-90 910 120)"
+        >
+          40'-0" WIDE ROAD
+        </text>
+        <text
+          x="910"
+          y="300"
+          fill="#fff"
+          fontSize="12"
+          textAnchor="middle"
+          transform="rotate(-90 910 300)"
+        >
+          40'-0" WIDE ROAD
+        </text>
+
+        {/* Bottom horizontal road */}
+        <rect x="300" y="580" width="650" height="80" fill="#9ca3af" />
+        <text x="625" y="625" fill="#fff" fontSize="12" textAnchor="middle">
+          ROAD
+        </text>
+
+        {/* ================= INTERNAL ROADS ================= */}
+        <rect x="80" y="120" width="750" height="35" fill="#6b7280" />
+        <rect x="80" y="255" width="750" height="35" fill="#6b7280" />
+        <rect x="80" y="390" width="750" height="35" fill="#6b7280" />
+
+        <text x="455" y="142" fill="#fff" fontSize="11" textAnchor="middle">
+          16'-0" WIDE ROAD
+        </text>
+        <text x="455" y="277" fill="#fff" fontSize="11" textAnchor="middle">
+          16'-0" WIDE ROAD
+        </text>
+        <text x="455" y="412" fill="#fff" fontSize="11" textAnchor="middle">
+          16'-0" WIDE ROAD
+        </text>
+
+        {/* ================= PLOTS ================= */}
+        {/* Helper */}
+        {[
+          // Top row A50–A36 (yellow)
+          ...Array.from({ length: 15 }).map((_, i) => ({
+            id: `A${50 - i}`,
+            x: 80 + i * 50,
+            y: 50,
+            type: "yellow",
+          })),
+          // Second row A35–A21 (yellow)
+          ...Array.from({ length: 15 }).map((_, i) => ({
+            id: `A${35 - i}`,
+            x: 80 + i * 50,
+            y: 170,
+            type: "yellow",
+          })),
+          // Third row A20–A11 (blue)
+          ...Array.from({ length: 10 }).map((_, i) => ({
+            id: `A${20 - i}`,
+            x: 80 + i * 60,
+            y: 305,
+            type: "blue",
+          })),
+          // Bottom row A10–A1 (blue)
+          ...Array.from({ length: 10 }).map((_, i) => ({
+            id: `A${10 - i}`,
+            x: 80 + i * 60,
+            y: 440,
+            type: "blue",
+          })),
+        ].map((plot) => (
+          <g
+            key={plot.id}
+            onClick={() => toggle(plot.id)}
+            style={{
+              cursor: booked.includes(plot.id) ? "not-allowed" : "pointer",
+            }}
+          >
+            <rect
+              x={plot.x}
+              y={plot.y}
+              width={plot.type === "yellow" ? 48 : 58}
+              height="60"
+              rx="4"
+              fill={plotFill(plot.id, plot.type)}
+              stroke="#1f2937"
+            />
+            <text
+              x={plot.x + (plot.type === "yellow" ? 24 : 29)}
+              y={plot.y + 35}
+              fontSize="12"
+              fill={
+                selected.includes(plot.id) || booked.includes(plot.id)
+                  ? "#fff"
+                  : "#111"
+              }
+              textAnchor="middle"
+              fontWeight="bold"
+            >
+              {plot.id}
+            </text>
+          </g>
+        ))}
+      </svg>
+
+      {/* ACTION */}
+      <div className="mt-8 text-center">
+        <button
+          onClick={() =>
+            selected.length
+              ? alert(`Booked plots: ${selected.join(", ")}`)
+              : alert("Please select a plot")
+          }
+          className="px-10 py-4 text-lg font-semibold text-white rounded-lg bg-slate-900"
+        >
+          Confirm Plot Booking
+        </button>
+      </div>
     </div>
   );
 }

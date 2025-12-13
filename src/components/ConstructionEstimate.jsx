@@ -1,295 +1,369 @@
-// src/components/ConstructionWizardModal.jsx
-import React, { useState, useEffect, useMemo } from "react";
+// ConstructionEstimate.part1.jsx
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/**
- * ConstructionWizardModal.jsx (Large Premium UI - Dark Glass)
- *
- * - Option B: Large Premium UI
- * - Modal centered, big, dark glass background, white text inside for readability
- * - Inputs, selects, headings, cards, sidebar are made larger
- * - Auto-advance wizard for material selection; final estimate shown after all steps
- *
- * Usage:
- *   import ConstructionWizardModal from "./components/ConstructionWizardModal";
- *   <ConstructionWizardModal theme="dark" />
- */
-
-const ConstructionWizardModal = ({ theme = "dark" }) => {
+const ConstructionEstimate = ({ theme = "dark" }) => {
   const isDark = theme === "dark";
 
-  const light = {
-    pageBg: "#f6f7f9",
-    cardBg: "#fff",
-    panelBg: "rgba(255,255,255,0.85)",
-    textMain: "#0b0b0b",
-    textSecondary: "#666",
-    accent: "#d4af37",
-    border: "rgba(0,0,0,0.06)",
+  const lightTheme = {
+    pageBg: "#ffffff",
+    textMain: "#000",
+    textSecondary: "#555",
+    cardBg: "rgba(255,255,255,0.85)",
+    border: "rgba(212,175,55,0.25)",
+    headerBg: "rgba(212,175,55,0.08)",
   };
 
   const darkTheme = {
-    pageBg: "#060606",
-    cardBg: "#0f0f10",
-    panelBg: "rgba(255,255,255,0.03)",
-    textMain: "#ffffff",
-    textSecondary: "#cfcfcf",
-    accent: "#d4af37",
-    border: "rgba(255,255,255,0.06)",
+    pageBg: "#0a0a0a",
+    textMain: "#fff",
+    textSecondary: "#d0d0d0",
+    cardBg: "rgba(255,255,255,0.03)",
+    border: "rgba(212,175,55,0.12)",
+    headerBg: "linear-gradient(135deg, rgba(212,175,55,0.12), transparent)",
   };
 
-  const T = isDark ? darkTheme : light;
+  const T = isDark ? darkTheme : lightTheme;
 
-  // ---------- FORM & UI STATE ----------
-  const [showHouseModal, setShowHouseModal] = useState(true); // show modal on mount
+  // ---------- MAIN STATES ----------
   const [formData, setFormData] = useState({
     city: "Gurgaon",
-    exactArea: "",
-    useExactArea: true,
-    plotAreaPreset: "3001-5000",
-    floors: 2,
-    bathrooms: 2,
-    constructionQuality: "Standard",
+    plotArea: "3001-5000",
+    floors: "2",
+    constructionType: "Isolated",
   });
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedMaterials, setSelectedMaterials] = useState({});
-  const [showEstimate, setShowEstimate] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("Foundation");
   const [autoAdvance] = useState(true);
 
-  // ---------- MATERIAL CATALOG (images representative) ----------
-  const materialCategories = useMemo(
-    () => ({
-      Foundation: [
-        { id: "f1", name: "RCC Concrete Mix (M20)", price: 8500, img: "https://images.unsplash.com/photo-1488376731597-3c6a9d2f0aa4?q=80&w=1600&auto=format&fit=crop" },
-        { id: "f2", name: "Ready Mix Concrete (M25)", price: 9200, img: "https://images.unsplash.com/photo-1556909218-52c98ee0c98c?q=80&w=1600&auto=format&fit=crop" },
-        { id: "f3", name: "Reinforced Concrete (M30)", price: 10500, img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Cement: [
-        { id: "c1", name: "Ultratech (bag)", price: 420, img: "https://images.unsplash.com/photo-1601073911943-6c5a4a5e5f05?q=80&w=1600&auto=format&fit=crop" },
-        { id: "c2", name: "ACC (bag)", price: 390, img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop" },
-        { id: "c3", name: "Lafarge (bag)", price: 380, img: "https://images.unsplash.com/photo-1600611088023-1f8eaa7fe2f6?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Steel: [
-        { id: "s1", name: "TMT Fe500 (ton)", price: 45000, img: "https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=1600&auto=format&fit=crop" },
-        { id: "s2", name: "TMT Fe550 (ton)", price: 48000, img: "https://images.unsplash.com/photo-1549399543-4972b016c8c6?q=80&w=1600&auto=format&fit=crop" },
-        { id: "s3", name: "TMT Fe600 (ton)", price: 52000, img: "https://images.unsplash.com/photo-1565182999561-8a3b7d0d3a9d?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Bricks: [
-        { id: "b1", name: "Red Clay (1000 nos)", price: 4500, img: "https://images.unsplash.com/photo-1565182999561-8a3b7d0d3a9d?q=80&w=1600&auto=format&fit=crop" },
-        { id: "b2", name: "Fly Ash (1000 nos)", price: 3500, img: "https://images.unsplash.com/photo-1553163147-622ab57e33bb?q=80&w=1600&auto=format&fit=crop" },
-        { id: "b3", name: "AAC Blocks (1000 nos)", price: 6500, img: "https://images.unsplash.com/photo-1581093588401-0b5d1fd4a1f7?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Pipes: [
-        { id: "p1", name: "PVC (rft)", price: 40, img: "https://images.unsplash.com/photo-1581091870620-b2f6c2a0b4c9?q=80&w=1600&auto=format&fit=crop" },
-        { id: "p2", name: "CPVC (rft)", price: 70, img: "https://images.unsplash.com/photo-1600180758890-e5d8e5c4d8f2?q=80&w=1600&auto=format&fit=crop" },
-        { id: "p3", name: "GI (rft)", price: 180, img: "https://images.unsplash.com/photo-1566150905226-6b06d6a4b5b6?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Electrical: [
-        { id: "w1", name: "Polycab 1.5mm (m)", price: 20, img: "https://images.unsplash.com/photo-1581090469743-1a1b6a2a1d7f?q=80&w=1600&auto=format&fit=crop" },
-        { id: "w2", name: "Havells 2.5mm (m)", price: 30, img: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1600&auto=format&fit=crop" },
-        { id: "w3", name: "Finolex 4mm (m)", price: 50, img: "https://images.unsplash.com/photo-1581091012184-e6d0b5d3f4b2?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Taps: [
-        { id: "t1", name: "Hindware Basic (per bath)", price: 4000, img: "https://images.unsplash.com/photo-1581579181355-758c36e4b2b6?q=80&w=1600&auto=format&fit=crop" },
-        { id: "t2", name: "Jaquar Mid (per bath)", price: 9000, img: "https://images.unsplash.com/photo-1558494949-930c8f3e46cf?q=80&w=1600&auto=format&fit=crop" },
-        { id: "t3", name: "Kohler Premium (per bath)", price: 20000, img: "https://images.unsplash.com/photo-1582582494707-0b5b9b5b5b5b?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Windows: [
-        { id: "win1", name: "Aluminium (per sqft)", price: 220, img: "https://images.unsplash.com/photo-1505691723518-36a36e0c1b8f?q=80&w=1600&auto=format&fit=crop" },
-        { id: "win2", name: "UPVC (per sqft)", price: 260, img: "https://images.unsplash.com/photo-1499969390265-0b8af3b7d3e6?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Doors: [
-        { id: "d1", name: "Flush Door (per pc)", price: 8000, img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1600&auto=format&fit=crop" },
-        { id: "d2", name: "Engineered (per pc)", price: 14000, img: "https://images.unsplash.com/photo-1535958637724-1082b7b6b1e8?q=80&w=1600&auto=format&fit=crop" },
-        { id: "d3", name: "Hardwood (per pc)", price: 30000, img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1600&auto=format&fit=crop" },
-      ],
-      Finishes: [
-        { id: "pf1", name: "Paint (per sqft)", price: 18, img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1600&auto=format&fit=crop" },
-        { id: "pf2", name: "Putty (per sqft)", price: 7, img: "https://images.unsplash.com/photo-1545235617-945f27c2cf2b?q=80&w=1600&auto=format&fit=crop" },
-      ],
-    }),
-    []
-  );
+  // MODAL (material details) state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMaterial, setModalMaterial] = useState(null);
 
+  // ENTRANCE POPUP (blocking) state — user cannot interact with page until they close/confirm
+  const [entranceOpen, setEntranceOpen] = useState(true);
+
+  // ---------- MATERIAL CATEGORIES (data) ----------
+  const materialCategories = {
+    Foundation: [
+      {
+        id: "f1",
+        name: "RCC Concrete Mix",
+        price: 8500,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "High strength RCC mix for durable foundation work.",
+        details: "Used for structural base work with superior load capacity.",
+      },
+      {
+        id: "f2",
+        name: "Ready Mix Concrete",
+        price: 9200,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Consistent quality concrete solution.",
+        details:
+          "Perfect for fast execution and precise strength requirements.",
+      },
+      {
+        id: "f3",
+        name: "Reinforced Concrete",
+        price: 10500,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Ultra-strong concrete with reinforcement compatibility.",
+        details: "Best suited for deep footings and high-load structures.",
+      },
+    ],
+
+    Cement: [
+      {
+        id: "c1",
+        name: "LaFarge Duragold",
+        price: 380,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Premium cement for durability and long life.",
+        details: "Provides crack resistance and excellent bonding.",
+      },
+      {
+        id: "c2",
+        name: "Ultratech Cement",
+        price: 420,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Industry-leading cement brand.",
+        details: "Ensures fast setting and long-term structural stability.",
+      },
+      {
+        id: "c3",
+        name: "ACC Cement",
+        price: 390,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "High-strength cement for premium construction.",
+        details: "Ideal for columns, beams, and load-bearing walls.",
+      },
+    ],
+
+    Bricks: [
+      {
+        id: "b1",
+        name: "Red Clay Bricks",
+        price: 4500,
+        image:
+          "https://images.unsplash.com/photo-1565193566173-7cdd77751ffd?w=800",
+        description: "Traditional durable bricks.",
+        details: "Good heat insulation and strong bonding.",
+      },
+      {
+        id: "b2",
+        name: "Fly Ash Bricks",
+        price: 3500,
+        image:
+          "https://images.unsplash.com/photo-1565193566173-7cdd77751ffd?w=800",
+        description: "Eco-friendly and strong.",
+        details: "Perfect alignment and lightweight.",
+      },
+      {
+        id: "b3",
+        name: "AAC Blocks",
+        price: 6500,
+        image:
+          "https://images.unsplash.com/photo-1565193566173-7cdd77751ffd?w=800",
+        description: "Lightweight thermal insulation blocks.",
+        details: "Best for modern construction & energy efficiency.",
+      },
+    ],
+
+    Steel: [
+      {
+        id: "s1",
+        name: "TMT 500 Grade",
+        price: 45000,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Reliable tensile strength.",
+        details: "Widely used in beams and columns.",
+      },
+      {
+        id: "s2",
+        name: "TMT 550 Grade",
+        price: 48000,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Higher durability and load resistance.",
+        details: "Ideal for high rise structures.",
+      },
+      {
+        id: "s3",
+        name: "TMT 600 Grade",
+        price: 52000,
+        image:
+          "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800",
+        description: "Top-grade steel.",
+        details: "Maximum structural performance.",
+      },
+    ],
+
+    // new categories
+    Paint: [
+      {
+        id: "p1",
+        name: "Asian Royale Paint",
+        price: 650,
+        image:
+          "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?w=800",
+        description: "Premium washable interior paint.",
+        details: "Smooth finish with anti-fungal properties.",
+      },
+      {
+        id: "p2",
+        name: "Dulux Velvet Touch",
+        price: 710,
+        image:
+          "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?w=800",
+        description: "Luxury silky smooth finish.",
+        details: "Zero odor and advanced stain guard.",
+      },
+    ],
+
+    Electrical: [
+      {
+        id: "el1",
+        name: "Havells Wiring Pack",
+        price: 15000,
+        image:
+          "https://images.unsplash.com/photo-1581092335873-4f09a3a14f2d?w=800",
+        description: "High-quality wiring bundle.",
+        details: "Heat resistant, long life wiring set.",
+      },
+      {
+        id: "el2",
+        name: "Anchor Switch Set",
+        price: 8500,
+        image:
+          "https://images.unsplash.com/photo-1581092335873-4f09a3a14f2d?w=800",
+        description: "Premium modular switches.",
+        details: "Shockproof durable design.",
+      },
+    ],
+
+    Plumbing: [
+      {
+        id: "pl1",
+        name: "CPVC Pipe Set",
+        price: 12000,
+        image:
+          "https://images.unsplash.com/photo-1581092919337-497bb7d5005b?w=800",
+        description: "Hot & cold water pipe solution.",
+        details: "Leak proof & corrosion resistant.",
+      },
+      {
+        id: "pl2",
+        name: "Bathroom Fittings Pack",
+        price: 18000,
+        image:
+          "https://images.unsplash.com/photo-1581092919337-497bb7d5005b?w=800",
+        description: "Premium chrome finish fittings.",
+        details: "Long-lasting and anti-rust.",
+      },
+    ],
+  };
+
+  const categories = Object.keys(materialCategories);
+  const currentCategoryIndex = categories.indexOf(currentCategory);
+  const nextCategory = categories[currentCategoryIndex + 1];
+
+  // ---------- AUTO-ADVANCE CATEGORY ----------
   useEffect(() => {
-    if (showHouseModal) {
-      document.body.style.overflow = "hidden"; // disable scroll
-    } else {
-      document.body.style.overflow = "auto"; // enable scroll
-    }
-    // cleanup on unmount
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [showHouseModal]);
-
-  const steps = Object.keys(materialCategories); // ordered steps
-
-  // ---------- HELPERS ----------
-  const setForm = (k, v) => setFormData(prev => ({ ...prev, [k]: v }));
-  const fmt = (n) => (n || 0).toLocaleString();
-
-  const presetToArea = (p) => {
-    if (p === "1000-3000") return 2000;
-    if (p === "3001-5000") return 4000;
-    if (p === "5001-8000") return 6500;
-    if (p === "8001+") return 9000;
-    return 3000;
-  };
-
-  const qualityBaseRate = (quality, city) => {
-    let base = 1500;
-    if (quality === "Premium") base = 1800;
-    if (quality === "Commercial") base = 2200;
-    const cityMul = { Gurgaon: 1.0, Delhi: 1.02, Mumbai: 1.18, Bangalore: 0.98 }[city] || 1;
-    return Math.round(base * cityMul);
-  };
-
-  const areaUsed = (() => {
-    const exact = Number(String(formData.exactArea).replace(/,/g, "")) || 0;
-    if (formData.useExactArea && exact > 0) return exact;
-    return presetToArea(formData.plotAreaPreset);
-  })();
-
-  // ---------- ESTIMATE LOGIC ----------
-  const computeEstimate = () => {
-    const floors = Number(formData.floors) || 1;
-    const bathrooms = Number(formData.bathrooms) || 2;
-    const area = Number(areaUsed) || 0;
-    const baseRate = qualityBaseRate(formData.constructionQuality, formData.city);
-    const baseStructural = Math.round(area * floors * baseRate);
-
-    const cementBagsQty = Math.round(area * 0.4);
-    const steelKgQty = Math.round(area * 4.5);
-    const bricksQty = Math.round(area * 8);
-    const bricksPacks = Math.ceil(bricksQty / 1000);
-    const plumbingRunFeet = Math.round(area * 0.8);
-    const wiringMeters = Math.round(area * 1.2);
-    const windowsArea = Math.round(area * 0.18);
-    const doorsCount = Math.max(Math.round(floors * 3), 1);
-
-    let materialsSelectedCost = 0;
-    const findMat = (id) => {
-      for (const cat of Object.values(materialCategories)) {
-        const m = cat.find(x => x.id === id);
-        if (m) return m;
-      }
-      return null;
-    };
-    for (const [cat, id] of Object.entries(selectedMaterials)) {
-      if (!id) continue;
-      const mat = findMat(id);
-      if (!mat) continue;
-      const price = Number(mat.price) || 0;
-      switch (cat) {
-        case "Cement":
-          materialsSelectedCost += cementBagsQty * price; break;
-        case "Steel":
-          materialsSelectedCost += (steelKgQty / 1000) * price; break;
-        case "Bricks":
-          materialsSelectedCost += bricksPacks * price; break;
-        case "Foundation":
-          materialsSelectedCost += Math.round((area * price) / 1000); break;
-        case "Pipes":
-          materialsSelectedCost += plumbingRunFeet * price; break;
-        case "Electrical":
-          materialsSelectedCost += wiringMeters * price; break;
-        case "Taps":
-          materialsSelectedCost += price * bathrooms; break;
-        case "Windows":
-          materialsSelectedCost += windowsArea * price; break;
-        case "Doors":
-          materialsSelectedCost += doorsCount * price; break;
-        case "Finishes":
-          materialsSelectedCost += area * price; break;
-        default:
-          materialsSelectedCost += price;
-      }
-    }
-
-    const plumbingBase = Math.round(area * 20 + bathrooms * 6000);
-    const electricalBase = Math.round(area * 40);
-    const paintDefault = Math.round(area * 18);
-    const puttyDefault = Math.round(area * 7);
-
-    const total = baseStructural + Math.round(materialsSelectedCost) + plumbingBase + electricalBase + paintDefault + puttyDefault;
-
-    return {
-      area, floors, baseRate, baseStructural,
-      materialsSelectedCost: Math.round(materialsSelectedCost),
-      plumbingBase, electricalBase, paintDefault, puttyDefault,
-      cementBagsQty, steelKgQty, bricksQty, plumbingRunFeet, wiringMeters, windowsArea, doorsCount, total
-    };
-  };
-
-  const estimate = computeEstimate();
-
-  // ---------- WIZARD BEHAVIOR ----------
-  useEffect(() => {
-    const currentCategory = steps[currentStepIndex];
-    const selected = selectedMaterials[currentCategory];
-    const isLast = currentStepIndex === steps.length - 1;
-
-    if (selected && autoAdvance && !isLast) {
-      const timer = setTimeout(() => setCurrentStepIndex(i => Math.min(i + 1, steps.length - 1)), 500);
+    if (selectedMaterials[currentCategory] && nextCategory && autoAdvance) {
+      const timer = setTimeout(() => {
+        setCurrentCategory(nextCategory);
+      }, 800);
       return () => clearTimeout(timer);
     }
-  }, [selectedMaterials, currentStepIndex, autoAdvance, steps]);
+  }, [
+    selectedMaterials[currentCategory],
+    currentCategory,
+    nextCategory,
+    autoAdvance,
+  ]);
 
-  const allSelected = steps.every(s => selectedMaterials[s]);
-  const currentCategory = steps[currentStepIndex];
-
-  const toggleSelect = (category, id) => {
-    setSelectedMaterials(prev => ({ ...prev, [category]: prev[category] === id ? undefined : id }));
+  // ---------- FORM CHANGE ----------
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const goPrev = () => setCurrentStepIndex(i => Math.max(i - 1, 0));
-  const goNext = () => setCurrentStepIndex(i => Math.min(i + 1, steps.length - 1));
-  const restart = () => {
-    setSelectedMaterials({});
-    setShowEstimate(false);
-    setCurrentStepIndex(0);
-    setShowHouseModal(true);
+  // ---------- SELECT MATERIAL (open material modal) ----------
+  const handleMaterialSelect = (category, material) => {
+    setSelectedMaterials((prev) => ({ ...prev, [category]: material.id }));
+    setModalMaterial(material);
+    setModalOpen(true);
   };
 
-  // ---------- UI COMPONENTS (LARGER SIZES) ----------
-  const LargeMaterialCard = ({ m, selected, onClick }) => (
-    <motion.div layout whileHover={{ scale: 1.02 }} onClick={onClick}
-      style={{
-        cursor: "pointer",
-        borderRadius: 16,
-        overflow: "hidden",
-        border: `1px solid ${T.border}`,
-        background: T.cardBg,
-        display: "flex",
-        flexDirection: "column",
-        minHeight: 500,          // big card
-        boxShadow: isDark ? "0 18px 40px rgba(0,0,0,0.6)" : "0 10px 24px rgba(0,0,0,0.06)",
-      }}>
-      <div style={{ height: 300, background: "#111" }}> {/* larger image area */}
-        <img src={m.img} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-      </div>
-      <div style={{ padding: 22, display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
-          <div style={{ fontWeight: 900, fontSize: 20, color: T.textMain, lineHeight: 1.1 }}>{m.name}</div>
-          <div style={{ color: T.accent, fontWeight: 900, fontSize: 20 }}>₹{fmt(m.price)}</div>
-        </div>
-        <div style={{ color: T.textSecondary, marginTop: 4, fontSize: 15 }}>Tap card to select — after selection wizard will move to next.</div>
-        <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ color: selected ? "#000" : T.textSecondary, fontWeight: 900 }}>{selected ? "Selected" : "Tap to select"}</div>
-          {selected && <div style={{ background: T.accent, padding: "10px 14px", borderRadius: 12, fontWeight: 900 }}>✓</div>}
-        </div>
-      </div>
-    </motion.div>
-  );
+  // ---------- ESTIMATE CALC ----------
+  const calculateEstimate = () => {
+    const baseRates = {
+      Gurgaon: 1800,
+      Delhi: 1700,
+      Mumbai: 2000,
+      Bangalore: 1600,
+    };
+    const areaMultiplier = {
+      "1000-3000": 0.9,
+      "3001-5000": 1,
+      "5001-8000": 1.1,
+      "8001+": 1.2,
+    };
 
-  // ---------- RENDER ----------
+    const area = 3500;
+    const floors = parseInt(formData.floors) || 1;
+    const baseRate = baseRates[formData.city] || 1600;
+    const multiplier = areaMultiplier[formData.plotArea] || 1;
+
+    let materialCost = 0;
+    Object.entries(selectedMaterials).forEach(([cat, id]) => {
+      const list = materialCategories[cat] || [];
+      const mat = list.find((m) => m.id === id);
+      if (mat) materialCost += mat.price;
+    });
+
+    const baseStructural = area * floors * baseRate * multiplier * 0.5;
+    const materials = baseStructural * 0.6 + materialCost * (area * 0.001);
+    const labor = baseStructural * 0.3;
+    const contingency = (baseStructural + materials + labor) * 0.1;
+    const total = baseStructural + materials + labor + contingency;
+
+    return {
+      baseStructural: Math.round(baseStructural),
+      materials: Math.round(materials),
+      labor: Math.round(labor),
+      contingency: Math.round(contingency),
+      total: Math.round(total),
+    };
+  };
+
+  const estimate = calculateEstimate();
+  const selectedCount = Object.keys(selectedMaterials).length;
+  const totalCount = Object.keys(materialCategories).length;
+  const isComplete = selectedCount === totalCount;
+
+  // ---------- MODAL HANDLERS ----------
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalMaterial(null);
+  };
+  const confirmMaterialInModal = () => {
+    setModalOpen(false);
+    setModalMaterial(null);
+  };
+
+  // ---------- SMALL HELPERS ----------
+  const fmt = (n) => (n || 0).toLocaleString();
+
+  // Prevent background scroll while entrance popup is open
+  useEffect(() => {
+    if (entranceOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    // restore if not open
+    document.body.style.overflow = "";
+    return () => {};
+  }, [entranceOpen]);
+
+  // ---------- RENDER (PART 1) ----------
   return (
-    <div style={{ minHeight: "100vh", background: T.pageBg, color: T.textMain, fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" }}>
-      {/* HOUSE INFO MODAL - CENTER BIG DARK GLASS */}
+    <div
+      style={{
+        background: T.pageBg,
+        minHeight: "100vh",
+        paddingTop: "80px",
+        paddingBottom: "4rem",
+        color: T.textMain,
+        transition: "0.3s",
+      }}
+    >
+      {/* Responsive CSS */}
+      <style>{`
+        @media (max-width: 992px) {
+          .mainLayout { grid-template-columns: 1fr !important; }
+          .container { padding: 0 2rem !important; }
+        }
+        @media (max-width: 600px) {
+          .materialsGrid { grid-template-columns: 1fr !important; }
+          .filterGrid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      {/* ---------- ENTRANCE POPUP (House Information Form) ---------- */}
       <AnimatePresence>
-        {showHouseModal && (
+        {entranceOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -297,354 +371,800 @@ const ConstructionWizardModal = ({ theme = "dark" }) => {
             style={{
               position: "fixed",
               inset: 0,
-              zIndex: 9999,
+              zIndex: 99999,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "rgba(0,0,0,0.82)",   // darker overlay
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
+              background: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(4px)",
             }}
           >
             <motion.div
-              initial={{ y: -10, scale: 0.99, opacity: 0 }}
-              animate={{ y: 0, scale: 1, opacity: 1 }}
-              exit={{ y: 10, scale: 0.99, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 260, damping: 25 }}
               style={{
-                width: "94%",
-                maxWidth: 1100,                // larger modal
-                borderRadius: 24,
-                background: "linear-gradient(180deg, rgba(30,30,30,0.82), rgba(18,18,18,0.88))",
-                padding: 36,
-                boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
-                border: `1px solid rgba(212,175,55,0.28)`,
-                color: T.textMain,
+                width: "min(480px,95%)",
+                background: isDark ? "#0c0c0c" : "#fff",
+                borderRadius: 14,
+                padding: "2rem",
+                border: `1px solid ${T.border}`,
+                textAlign: "center",
               }}
             >
-              <div style={{ display: "flex", gap: 26 }}>
-                <div style={{ flex: 1 }}>
-                  <h1 style={{ margin: 0, fontSize: 30, fontWeight: 900, color: T.textMain }}>Project Details</h1>
-                  <p style={{ color: T.textSecondary, marginTop: 10, fontSize: 16 }}>Fill house information to begin the guided material selection (larger UI).</p>
+              <h2
+                style={{
+                  fontSize: "1.8rem",
+                  marginBottom: "1.5rem",
+                  fontWeight: "800",
+                  color: T.textMain,
+                  fontFamily: '"Playfair Display", serif',
+                }}
+              >
+                House Information
+              </h2>
 
-                  <div style={{ display: "grid", gap: 16, marginTop: 18 }}>
-                    <div style={{ display: "flex", gap: 14 }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>City</label>
-                        <select value={formData.city} onChange={(e) => setForm("city", e.target.value)} style={selectStyle(T)}>
-                          <option>Gurgaon</option>
-                          <option>Delhi</option>
-                          <option>Mumbai</option>
-                          <option>Bangalore</option>
-                        </select>
-                      </div>
+              {/* FORM GRID */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                {/* CITY */}
+                <select
+                  value={formData.city}
+                  name="city"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose City</option>
+                  <option>Gurgaon</option>
+                  <option>Delhi</option>
+                  <option>Mumbai</option>
+                  <option>Bangalore</option>
+                </select>
 
-                      <div style={{ width: 180 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>Quality</label>
-                        <select value={formData.constructionQuality} onChange={(e) => setForm("constructionQuality", e.target.value)} style={selectStyle(T)}>
-                          <option>Standard</option>
-                          <option>Premium</option>
-                          <option>Commercial</option>
-                        </select>
-                      </div>
-                    </div>
+                {/* PLOT AREA */}
+                <select
+                  value={formData.plotArea}
+                  name="plotArea"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose Plot Area</option>
+                  <option>1000-3000</option>
+                  <option>3001-5000</option>
+                  <option>5001-8000</option>
+                  <option>8001+</option>
+                </select>
 
-                    <div style={{ display: "flex", gap: 14 }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>Exact Area (sq.ft)</label>
-                        <input value={formData.exactArea} onChange={(e) => setForm("exactArea", e.target.value)} placeholder="e.g. 3500" style={inputStyle(T)} />
-                      </div>
+                {/* ROOF/SLAB AREA */}
+                <select
+                  value={formData.slabArea || ""}
+                  name="slabArea"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose Slab/Roof Area</option>
+                  <option>500-1500</option>
+                  <option>1501-3000</option>
+                  <option>3001-6000</option>
+                </select>
 
-                      <div style={{ width: 160 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>Floors</label>
-                        <input type="number" min={1} value={formData.floors} onChange={(e) => setForm("floors", e.target.value)} style={inputStyle(T)} />
-                      </div>
+                {/* FLOORS */}
+                <select
+                  value={formData.floors}
+                  name="floors"
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.9rem",
+                    borderRadius: 10,
+                    border: `1px solid ${T.border}`,
+                    background: isDark ? "#111" : "#fff",
+                    color: T.textMain,
+                    fontWeight: 600,
+                  }}
+                >
+                  <option>Choose Number of Floors</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+              </div>
 
-                      <div style={{ width: 160 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>Bathrooms</label>
-                        <input type="number" min={0} value={formData.bathrooms} onChange={(e) => setForm("bathrooms", e.target.value)} style={inputStyle(T)} />
-                      </div>
-                    </div>
+              {/* BUTTONS */}
+              <div style={{ marginTop: "1.8rem" }}>
+                <button
+                  onClick={() => {
+                    if (
+                      !formData.city ||
+                      !formData.plotArea ||
+                      !formData.floors ||
+                      !formData.slabArea
+                    ) {
+                      alert("Please fill all fields before submitting.");
+                      return;
+                    }
+                    setEntranceOpen(false);
+                  }}
+                  style={{
+                    padding: "1rem",
+                    width: "100%",
+                    background: "linear-gradient(135deg,#f4c825,#ffdd55)",
+                    border: "none",
+                    borderRadius: 30,
+                    fontSize: "1.1rem",
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    color: "#000",
+                  }}
+                >
+                  Submit
+                </button>
 
-                    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                      <label style={{ display: "flex", alignItems: "center", gap: 10, color: T.textSecondary, fontSize: 15 }}>
-                        <input type="checkbox" checked={formData.useExactArea} onChange={(e) => setForm("useExactArea", e.target.checked)} style={{ width: 18, height: 18 }} /> Use exact area
-                      </label>
-
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: "block", color: T.textSecondary, marginBottom: 6, fontSize: 15 }}>Preset area (used if exact not enabled)</label>
-                        <select value={formData.plotAreaPreset} onChange={(e) => setForm("plotAreaPreset", e.target.value)} style={selectStyle(T)}>
-                          <option value="1000-3000">1000-3000</option>
-                          <option value="3001-5000">3001-5000</option>
-                          <option value="5001-8000">5001-8000</option>
-                          <option value="8001+">8001+</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ width: 380, display: "flex", flexDirection: "column", gap: 12 }}>
-                  <div style={{ background: T.cardBg, padding: 18, borderRadius: 14, border: `1px solid ${T.border}` }}>
-                    <div style={{ color: T.textSecondary, fontSize: 14 }}>Quick preview</div>
-                    <div style={{ fontWeight: 900, fontSize: 22, marginTop: 10, color: T.textMain }}>{fmt(areaUsed)} sq.ft</div>
-                    <div style={{ color: T.textSecondary, marginTop: 8, fontSize: 15 }}>Floors: <strong style={{ color: T.textMain }}>{formData.floors}</strong> • Baths: <strong style={{ color: T.textMain }}>{formData.bathrooms}</strong></div>
-                    <div style={{ marginTop: 12, textAlign: "center" }}>
-                      <small style={{ color: T.textSecondary }}>Select materials next. Final estimate visible after all steps selected.</small>
-                    </div>
-                  </div>
-
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button onClick={() => { /* keep Cancel for future behavior */ }} style={ghostBtnStyle(T)}>Cancel</button>
-                    <button onClick={() => { setShowHouseModal(false); }} style={primaryBtnStyle(T)}>Next → Select Materials</button>
-                  </div>
-                </div>
+                {/* CANCEL BUTTON (optional, does NOT allow entering site) */}
+                <button
+                  onClick={() => alert("You must submit to continue.")}
+                  style={{
+                    marginTop: "1rem",
+                    padding: "0.9rem",
+                    width: "100%",
+                    background: "transparent",
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 10,
+                    color: T.textSecondary,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* MAIN PAGE (wizard & breakdown) */}
-      <div style={{ maxWidth: 1220, margin: "36px auto", padding: "0 18px" }}>
-        <div style={{ display: "flex", gap: 26 }}>
-          <div style={{ flex: 1 }}>
-            {/* header */}
-            <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div>
-                <h2 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>Construction Cost Wizard</h2>
-                <div style={{ color: T.textSecondary, marginTop: 8 }}>House info modal first → then step-by-step material selection (large cards).</div>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ color: T.textSecondary }}>Area used</div>
-                <div style={{ fontWeight: 900, fontSize: 20 }}>{fmt(areaUsed)} sq.ft</div>
-              </div>
-            </div>
+      {/* ---------- HEADER (page title + subtitle) ---------- */}
+      <motion.div
+        style={{
+          textAlign: "center",
+          padding: "3.5rem 5rem 2rem",
+          background: T.headerBg,
+          borderBottom: `1px solid ${T.border}`,
+          marginBottom: "2.5rem",
+        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h1
+          style={{
+            fontSize: "2.8rem",
+            fontWeight: "800",
+            margin: 0,
+            color: T.textMain,
+            fontFamily: '"Playfair Display", serif',
+          }}
+        >
+          Construction Cost Estimator
+        </h1>
 
-            {/* wizard panel */}
-            <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: 18, borderRadius: 16 }}>
-              <div style={{ marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ color: T.textSecondary, fontSize: 15 }}>Step {currentStepIndex + 1} of {steps.length} — <strong style={{ color: T.textMain }}>{currentCategory}</strong></div>
-                <div style={{ color: T.textSecondary }}>{steps.map(s => selectedMaterials[s] ? "●" : "○").join("  ")}</div>
-              </div>
+        <p
+          style={{
+            color: T.textSecondary,
+            fontSize: "1.05rem",
+            maxWidth: "650px",
+            margin: "0 auto",
+          }}
+        >
+          Complete your project details and choose premium materials
+        </p>
+      </motion.div>
 
-              <div style={{ minHeight: 520 }}>
-                {/* large cards grid for current category */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(460px,1fr))", gap: 20 }}>
-                  {materialCategories[currentCategory].map(m => (
-                    <LargeMaterialCard
-                      key={m.id}
-                      m={m}
-                      selected={selectedMaterials[currentCategory] === m.id}
-                      onClick={() => toggleSelect(currentCategory, m.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* nav */}
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 18, gap: 12 }}>
-                <div>
-                  <button onClick={goPrev} disabled={currentStepIndex === 0} style={navBtnStyle(T, currentStepIndex === 0)}>← Previous</button>
-                </div>
-
-                <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setCurrentStepIndex(steps.length - 1)} style={ghostBtnStyle(T)}>Jump to Last</button>
-                  <button onClick={goNext} disabled={currentStepIndex === steps.length - 1} style={primaryBtnStyle(T)}>Next →</button>
-                </div>
-              </div>
-            </div>
+      <div
+        className="container"
+        style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 5rem" }}
+      >
+        {/* PROGRESS (keeps working once user enters) */}
+        <div style={{ marginBottom: "2.5rem" }}>
+          <div
+            style={{
+              height: "3px",
+              background: "rgba(212,175,55,0.1)",
+              borderRadius: "2px",
+              overflow: "hidden",
+            }}
+          >
+            <motion.div
+              style={{
+                height: "100%",
+                background: "linear-gradient(90deg, #d4af37, #f4e5c3)",
+              }}
+              animate={{ width: `${(selectedCount / totalCount) * 100}%` }}
+              transition={{ duration: 0.6 }}
+            />
           </div>
-
-          {/* RIGHT: sidebar summary & final actions */}
-          <div style={{ width: 420, position: "sticky", top: 24 }}>
-            <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: 18, borderRadius: 14 }}>
-              <h3 style={{ marginTop: 0, fontSize: 20 }}>Project Summary</h3>
-              <div style={{ color: T.textSecondary, fontSize: 14 }}>City</div>
-              <div style={{ fontWeight: 900, fontSize: 18 }}>{formData.city}</div>
-
-              <div style={{ marginTop: 12, color: T.textSecondary, fontSize: 14 }}>Area used</div>
-              <div style={{ fontWeight: 900, fontSize: 18 }}>{fmt(areaUsed)} sq.ft</div>
-
-              <div style={{ marginTop: 12, color: T.textSecondary, fontSize: 14 }}>Floors / Baths</div>
-              <div style={{ fontWeight: 900, fontSize: 18 }}>{formData.floors} / {formData.bathrooms}</div>
-
-              <div style={{ marginTop: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", color: T.textSecondary }}>
-                  <div style={{ fontSize: 14 }}>Selected</div>
-                  <div style={{ fontWeight: 900, fontSize: 16 }}>{Object.keys(selectedMaterials).filter(k => selectedMaterials[k]).length}/{steps.length}</div>
-                </div>
-
-                <div style={{ marginTop: 12 }}>
-                  {steps.map(s => {
-                    const id = selectedMaterials[s];
-                    const mat = id ? materialCategories[s].find(x => x.id === id) : null;
-                    return (
-                      <div key={s} style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
-                        <div style={{ color: mat ? T.textMain : T.textSecondary }}>{s}</div>
-                        <div style={{ color: mat ? T.accent : T.textSecondary, fontWeight: mat ? 800 : 600 }}>{mat ? mat.name : "—"}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div style={{ marginTop: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", color: T.textSecondary }}>
-                  <div style={{ fontSize: 14 }}>Estimated total (preview)</div>
-                  <div style={{ fontWeight: 900, color: T.accent, fontSize: 18 }}>₹{fmt(estimate.total)}</div>
-                </div>
-                <small style={{ color: T.textSecondary }}>Final breakdown after Calculate (all steps selected)</small>
-              </div>
-
-              <div style={{ marginTop: 16 }}>
-                <button onClick={() => { if (allSelected) setShowEstimate(true); }} disabled={!allSelected} style={allSelected ? primaryBtnStyle(T) : disabledBtnStyle()}>
-                  Calculate Estimate
-                </button>
-                <button onClick={restart} style={{ marginTop: 10, width: "100%", padding: 12, borderRadius: 12, border: `1px solid ${T.border}`, background: "transparent", color: T.textSecondary, fontWeight: 800 }}>Restart (start over)</button>
-              </div>
-            </div>
-
-            {/* mini quantities */}
-            <div style={{ marginTop: 14, background: T.cardBg, border: `1px solid ${T.border}`, padding: 14, borderRadius: 14 }}>
-              <div style={{ color: T.textSecondary, fontSize: 14 }}>Quantities (approx)</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 12 }}>
-                <SmallCard title="Cement bags" value={fmt(estimate.cementBagsQty)} />
-                <SmallCard title="Steel (kg)" value={fmt(estimate.steelKgQty)} />
-                <SmallCard title="Bricks (nos)" value={fmt(estimate.bricksQty)} />
-                <SmallCard title="Plumbing (rft)" value={fmt(estimate.plumbingRunFeet)} />
-                <SmallCard title="Wiring (m)" value={fmt(estimate.wiringMeters)} />
-                <SmallCard title="Windows (sqft)" value={fmt(estimate.windowsArea)} />
-              </div>
-            </div>
-          </div>
+          <p
+            style={{
+              color: T.textSecondary,
+              fontSize: "0.85rem",
+              fontWeight: "600",
+            }}
+          >
+            {selectedCount} of {totalCount} Materials Selected
+          </p>
         </div>
 
-        {/* FINAL ESTIMATE overlay */}
-        <AnimatePresence>
-          {showEstimate && (
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} style={{ marginTop: 26 }}>
-              <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: 20, borderRadius: 14 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: 20 }}>Final Estimate</h3>
-                    <div style={{ color: T.textSecondary, marginTop: 8 }}>{fmt(estimate.area)} sq.ft • {estimate.floors} floors</div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ color: T.textSecondary }}>TOTAL</div>
-                    <div style={{ fontSize: 30, fontWeight: 900, color: T.accent }}>₹{fmt(estimate.total)}</div>
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
-                  <Row label="Structural Work" value={`₹${fmt(estimate.baseStructural)}`} />
-                  <Row label="Selected Materials" value={`₹${fmt(estimate.materialsSelectedCost)}`} />
-                  <Row label="Plumbing (base)" value={`₹${fmt(estimate.plumbingBase)}`} />
-                  <Row label="Electrical (base)" value={`₹${fmt(estimate.electricalBase)}`} />
-                  <Row label="Paint (default)" value={`₹${fmt(estimate.paintDefault)}`} />
-                  <Row label="Putty (default)" value={`₹${fmt(estimate.puttyDefault)}`} />
-                  <hr style={{ border: "none", height: 1, background: T.border, margin: "6px 0" }} />
-                  <Row label="TOTAL" value={`₹${fmt(estimate.total)}`} bold />
-                </div>
-
-                <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
-                  <button onClick={() => setShowEstimate(false)} style={ghostBtnStyle(T)}>Edit selections</button>
-                  <button onClick={() => navigator.clipboard?.writeText(JSON.stringify({ formData, selectedMaterials, estimate }))} style={primaryBtnStyle(T)}>Copy Estimate JSON</button>
-                </div>
+        {/* FILTERS */}
+        <motion.div
+          style={{
+            background: T.cardBg,
+            border: `1px solid ${T.border}`,
+            borderRadius: "12px",
+            padding: "1.8rem",
+            marginBottom: "2.5rem",
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div
+            className="filterGrid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
+            {[
+              {
+                label: "City",
+                name: "city",
+                options: ["Gurgaon", "Delhi", "Mumbai", "Bangalore"],
+              },
+              {
+                label: "Plot Area",
+                name: "plotArea",
+                options: ["1000-3000", "3001-5000", "5001-8000", "8001+"],
+              },
+              {
+                label: "Floors",
+                name: "floors",
+                options: ["1", "2", "3", "4"],
+              },
+              {
+                label: "Construction Type",
+                name: "constructionType",
+                options: ["Isolated", "Attached", "Commercial"],
+              },
+            ].map((field) => (
+              <div
+                key={field.name}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.6rem",
+                }}
+              >
+                <label
+                  style={{
+                    color: T.textSecondary,
+                    fontSize: "0.85rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {field.label}
+                </label>
+                <select
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.85rem 1rem",
+                    background: isDark ? "rgba(10,10,10,0.8)" : "#fff",
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "6px",
+                    color: T.textMain,
+                  }}
+                >
+                  {field.options.map((op) => (
+                    <option key={op} value={op}>
+                      {op}
+                    </option>
+                  ))}
+                </select>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* ---- PART 1 ends here. Continue with Part 2 which contains the mainLayout (categories + cards) and right panel. ---- */}
+        {/* ---------- MAIN LAYOUT ---------- */}
+        <div
+          className="mainLayout"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.6fr 1.1fr",
+            gap: "2.5rem",
+          }}
+        >
+          {/* ---------- LEFT SIDE (Categories + Materials) ---------- */}
+          <motion.div
+            style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            {/* ---------- CATEGORY NAVIGATION ---------- */}
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                flexWrap: "wrap",
+                padding: "1.8rem",
+                background: T.cardBg,
+                border: `1px solid ${T.border}`,
+                borderRadius: "12px",
+              }}
+            >
+              {categories.map((cat, idx) => (
+                <motion.button
+                  key={cat}
+                  onClick={() => setCurrentCategory(cat)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.7rem",
+                    padding: "0.8rem 1.4rem",
+                    background: selectedMaterials[cat]
+                      ? "rgba(74,222,128,0.1)"
+                      : currentCategory === cat
+                      ? "rgba(212,175,55,0.15)"
+                      : "rgba(255,255,255,0.04)",
+                    border: `1px solid ${
+                      selectedMaterials[cat]
+                        ? "rgba(74,222,128,0.3)"
+                        : "rgba(212,175,55,0.2)"
+                    }`,
+                    borderRadius: "8px",
+                    color: selectedMaterials[cat]
+                      ? "#4ade80"
+                      : currentCategory === cat
+                      ? "#d4af37"
+                      : T.textMain,
+                    cursor: "pointer",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      background: "rgba(212,175,55,0.2)",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: T.textMain,
+                    }}
+                  >
+                    {idx + 1}
+                  </span>
+
+                  <span>{cat}</span>
+                  {selectedMaterials[cat] && <span>✓</span>}
+                </motion.button>
+              ))}
+            </div>
+
+            {/* ---------- MATERIAL CARDS ---------- */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentCategory}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                style={{
+                  background: T.cardBg,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "14px",
+                  padding: "2.5rem",
+                }}
+              >
+                <h2
+                  style={{
+                    fontSize: "1.8rem",
+                    fontFamily: '"Playfair Display", serif',
+                    margin: 0,
+                    marginBottom: "0.4rem",
+                    color: T.textMain,
+                  }}
+                >
+                  {currentCategory}
+                </h2>
+
+                <p style={{ color: T.textSecondary }}>
+                  Select the best option for your project
+                </p>
+
+                <div
+                  className="materialsGrid"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                    gap: "1.5rem",
+                    marginTop: "1.2rem",
+                  }}
+                >
+                  {materialCategories[currentCategory].map((material, idx) => (
+                    <motion.div
+                      key={material.id}
+                      onClick={() =>
+                        handleMaterialSelect(currentCategory, material)
+                      }
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.06 }}
+                      whileHover={{
+                        y: -6,
+                        boxShadow: "0 12px 24px rgba(212,175,55,0.12)",
+                      }}
+                      style={{
+                        background: T.cardBg,
+                        border: `1.5px solid ${T.border}`,
+                        borderRadius: "12px",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        display: "flex",
+                        flexDirection: "column",
+                        position: "relative",
+                        minHeight: 280,
+                      }}
+                    >
+                      {/* Material Image */}
+                      <div style={{ height: "140px", overflow: "hidden" }}>
+                        <img
+                          src={material.image}
+                          alt={material.name}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            display: "block",
+                          }}
+                        />
+                      </div>
+
+                      {/* Selected Overlay Checkmark */}
+                      {selectedMaterials[currentCategory] === material.id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: "rgba(212,175,55,0.12)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#d4af37",
+                            fontSize: "2rem",
+                            fontWeight: "800",
+                          }}
+                        >
+                          ✓
+                        </motion.div>
+                      )}
+
+                      {/* Card Content */}
+                      <div
+                        style={{
+                          padding: "1rem 1rem 1.2rem",
+                          display: "flex",
+                          flexDirection: "column",
+                          flex: 1,
+                          color: T.textMain,
+                        }}
+                      >
+                        <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem" }}>
+                          {material.name}
+                        </h3>
+                        <p
+                          style={{
+                            color: T.textSecondary,
+                            fontSize: "0.85rem",
+                            marginBottom: "0.8rem",
+                            flex: 1,
+                          }}
+                        >
+                          {material.description}
+                        </p>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            borderTop: `1px solid ${T.border}`,
+                            paddingTop: "0.7rem",
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "#d4af37",
+                              fontWeight: "700",
+                            }}
+                          >
+                            ₹{material.price.toLocaleString()}
+                          </span>
+
+                          <span
+                            style={{
+                              background:
+                                selectedMaterials[currentCategory] ===
+                                material.id
+                                  ? "rgba(212,175,55,0.25)"
+                                  : "rgba(212,175,55,0.12)",
+                              color: "#d4af37",
+                              padding: "6px 10px",
+                              borderRadius: "6px",
+                              fontSize: "0.78rem",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {selectedMaterials[currentCategory] === material.id
+                              ? "Selected"
+                              : "Select"}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* ---------- RIGHT SIDE (Cost Panel) ---------- */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <div
+              style={{
+                background: T.cardBg,
+                border: `1px solid ${T.border}`,
+                borderRadius: "14px",
+                padding: "2rem",
+                position: "sticky",
+                top: "100px",
+                minWidth: 260,
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: `1px solid ${T.border}`,
+                  paddingBottom: "1rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <h3 style={{ fontSize: "1.4rem", color: T.textMain }}>
+                  Cost Estimation
+                </h3>
+
+                <span
+                  style={{
+                    background: isComplete
+                      ? "rgba(74,222,128,0.15)"
+                      : "rgba(255,255,255,0.06)",
+                    padding: "6px 12px",
+                    borderRadius: "6px",
+                    color: isComplete ? "#4ade80" : T.textSecondary,
+                    fontWeight: "600",
+                  }}
+                >
+                  {isComplete ? "✓ Complete" : "In Progress"}
+                </span>
+              </div>
+
+              {/* Selected Materials Summary */}
+              <div
+                style={{
+                  background: "rgba(212,175,55,0.06)",
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "10px",
+                  padding: "1.2rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <h4
+                  style={{
+                    color: "#d4af37",
+                    marginBottom: "1rem",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  Your Selection
+                </h4>
+
+                {Object.entries(selectedMaterials).length === 0 && (
+                  <div style={{ color: T.textSecondary, fontSize: 13 }}>
+                    No materials selected yet.
+                  </div>
+                )}
+
+                {Object.entries(selectedMaterials).map(([cat, id]) => {
+                  const mat =
+                    (materialCategories[cat] || []).find((m) => m.id === id) ||
+                    {};
+                  return (
+                    <div
+                      key={cat}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        borderBottom: `1px solid ${T.border}`,
+                        marginBottom: "0.8rem",
+                        paddingBottom: "0.8rem",
+                      }}
+                    >
+                      <div>
+                        <span
+                          style={{
+                            color: T.textSecondary,
+                            fontSize: "0.75rem",
+                          }}
+                        >
+                          {cat}
+                        </span>
+                        <p
+                          style={{
+                            color: T.textMain,
+                            fontWeight: "600",
+                            margin: 0,
+                          }}
+                        >
+                          {mat.name || "—"}
+                        </p>
+                      </div>
+
+                      <span style={{ color: "#d4af37", fontWeight: "700" }}>
+                        {mat.price ? `₹${mat.price.toLocaleString()}` : "—"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Breakdown */}
+              <div
+                style={{
+                  background: "rgba(212,175,55,0.05)",
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "10px",
+                  padding: "1.2rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <h4 style={{ color: "#d4af37", marginBottom: "1rem" }}>
+                  Cost Breakdown
+                </h4>
+
+                {[
+                  ["Structural Work", estimate.baseStructural],
+                  ["Materials", estimate.materials],
+                  ["Labor", estimate.labor],
+                  ["Contingency", estimate.contingency],
+                ].map(([label, val]) => (
+                  <div
+                    key={label}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingBottom: "0.8rem",
+                      marginBottom: "0.8rem",
+                      borderBottom: `1px solid ${T.border}`,
+                    }}
+                  >
+                    <span style={{ color: T.textSecondary }}>{label}</span>
+                    <span style={{ color: "#d4af37", fontWeight: "700" }}>
+                      ₹{fmt(val)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Total */}
+              <div
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(212,175,55,0.12), rgba(244,229,195,0.06))",
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "10px",
+                  padding: "1.5rem",
+                  textAlign: "center",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <span
+                  style={{
+                    color: T.textSecondary,
+                    fontSize: "0.85rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Total Estimated Cost
+                </span>
+
+                <h2
+                  style={{
+                    fontSize: "2.2rem",
+                    marginTop: "0.4rem",
+                    color: "#d4af37",
+                  }}
+                >
+                  ₹{fmt(estimate.total)}
+                </h2>
+              </div>
+
+              {/* CTA Button */}
+              <button
+                onClick={() => {
+                  const payload = { formData, selectedMaterials, estimate };
+                  navigator.clipboard.writeText(JSON.stringify(payload));
+                  alert("Estimate copied to clipboard.");
+                }}
+                style={{
+                  width: "100%",
+                  padding: "1.1rem",
+                  background: "linear-gradient(135deg, #d4af37, #f4e5c3)",
+                  border: "none",
+                  color: "#000",
+                  fontWeight: "700",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Get Professional Consultation →
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
 };
 
-// ---------- STYLES & SMALL HELPERS ----------
-const inputStyle = (T) => ({
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: 12,
-  border: "none",
-  outline: "none",
-  background: "rgba(255,255,255,0.04)",
-  color: T.textMain,
-  fontSize: 16,
-  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.02)",
-});
-
-const selectStyle = (T) => ({
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: 12,
-  border: "none",
-  outline: "none",
-  background: "rgba(255,255,255,0.04)",
-  color: T.textMain,
-  fontSize: 16,
-});
-
-const primaryBtnStyle = (T) => ({
-  width: "100%",
-  padding: 14,
-  borderRadius: 12,
-  border: "none",
-  background: T.accent,
-  color: "#000",
-  fontWeight: 900,
-  cursor: "pointer",
-  fontSize: 16,
-});
-
-const ghostBtnStyle = (T) => ({
-  width: "100%",
-  padding: 14,
-  borderRadius: 12,
-  border: `1px solid ${T.border}`,
-  background: "transparent",
-  color: T.textMain,
-  fontWeight: 800,
-  cursor: "pointer",
-  fontSize: 15,
-});
-
-const navBtnStyle = (T, disabled) => ({
-  padding: "12px 18px",
-  borderRadius: 12,
-  border: `1px solid ${T.border}`,
-  background: "transparent",
-  color: disabled ? T.textSecondary : T.textMain,
-  fontWeight: 800,
-  cursor: disabled ? "not-allowed" : "pointer",
-  fontSize: 15,
-});
-
-const disabledBtnStyle = () => ({
-  width: "100%",
-  padding: 14,
-  borderRadius: 12,
-  border: "none",
-  background: "rgba(255,255,255,0.03)",
-  color: "rgba(255,255,255,0.4)",
-  fontWeight: 900,
-  cursor: "not-allowed",
-  fontSize: 16,
-});
-const Row = ({ label, value, bold = false }) => (
-  <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0" }}>
-    <div style={{ color: "#9aa0a6", fontSize: 15 }}>{label}</div>
-    <div style={{ fontWeight: bold ? 900 : 800, color: "#d4af37", fontSize: 15 }}>{value}</div>
-  </div>
-);   
-
-
-
-
-const SmallCard = ({ title, value }) => (
-  <div style={{ padding: 12, borderRadius: 12, background: "transparent", border: "1px solid rgba(255,255,255,0.02)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <div style={{ color: "#9aa0a6", fontSize: 14 }}>{title}</div>
-    <div style={{ fontWeight: 900, fontSize: 14 }}>{value}</div>
-  </div>
-);
-
-export default ConstructionWizardModal;
+export default ConstructionEstimate;

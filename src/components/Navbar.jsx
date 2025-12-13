@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../assets/logo.png";
 
 const Navbar = ({
   theme,
@@ -28,45 +29,19 @@ const Navbar = ({
   return (
     <>
       {/* TOP NAV */}
-      <motion.nav
-        className={`fixed top-0 w-full z-[2000] transition-all ${
-          scrolled
-            ? isDark
-              ? "backdrop-blur-lg bg-black/70 border-b border-yellow-600/20"
-              : "backdrop-blur-lg bg-white/70 border-b border-yellow-600/20"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="flex items-center justify-between px-4 py-4 sm:px-8 lg:px-16">
+      <motion.nav className="fixed top-0 w-full z-[2000] transition-all backdrop-blur-lg bg-white border-b border-yellow-600/20">
+        <div className="flex items-center justify-between px-4 py-2 sm:px-8 lg:px-16">
+          {/* LOGO */}
           {/* LOGO */}
           <div
             onClick={() => onNavClick("home")}
-            className="flex items-center gap-2 cursor-pointer select-none"
+            className="flex items-center gap-2 pl-10 cursor-pointer select-none"
           >
-            <svg width="40" height="40" viewBox="0 0 48 48">
-              <rect
-                x="6"
-                y="12"
-                width="36"
-                height="30"
-                rx="2"
-                stroke="#d4af37"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M6 18H42M14 12V42M34 12V42M24 18V30"
-                stroke="#d4af37"
-                strokeWidth="1"
-              />
-              <circle cx="24" cy="24" r="2" fill="#d4af37" />
-            </svg>
-            <span
-              className={`text-2xl font-extrabold font-playfair ${
-                isDark ? "text-white" : "text-black"
-              }`}
-            >
-              DESIGNTECH
-            </span>
+            <img
+              src={logo}
+              alt="Logo"
+              className="object-contain w-20 h-20 scale-125"
+            />
           </div>
 
           {/* DESKTOP MENU */}
@@ -75,9 +50,7 @@ const Navbar = ({
               <button
                 key={item.id}
                 onClick={() => onNavClick(item.id)}
-                className={`text-sm font-semibold ${
-                  isDark ? "text-gray-200" : "text-gray-800"
-                } hover:text-yellow-500`}
+                className="text-sm font-semibold text-black hover:text-yellow-500"
               >
                 {item.label}
               </button>
@@ -86,9 +59,7 @@ const Navbar = ({
             {/* BOOKING */}
             <button
               onClick={onBookingClick}
-              className={`text-sm font-semibold ${
-                isDark ? "text-gray-200" : "text-gray-800"
-              } hover:text-yellow-500`}
+              className="text-sm font-semibold text-black hover:text-yellow-500"
             >
               Booking
             </button>
@@ -104,9 +75,20 @@ const Navbar = ({
             {/* THEME */}
             <button
               onClick={onThemeToggle}
-              className="px-4 py-2 text-sm font-semibold text-yellow-200 border rounded-lg border-yellow-500/40 bg-yellow-500/10 hover:bg-yellow-600/20"
+              className={`p-3 rounded-full transition border
+    ${
+      isDark
+        ? "bg-slate-800 border-slate-600 hover:bg-slate-700"
+        : "bg-slate-100 border-slate-300 hover:bg-slate-200"
+    }
+  `}
+              aria-label="Toggle theme"
             >
-              {isDark ? "Light Mode" : "Dark Mode"}
+              {isDark ? (
+                <span className="text-xl">☀️</span>
+              ) : (
+                <span className="text-xl">🌙</span>
+              )}
             </button>
           </div>
 
@@ -117,23 +99,12 @@ const Navbar = ({
           >
             {menuOpen ? (
               // X ICON
-              <span
-                className={`text-4xl font-bold ${
-                  isDark ? "text-white" : "text-black"
-                }`}
-              >
-                ✕
-              </span>
+              <span className="text-4xl font-bold text-black">✕</span>
             ) : (
               // HAMBURGER ICON
               <div className="flex flex-col gap-1.5">
                 {[1, 2, 3].map((i) => (
-                  <span
-                    key={i}
-                    className={`block w-7 h-[3px] ${
-                      isDark ? "bg-white" : "bg-black"
-                    }`}
-                  />
+                  <span key={i} className="block w-7 h-[3px] bg-black" />
                 ))}
               </div>
             )}

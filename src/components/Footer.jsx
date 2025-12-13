@@ -264,8 +264,8 @@ const Footer = ({ theme = "dark" }) => {
                   Location
                 </div>
                 <p className="mt-1 text-sm" style={{ color: T.cardText }}>
-                  Gandhi Complex, Station Rd, near BJP Office, Professor Colony,
-                  Belbanwa, Motihari, Bihar 845401
+                  Gandhi Complex, Station Road, Near BJP Office, Professor
+                  Colony, Belbanwa, Motihari, Bihar 845401
                 </p>
               </div>
             </div>

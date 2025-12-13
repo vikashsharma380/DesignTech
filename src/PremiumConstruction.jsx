@@ -16,7 +16,7 @@ const PremiumConstruction = () => {
   const [showEstimate, setShowEstimate] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
 
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const isDark = theme === "dark";
 
   const toggleTheme = () =>

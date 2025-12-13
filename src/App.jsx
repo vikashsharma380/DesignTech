@@ -6,6 +6,7 @@ const ConstructionEstimate = lazy(() =>
   import("./components/ConstructionEstimate")
 );
 const BookingPage = lazy(() => import("./components/BookingPage.jsx"));
+const Portfolio = lazy(() => import("./pages/Portfolio")); // ⭐ added
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<PremiumConstruction />} />
         <Route path="/estimate" element={<ConstructionEstimate />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/portfolio" element={<Portfolio />} /> {/* ⭐ added */}
       </Routes>
     </Router>
   );

@@ -59,9 +59,7 @@ const Navbar = ({
             {/* BOOKING */}
             <button
               onClick={onBookingClick}
-              className={`text-sm font-semibold ${
-                isDark ? "text-gray-200" : "text-gray-800"
-              } hover:text-yellow-500`}
+              className="text-sm font-semibold text-black hover:text-yellow-500"
             >
               Booking
             </button>
@@ -77,9 +75,20 @@ const Navbar = ({
             {/* THEME */}
             <button
               onClick={onThemeToggle}
-              className="px-4 py-2 text-sm font-semibold text-yellow-200 border rounded-lg border-yellow-500/40 bg-yellow-500/10 hover:bg-yellow-600/20"
+              className={`p-3 rounded-full transition border
+    ${
+      isDark
+        ? "bg-slate-800 border-slate-600 hover:bg-slate-700"
+        : "bg-slate-100 border-slate-300 hover:bg-slate-200"
+    }
+  `}
+              aria-label="Toggle theme"
             >
-              {isDark ? "Light Mode" : "Dark Mode"}
+              {isDark ? (
+                <span className="text-xl">☀️</span>
+              ) : (
+                <span className="text-xl">🌙</span>
+              )}
             </button>
           </div>
 

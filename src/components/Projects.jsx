@@ -146,17 +146,16 @@ const Projects = ({ theme }) => {
               />
 
               {/* Overlay */}
-              <div
-                className={`absolute inset-0 ${
-                  isLight
-                    ? "bg-gradient-to-t from-white/90 via-white/60 to-transparent"
-                    : "bg-gradient-to-t from-black/90 via-black/60 to-transparent"
-                }`}
-              />
 
               {/* CONTENT */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-10 lg:p-14"
+                className="absolute bottom-0 left-0 right-0
+             p-4 sm:p-6 md:p-10 lg:p-14
+             bg-gradient-to-t
+             from-[#f3e6c6]/85
+             via-[#f3e6c6]/65
+             to-transparent
+             "
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
@@ -167,20 +166,12 @@ const Projects = ({ theme }) => {
                 </div>
 
                 {/* Title */}
-                <h3
-                  className={`font-['Playfair_Display'] font-extrabold tracking-tight mb-3 sm:mb-4 ${
-                    isLight ? "text-black" : "text-white"
-                  } text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem]`}
-                >
+                <h3 className="font-['Playfair_Display'] font-extrabold tracking-tight mb-3 sm:mb-4 text-white text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem]">
                   {projects[current].title}
                 </h3>
 
                 {/* Details */}
-                <p
-                  className={`max-w-[600px] font-light leading-relaxed mb-4 sm:mb-6 text-xs sm:text-sm md:text-base ${
-                    isLight ? "text-[#333]" : "text-gray-300"
-                  }`}
-                >
+                <p className="max-w-[600px] font-light leading-relaxed mb-4 sm:mb-6 text-xs sm:text-sm md:text-base text-white/90">
                   {projects[current].details}
                 </p>
 

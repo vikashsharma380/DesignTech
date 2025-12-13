@@ -635,7 +635,10 @@ const Row = ({ label, value, bold = false }) => (
     <div style={{ color: "#9aa0a6", fontSize: 15 }}>{label}</div>
     <div style={{ fontWeight: bold ? 900 : 800, color: "#d4af37", fontSize: 15 }}>{value}</div>
   </div>
-);
+);   
+
+
+
 
 const SmallCard = ({ title, value }) => (
   <div style={{ padding: 12, borderRadius: 12, background: "transparent", border: "1px solid rgba(255,255,255,0.02)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>

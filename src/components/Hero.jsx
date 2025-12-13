@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
 
 const Hero = () => {
   const [offsetY, setOffsetY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+const navigate = useNavigate();
 
   // DARK MODE COLORS — fixed, no switching
   const T = {
@@ -149,7 +152,8 @@ const Hero = () => {
           </button>
 
           <button
-            onClick={() => (window.location.href = "/portfolio")}
+           onClick={() => navigate("/portfolio")}
+
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold backdrop-blur-xl
             text-yellow-500 text-sm sm:text-base"
             style={{

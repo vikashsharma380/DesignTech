@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
-
-const Hero = () => {
+const Hero = ({ onStartBuilding }) => {
   const [offsetY, setOffsetY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-const navigate = useNavigate();
 
-  // DARK MODE COLORS — fixed, no switching
+  // DARK MODE COLORS — fixed
   const T = {
     mainHeading: "#ffffffef",
     subHeading:
@@ -41,7 +38,7 @@ const navigate = useNavigate();
       className="relative flex items-center justify-center min-h-screen px-4 overflow-hidden sm:px-8 md:px-16"
       style={{ background: T.bg }}
     >
-      {/* BACKGROUND VIDEO MAIN */}
+      {/* BACKGROUND VIDEO */}
       <motion.div
         className="absolute inset-0 z-0"
         style={{
@@ -77,14 +74,11 @@ const navigate = useNavigate();
           muted
           playsInline
           className="object-cover w-full h-full"
-          style={{
-            opacity: 0.08,
-            filter: "blur(22px)",
-          }}
+          style={{ opacity: 0.08, filter: "blur(22px)" }}
         />
       </motion.div>
 
-      {/* DARK MODE OVERLAY */}
+      {/* DARK OVERLAY */}
       <div
         className="absolute inset-0 pointer-events-none z-2"
         style={{
@@ -102,18 +96,19 @@ const navigate = useNavigate();
         }}
       />
 
-      {/* HERO CONTENT */}
+      {/* CONTENT */}
       <motion.div
         className="relative z-10 text-center max-w-[900px] px-2"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        {/* MAIN HEADING */}
+        {/* ONE LINE HEADING */}
         <h1
           className="font-playfair font-extrabold leading-[1.08]
+          whitespace-nowrap
           text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[6rem] mb-6"
-          style={{ color: T.mainHeading, display: "inline-block" }}
+          style={{ color: T.mainHeading }}
         >
           Design. Build. Innovate.
         </h1>
@@ -125,26 +120,24 @@ const navigate = useNavigate();
             background: T.subHeading,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            display: "inline-block",
           }}
         >
           Crafting Modern Spaces With Precision & Excellence
         </h2>
 
-        {/* PARAGRAPH */}
+        {/* DESCRIPTION */}
         <p
-          className="mx-auto max-w-[700px]
-          text-base sm:text-lg md:text-xl leading-relaxed
-          mb-12"
+          className="mx-auto max-w-[700px] text-base sm:text-lg md:text-xl leading-relaxed mb-12"
           style={{ color: T.paragraph }}
         >
           From concept to completion, we transform architectural visions into
           extraordinary realities through innovation and engineering mastery.
         </p>
 
-        {/* CTA BUTTONS */}
+        {/* CTA */}
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
           <button
+            onClick={onStartBuilding}
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold text-black
             bg-gradient-to-br from-yellow-600 to-yellow-300 text-sm sm:text-base"
           >
@@ -152,8 +145,6 @@ const navigate = useNavigate();
           </button>
 
           <button
-           onClick={() => navigate("/portfolio")}
-
             className="py-3.5 px-8 sm:px-10 rounded-lg font-bold backdrop-blur-xl
             text-yellow-500 text-sm sm:text-base"
             style={{

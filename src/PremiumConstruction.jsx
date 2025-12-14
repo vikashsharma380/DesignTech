@@ -60,7 +60,10 @@ const PremiumConstruction = () => {
         <ConstructionEstimate theme={theme} />
       ) : (
         <>
-          <Hero theme={theme} />
+          <Hero
+            theme={theme}
+            onStartBuilding={() => scrollToFromNavbar("contact")}
+          />
           <Services theme={theme} />
           <Projects theme={theme} />
           <Contact theme={theme} />

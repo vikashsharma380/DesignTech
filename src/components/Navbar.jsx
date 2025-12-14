@@ -32,7 +32,6 @@ const Navbar = ({
       <motion.nav className="fixed top-0 w-full z-[2000] transition-all backdrop-blur-lg bg-white border-b border-yellow-600/20">
         <div className="flex items-center justify-between px-4 py-2 sm:px-8 lg:px-16">
           {/* LOGO */}
-          {/* LOGO */}
           <div
             onClick={() => onNavClick("home")}
             className="flex items-center gap-2 pl-10 cursor-pointer select-none"
@@ -40,7 +39,7 @@ const Navbar = ({
             <img
               src={logo}
               alt="Logo"
-              className="object-contain w-20 h-20 scale-125"
+              className="object-contain h-20 scale-125 w-22"
             />
           </div>
 

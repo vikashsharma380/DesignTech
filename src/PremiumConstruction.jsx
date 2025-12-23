@@ -80,8 +80,6 @@ const PremiumConstruction = () => {
           position={{ right: 20, bottom: 25 }}
         />
       )}
-
-      <Footer theme={theme} />
     </div>
   );
 };
